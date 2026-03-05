@@ -166,7 +166,22 @@ class NexusLibrarySystem:
                 return
 
         try:
-            
+            # Handle DANIELSON API format: {"cards": [...], "total": N}
+            if 'cards' in data and isinstance(data['cards'], list):
+                print(f"[INFO] Loading {len(data['cards'])} cards from DANIELSON API...")
+                for card in data['cards']:
+                    cn = card.get('call_number', '')
+                    box_id = cn.split('-')[0] if '-' in cn else (cn[:1] if cn else 'AA')
+                    if box_id not in self.box_inventory:
+                        self.box_inventory[box_id] = []
+                    self.box_inventory[box_id].append(card)
+                    if cn:
+                        self.card_locations[cn] = card.get('name', 'Unknown')
+                total = sum(len(c) for c in self.box_inventory.values())
+                print(f"[OK] Library loaded from DANIELSON: {total} cards in {len(self.box_inventory)} boxes")
+                self._update_statistics()
+                return
+
             self.box_inventory = data.get('box_inventory', {})
             self.card_locations = data.get('card_locations', {})
             self.statistics = data.get('statistics', {})

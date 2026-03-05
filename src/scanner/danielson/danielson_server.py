@@ -3059,7 +3059,7 @@ def review_confirm():
                 logger.error(f"[NFT] Mint failed: {me}")
         _threading.Thread(target=_do_mint, args=(entry,), daemon=True).start()
 
-    return jsonify({'success': True, 'card': item, 'queue_depth': len(_review_queue)})
+    return jsonify({'success': True, 'card': entry, 'call_number': entry.get('call_number', ''), 'queue_depth': len(_review_queue)})
 
 
 @app.route('/api/review/skip', methods=['POST'])

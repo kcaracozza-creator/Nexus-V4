@@ -303,13 +303,14 @@ class NexusApp:
 
         card_count = len(self.library) if self.library else 0
 
-        tk.Label(
+        self.card_count_label = tk.Label(
             stats_frame,
             text=f"{card_count:,}",
             font=('Segoe UI', 22, 'bold'),
             fg=self.colors.accent,
             bg=self.colors.bg_surface
-        ).pack(side='left')
+        )
+        self.card_count_label.pack(side='left')
 
         tk.Label(
             stats_frame,

@@ -1553,49 +1553,37 @@ class HardwareScannerTab:
         if self.current_scan:
             call_num = self.current_scan.get('call_number', '???')
 
-        # Send to DANIELSON API - confirm endpoint
-        def send_accept(cn, card_name):
+        # Send to DANIELSON API - confirm endpoint (DANIELSON assigns call number + writes to DB)
+        def send_accept(card_name, card_info):
             try:
                 r = requests.post(
                     f"{self.danielson_url}/api/review/confirm",
-                    json={'call_number': cn, 'card_name': card_name},
+                    json=card_info,
                     timeout=10
                 )
                 if r.status_code == 200:
-                    self._log(f"  -> Confirmed as {cn}", 'dim')
+                    resp = r.json()
+                    cn = resp.get('call_number', '')
+                    if cn:
+                        self._log(f"  -> Cataloged as {cn}", 'dim')
+                    else:
+                        self._log(f"  -> Confirmed on DANIELSON", 'dim')
+                    # Refresh header card count
+                    try:
+                        sr = requests.get(f"{self.danielson_url}/api/library/stats", timeout=5)
+                        if sr.status_code == 200:
+                            total = sr.json().get('total_cards', 0)
+                            app = self.frame.winfo_toplevel()
+                            if hasattr(app, 'card_count_label'):
+                                self.frame.after(0, lambda: app.card_count_label.config(text=f"{total:,}"))
+                    except Exception:
+                        pass
                 else:
                     self._log(f"  -> API error: {r.status_code}", 'error')
             except Exception as e:
                 self._log(f"  -> Failed to save: {e}", 'error')
 
-        threading.Thread(target=send_accept, args=(call_num, name), daemon=True).start()
-
-        # Add to local library for Collection tab
-        if self.library:
-            try:
-                # Get card details from current scan
-                lib_card = {
-                    'name': name,
-                    'set_code': set_code,
-                    'collector_number': card_data.get('collector_number', ''),
-                    'condition': card_data.get('condition', 'NM'),
-                    'foil': card_data.get('foil', False),
-                    'language': card_data.get('language', 'EN'),
-                    'image_path': card_data.get('image_path', ''),
-                }
-                # Add price if available from current scan
-                if self.current_scan and self.current_scan.get('card'):
-                    prices = self.current_scan['card'].get('prices', {})
-                    lib_card['price_usd'] = prices.get('usd')
-                    lib_card['rarity'] = self.current_scan['card'].get('rarity')
-                    lib_card['set_name'] = self.current_scan['card'].get('set_name')
-                    lib_card['scryfall_id'] = self.current_scan['card'].get('scryfall_id')
-
-                self.library.catalog_card(lib_card)
-                self.library._save_library()
-                self._log("  -> Added to collection", 'dim')
-            except Exception as e:
-                self._log(f"  -> Library save error: {e}", 'error')
+        threading.Thread(target=send_accept, args=(name, card_data), daemon=True).start()
 
         self.scan_count += 1
         self.count_label.config(text=f"Scans: {self.scan_count}")

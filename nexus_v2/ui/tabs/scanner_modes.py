@@ -1327,13 +1327,24 @@ class UniversalScannerTab:
 
         def send():
             try:
-                requests.post(
+                r = requests.post(
                     f"{self.danielson_url}/api/review/confirm",
                     json=payload,
                     timeout=10
                 )
-            except Exception:
-                pass
+                if r.status_code == 200:
+                    resp = r.json()
+                    cn = resp.get('call_number', '')
+                    if cn:
+                        self._log(f"  -> Cataloged as {cn}", 'dim')
+                    else:
+                        self._log(f"  -> Confirmed on DANIELSON", 'dim')
+                    # Update header card count from DANIELSON
+                    self._refresh_card_count()
+                else:
+                    self._log(f"  -> API error: {r.status_code}", 'error')
+            except Exception as e:
+                self._log(f"  -> Failed to save: {e}", 'error')
         threading.Thread(target=send, daemon=True).start()
 
         # Advance queue
@@ -1381,6 +1392,19 @@ class UniversalScannerTab:
                 self._show_review_item(self.review_index)
             self.queue_label.config(
                 text=f"{self.review_index + 1 if self.review_queue else 0} / {len(self.review_queue)}")
+
+    def _refresh_card_count(self):
+        """Fetch updated card count from DANIELSON and update header."""
+        try:
+            r = requests.get(f"{self.danielson_url}/api/library/stats", timeout=5)
+            if r.status_code == 200:
+                total = r.json().get('total_cards', 0)
+                # Update the app's header card count label (thread-safe)
+                app = self.frame.winfo_toplevel()
+                if hasattr(app, 'card_count_label'):
+                    self.frame.after(0, lambda: app.card_count_label.config(text=f"{total:,}"))
+        except Exception:
+            pass
 
     def cleanup(self):
         """Cleanup on close"""
