@@ -37,6 +37,8 @@ from threading import Thread, Event, Lock
 from difflib import SequenceMatcher
 from typing import Dict, Optional, List, Tuple
 
+import signal
+import atexit
 import cv2
 import numpy as np
 import requests
@@ -1856,6 +1858,7 @@ def capture_usb(device='/dev/video0', width=1920, height=1080, suffix="", cam_na
 
 def get_best_frame(device, count=5, width=1920, height=1080):
     """Capture multiple frames, return the one with least glare."""
+    camera = None
     try:
         dev_num = int(device.replace('/dev/video', '')) if isinstance(device, str) and '/dev/video' in device else int(device or 0)
         camera = cv2.VideoCapture(dev_num)
@@ -1879,8 +1882,6 @@ def get_best_frame(device, count=5, width=1920, height=1080):
                 frames.append((glare_score, frame))
                 time.sleep(0.05)
 
-        camera.release()
-
         if not frames:
             return None
         frames.sort(key=lambda x: x[0])
@@ -1888,6 +1889,9 @@ def get_best_frame(device, count=5, width=1920, height=1080):
     except Exception as e:
         logger.error(f"get_best_frame failed: {e}")
         return None
+    finally:
+        if camera is not None:
+            camera.release()
 
 
 def calculate_sharpness(image_path):
@@ -3774,11 +3778,38 @@ def detect_cameras():
         logger.warning("v4l2-ctl not found, using default camera config")
 
 
+def _release_all_cameras():
+    """Release all shared cameras cleanly on shutdown."""
+    for name, cam in list(shared_cameras.items()):
+        try:
+            cam.stop()
+            logger.info(f"Released camera: {name}")
+        except Exception:
+            pass
+    shared_cameras.clear()
+
+
+def _shutdown_handler(signum, frame):
+    """Handle SIGTERM/SIGINT — release USB devices before exit."""
+    logger.info(f"Received signal {signum}, releasing cameras...")
+    _release_all_cameras()
+    raise SystemExit(0)
+
+
+# Register cleanup for both normal exit and signals
+atexit.register(_release_all_cameras)
+signal.signal(signal.SIGTERM, _shutdown_handler)
+signal.signal(signal.SIGINT, _shutdown_handler)
+
+
 def main():
     logger.info("=" * 60)
     logger.info("  DANIELSON — Unified Scanner Server")
     logger.info("  Replaces SNARF + BROCK")
     logger.info("=" * 60)
+
+    # Brief pause to let USB devices settle after a restart
+    time.sleep(1)
 
     # Detect cameras
     detect_cameras()
