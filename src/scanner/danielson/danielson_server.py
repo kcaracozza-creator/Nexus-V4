@@ -2907,6 +2907,100 @@ def review_get():
     return jsonify({'success': False, 'error': 'Queue empty', 'items': [], 'queue_depth': 0})
 
 
+# =============================================================================
+# GLOBAL CALL NUMBER COUNTER  (zero-sort: scan order IS physical order)
+# One sequence across ALL card types, ALL scan modes. Never skip, never reorder.
+# =============================================================================
+_BOX_CAPACITY = 1000
+_COUNTER_DB = os.path.join(DATA_DIR, 'inventory', 'call_counter.db')
+_counter_lock = Lock()
+
+
+def _init_counter_db():
+    """Create the global call-number counter table and seed from existing cards."""
+    os.makedirs(os.path.dirname(_COUNTER_DB), exist_ok=True)
+    db = sqlite3.connect(_COUNTER_DB)
+    db.execute('''CREATE TABLE IF NOT EXISTS counter (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        last_prefix TEXT NOT NULL DEFAULT 'AA',
+        last_number INTEGER NOT NULL DEFAULT 0
+    )''')
+    # Seed: if counter is empty, scan all type libraries to find the true highest
+    row = db.execute("SELECT last_prefix, last_number FROM counter WHERE id=1").fetchone()
+    if not row:
+        highest = _scan_all_libraries_for_highest()
+        if highest:
+            prefix, num = highest
+            db.execute("INSERT INTO counter (id, last_prefix, last_number) VALUES (1, ?, ?)",
+                       (prefix, num))
+        else:
+            db.execute("INSERT INTO counter (id, last_prefix, last_number) VALUES (1, 'AA', 0)")
+    db.commit()
+    db.close()
+
+
+def _scan_all_libraries_for_highest():
+    """Scan every *_library.db to find the highest call number across all types."""
+    inv_dir = os.path.join(DATA_DIR, 'inventory')
+    if not os.path.isdir(inv_dir):
+        return None
+    best_prefix, best_num = 'AA', 0
+    import glob
+    for db_file in glob.glob(os.path.join(inv_dir, '*_library.db')) + \
+                   [os.path.join(inv_dir, 'nexus_library.db')]:
+        if not os.path.exists(db_file):
+            continue
+        try:
+            conn = sqlite3.connect(db_file)
+            row = conn.execute(
+                "SELECT call_number FROM cards ORDER BY call_number DESC LIMIT 1"
+            ).fetchone()
+            conn.close()
+            if row and row[0] and '-' in str(row[0]):
+                p, n = str(row[0]).rsplit('-', 1)
+                n = int(n)
+                if (p, n) > (best_prefix, best_num):
+                    best_prefix, best_num = p, n
+        except Exception:
+            pass
+    if best_num == 0 and best_prefix == 'AA':
+        return None
+    return (best_prefix, best_num)
+
+
+def _next_call_number():
+    """Atomically increment and return the next global call number.
+    Thread-safe. One sequence for ALL card types."""
+    with _counter_lock:
+        db = sqlite3.connect(_COUNTER_DB)
+        row = db.execute("SELECT last_prefix, last_number FROM counter WHERE id=1").fetchone()
+        prefix, num = row[0], row[1]
+
+        if num >= _BOX_CAPACITY:
+            # Advance box: AA → AB → ... AZ → BA → ... ZZ → AAA
+            p = list(prefix)
+            i = len(p) - 1
+            while i >= 0:
+                if p[i] < 'Z':
+                    p[i] = chr(ord(p[i]) + 1)
+                    break
+                else:
+                    p[i] = 'A'
+                    i -= 1
+            if i < 0:
+                p = ['A'] + p
+            prefix = ''.join(p)
+            num = 1
+        else:
+            num += 1
+
+        db.execute("UPDATE counter SET last_prefix=?, last_number=? WHERE id=1",
+                   (prefix, num))
+        db.commit()
+        db.close()
+        return f"{prefix}-{num:04d}"
+
+
 @app.route('/api/review/confirm', methods=['POST'])
 def review_confirm():
     """
@@ -2960,11 +3054,14 @@ def review_confirm():
     except Exception as e:
         logger.warning(f"Inventory JSONL write failed: {e}")
 
-    # Write to SQLite nexus_library.db (what the Collection tab reads)
+    # Write to per-type library DB (what the Collection tab reads)
+    card_type = entry.get('card_type', 'mtg')
     try:
         db_dir = os.path.join(DATA_DIR, 'inventory')
         os.makedirs(db_dir, exist_ok=True)
-        _db = sqlite3.connect(LIBRARY_DB_PATH)
+        _db = sqlite3.connect(_library_db_path(card_type))
+
+        # Create table if this is a brand new type library
         _db.execute('''CREATE TABLE IF NOT EXISTS cards (
             call_number TEXT PRIMARY KEY,
             box_id TEXT NOT NULL DEFAULT '',
@@ -2982,31 +3079,50 @@ def review_confirm():
             art_hash TEXT, scryfall_id TEXT, uuid TEXT,
             cataloged_at TEXT, updated_at TEXT, notes TEXT,
             display INTEGER DEFAULT 0, display_case INTEGER,
-            card_type TEXT DEFAULT 'mtg',
-            yugioh_id INTEGER, yugioh_type TEXT, yugioh_race TEXT,
-            yugioh_attribute TEXT, yugioh_atk INTEGER, yugioh_def INTEGER,
-            yugioh_level INTEGER, yugioh_archetype TEXT,
-            listing_status TEXT DEFAULT 'available',
-            listing_id TEXT, listed_at TEXT, sold_at TEXT, sold_price REAL
+            needs_review INTEGER DEFAULT 0, confidence REAL DEFAULT 0
         )''')
+
+        # Migrate: add columns that may not exist on older DBs
+        existing_cols = {r[1] for r in _db.execute("PRAGMA table_info(cards)")}
+        for col, defn in [
+            ('card_type', "TEXT DEFAULT 'mtg'"),
+            ('listing_status', "TEXT DEFAULT 'available'"),
+            ('needs_review', "INTEGER DEFAULT 0"),
+            ('confidence', "REAL DEFAULT 0"),
+        ]:
+            if col not in existing_cols:
+                _db.execute(f"ALTER TABLE cards ADD COLUMN {col} {defn}")
+                logger.info(f"[LIBRARY] Added column: {col}")
+
         card = entry.get('card') or {}
-        card_type = entry.get('card_type', 'mtg')
         now = datetime.now().isoformat()
-        cn_prefix = {'mtg': 'M', 'pokemon': 'P', 'yugioh': 'Y', 'sports': 'S',
-                     'lorcana': 'L', 'onepiece': 'O', 'fab': 'F'}.get(card_type, 'X')
-        call_number = f"{cn_prefix}{int(time.time() * 1000)}"
+        # Zero-sort: global call number (scan order = physical order, all types)
+        call_number = _next_call_number()
+        # Derive box_id and position from call number
+        if '-' in call_number:
+            box_id = call_number.split('-')[0]
+            position = int(call_number.split('-')[1])
+        else:
+            box_id = call_number[:2]
+            position = 0
         raw_set = entry.get('set_code') or card.get('set') or card.get('set_code') or ''
         raw_num = entry.get('collector_number') or card.get('collector_number') or card.get('number') or ''
+        needs_review = 1 if data.get('needs_review', False) else 0
+        scan_confidence = float(entry.get('confidence', 0) or 0)
         _db.execute(
             '''INSERT OR REPLACE INTO cards (
-                call_number, name, set_code, set_name, collector_number,
+                call_number, box_id, position, name,
+                set_code, set_name, collector_number,
                 rarity, mana_cost, cmc, type_line, oracle_text,
                 power, toughness, foil, condition, language,
                 price, price_foil, image_url, image_url_small, scryfall_id,
-                cataloged_at, updated_at, card_type, listing_status
-            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+                cataloged_at, updated_at, card_type, listing_status,
+                needs_review, confidence
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
             (
                 call_number,
+                box_id,
+                position,
                 entry.get('card_name') or card.get('name', ''),
                 raw_set.upper() if raw_set else '',
                 card.get('set_name', ''),
@@ -3029,6 +3145,8 @@ def review_confirm():
                 now, now,
                 card_type,
                 'available',
+                needs_review,
+                scan_confidence,
             )
         )
         _db.commit()
@@ -3178,20 +3296,36 @@ def serve_scan(filename):
 
 # --- Library/Inventory API ---
 
-LIBRARY_DB_PATH = os.path.join(DATA_DIR, 'inventory', 'nexus_library.db')
+# Per-type library DBs: MTG uses legacy nexus_library.db, others get <type>_library.db
+LIBRARY_DB_PATH = os.path.join(DATA_DIR, 'inventory', 'nexus_library.db')  # default = MTG
+
+_LIBRARY_DB_MAP = {
+    'mtg': 'nexus_library.db',
+    'pokemon': 'pokemon_library.db',
+    'sports': 'sports_library.db',
+    'yugioh': 'yugioh_library.db',
+}
+
+
+def _library_db_path(card_type='mtg'):
+    """Return DB path for the given card type."""
+    fname = _LIBRARY_DB_MAP.get(card_type, f'{card_type}_library.db')
+    return os.path.join(DATA_DIR, 'inventory', fname)
 
 
 @app.route('/api/library/all', methods=['GET'])
 def library_all():
     """Return all cards from the inventory database.
     Used by the Collection tab in the desktop app.
-    ?raw=1 returns flat list, otherwise wrapped in {cards: [...]}.
+    ?type=mtg (default), ?raw=1 returns flat list, otherwise wrapped in {cards: [...]}.
     """
-    if not os.path.exists(LIBRARY_DB_PATH):
-        return jsonify({"error": "Library database not found", "path": LIBRARY_DB_PATH}), 404
+    card_type = request.args.get('type', 'mtg')
+    db_path = _library_db_path(card_type)
+    if not os.path.exists(db_path):
+        return jsonify({"error": f"Library database not found for type '{card_type}'", "path": db_path}), 404
 
     try:
-        db = sqlite3.connect(LIBRARY_DB_PATH)
+        db = sqlite3.connect(db_path)
         db.row_factory = sqlite3.Row
         c = db.cursor()
         c.execute("SELECT * FROM cards ORDER BY call_number")
@@ -3211,18 +3345,20 @@ def library_all():
 
 @app.route('/api/library/search', methods=['GET'])
 def library_search():
-    """Search cards by name. ?q=name&limit=50"""
+    """Search cards by name. ?q=name&type=mtg&limit=50"""
     q = request.args.get('q', '')
     limit = int(request.args.get('limit', 50))
+    card_type = request.args.get('type', 'mtg')
 
     if not q:
         return jsonify({"cards": [], "total": 0})
 
-    if not os.path.exists(LIBRARY_DB_PATH):
+    db_path = _library_db_path(card_type)
+    if not os.path.exists(db_path):
         return jsonify({"error": "Library database not found"}), 404
 
     try:
-        db = sqlite3.connect(LIBRARY_DB_PATH)
+        db = sqlite3.connect(db_path)
         db.row_factory = sqlite3.Row
         c = db.cursor()
         c.execute("SELECT * FROM cards WHERE name LIKE ? ORDER BY name LIMIT ?",
@@ -3239,12 +3375,56 @@ def library_search():
 
 @app.route('/api/library/stats', methods=['GET'])
 def library_stats():
-    """Library statistics - total cards, sets, rarities, boxes."""
-    if not os.path.exists(LIBRARY_DB_PATH):
+    """Library statistics. ?type=mtg (single type) or ?type=all (aggregate across all types)."""
+    card_type = request.args.get('type', 'all')
+
+    # Aggregate across all type libraries
+    if card_type == 'all':
+        import glob as _g
+        inv_dir = os.path.join(DATA_DIR, 'inventory')
+        total = 0
+        total_value = 0.0
+        sets_set = set()
+        boxes_set = set()
+        per_type = {}
+        db_files = _g.glob(os.path.join(inv_dir, '*_library.db')) + \
+                   [os.path.join(inv_dir, 'nexus_library.db')]
+        for db_file in set(db_files):
+            if not os.path.exists(db_file):
+                continue
+            try:
+                db = sqlite3.connect(db_file)
+                c = db.cursor()
+                cnt = c.execute("SELECT count(*) FROM cards").fetchone()[0]
+                total += cnt
+                val = c.execute("SELECT SUM(price) FROM cards WHERE price > 0").fetchone()[0] or 0
+                total_value += val
+                for r in c.execute("SELECT DISTINCT set_code FROM cards WHERE set_code IS NOT NULL AND set_code != ''"):
+                    sets_set.add(r[0])
+                for r in c.execute("SELECT DISTINCT box_id FROM cards"):
+                    boxes_set.add(r[0])
+                # Derive type name from filename
+                fname = os.path.basename(db_file)
+                tname = 'mtg' if fname == 'nexus_library.db' else fname.replace('_library.db', '')
+                per_type[tname] = cnt
+                db.close()
+            except Exception:
+                pass
+        return jsonify({
+            "total_cards": total,
+            "total_sets": len(sets_set),
+            "total_boxes": len(boxes_set),
+            "total_value": round(total_value, 2),
+            "per_type": per_type,
+        })
+
+    # Single type
+    db_path = _library_db_path(card_type)
+    if not os.path.exists(db_path):
         return jsonify({"error": "Library database not found"}), 404
 
     try:
-        db = sqlite3.connect(LIBRARY_DB_PATH)
+        db = sqlite3.connect(db_path)
         c = db.cursor()
 
         c.execute("SELECT count(*) FROM cards")
@@ -3273,6 +3453,68 @@ def library_stats():
 
     except Exception as e:
         logger.error(f"Library stats error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/library/update', methods=['POST'])
+def library_update():
+    """Update an existing card entry (manual review correction).
+    Expects call_number in the payload — updates that row, clears needs_review."""
+    data = request.json or {}
+    call_number = data.get('call_number', '')
+    if not call_number:
+        return jsonify({"error": "call_number required"}), 400
+
+    card_type = data.get('card_type', 'mtg')
+    db_path = _library_db_path(card_type)
+    if not os.path.exists(db_path):
+        return jsonify({"error": "Library database not found"}), 404
+
+    try:
+        card = data.get('card') or {}
+        db = sqlite3.connect(db_path)
+        now = datetime.now().isoformat()
+        raw_set = data.get('set_code') or card.get('set') or card.get('set_code') or ''
+        raw_num = data.get('collector_number') or card.get('collector_number') or ''
+
+        db.execute('''UPDATE cards SET
+            name=?, set_code=?, set_name=?, collector_number=?,
+            rarity=?, mana_cost=?, cmc=?, type_line=?, oracle_text=?,
+            power=?, toughness=?, foil=?, condition=?, language=?,
+            price=?, price_foil=?, image_url=?, image_url_small=?, scryfall_id=?,
+            updated_at=?, needs_review=0, confidence=?
+            WHERE call_number=?''',
+            (
+                data.get('card_name') or card.get('name', ''),
+                raw_set.upper() if raw_set else '',
+                card.get('set_name', ''),
+                str(raw_num),
+                card.get('rarity', ''),
+                card.get('mana_cost', ''),
+                card.get('cmc', 0) or 0,
+                card.get('type_line', ''),
+                card.get('oracle_text', ''),
+                card.get('power', ''),
+                card.get('toughness', ''),
+                1 if data.get('foil') else 0,
+                data.get('condition', 'NM'),
+                data.get('lang', 'EN'),
+                float(card.get('prices', {}).get('usd', 0) or 0),
+                float(card.get('prices', {}).get('usd_foil', 0) or 0),
+                card.get('image_uris', {}).get('normal', card.get('image_url', '')),
+                card.get('image_uris', {}).get('small', card.get('image_url_small', '')),
+                card.get('id', card.get('scryfall_id', '')),
+                now,
+                float(data.get('confidence', 0) or 0),
+                call_number,
+            )
+        )
+        db.commit()
+        db.close()
+        logger.info(f"[LIBRARY] Updated {call_number}: {data.get('card_name')}")
+        return jsonify({"success": True, "call_number": call_number})
+    except Exception as e:
+        logger.error(f"Library update failed: {e}")
         return jsonify({"error": str(e)}), 500
 
 
@@ -3828,6 +4070,10 @@ def main():
     logger.info(f"ZULTAN: {ZULTAN_URL}")
     logger.info(f"Relay: {RELAY_URL}")
     logger.info(f"Port: {SERVER_PORT}")
+
+    # Initialize global call-number counter (seeds from existing libraries)
+    _init_counter_db()
+    logger.info(f"Call number counter: {_COUNTER_DB}")
 
     # Start Flask
     app.run(host='0.0.0.0', port=SERVER_PORT, debug=False, threaded=True)

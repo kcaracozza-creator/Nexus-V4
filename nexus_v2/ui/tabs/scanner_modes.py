@@ -53,7 +53,11 @@ class UniversalScannerTab:
 
         # Mode and type
         self.scan_mode = 'single'  # single, bulk, pregrading
-        self.card_type = 'mtg'
+        # Default card_type from config game mode
+        _game_to_type = {"magic": "mtg", "pokemon": "pokemon", "sports": "sports",
+                         "yugioh": "yugioh", "onepiece": "onepiece", "lorcana": "lorcana"}
+        active_game = getattr(getattr(_config, 'game', None), 'active_game', 'magic') if _config else 'magic'
+        self.card_type = _game_to_type.get(active_game, 'mtg')
 
         # 5-step status
         self.step_status = {
@@ -1023,28 +1027,38 @@ class UniversalScannerTab:
                         if validation:
                             self._display_validation(validation)
 
-                        # Log result
+                        # ============================================================
+                        # ZERO-SORT: Every card gets a call number immediately.
+                        # >=95% = auto-accept (full data into collection)
+                        # <95%  = placeholder (call number assigned, awaits manual ID)
+                        # ============================================================
                         if status == 'identified':
                             self.success_count += 1
                             self._log(f"✓ {name} ({set_code}) - {confidence}%", 'success')
+                            # Auto-accept: send to DANIELSON with full data
+                            self._auto_catalog(card, name, set_code, confidence, image_path, needs_review=False)
                         elif status == 'likely':
                             self._log(f"? {name} ({set_code}) - {confidence}%", 'warning')
+                            # Placeholder: call number assigned, needs human review
+                            self._auto_catalog(card, name, set_code, confidence, image_path, needs_review=True)
                         else:
                             self._log(f"✗ NEEDS REVIEW: {name} ({confidence}%)", 'error')
+                            # Placeholder: call number assigned, needs human review
+                            self._auto_catalog(card, name, set_code, confidence, image_path, needs_review=True)
 
                     else:
-                        # Failed scan — show what we found + populate candidate list
+                        # Failed scan — still gets a call number (zero-sort)
                         confidence = result.get('confidence', 0)
                         card_name = result.get('card_name', '')
                         card = result.get('card') or {}
                         error = result.get('error', 'Unknown error')
 
-                        # Auto-fill form with best candidate so user can just hit ACCEPT
-                        if card_name or card.get('name'):
-                            best_name = card.get('name', card_name)
-                            best_set = card.get('set', card.get('set_code', result.get('set_code', '???')))
-                            best_num = card.get('collector_number', result.get('collector_number', ''))
+                        # Auto-fill form with best candidate
+                        best_name = card.get('name', card_name) or 'UNKNOWN'
+                        best_set = card.get('set', card.get('set_code', result.get('set_code', '')))
+                        best_num = card.get('collector_number', result.get('collector_number', ''))
 
+                        if best_name != 'UNKNOWN':
                             def update_failed_ui():
                                 self.match_name_label.config(text=best_name)
                                 self.match_set_label.config(text=best_set or '???')
@@ -1052,7 +1066,6 @@ class UniversalScannerTab:
                                 self.confidence_bar['value'] = confidence
                                 self.confidence_label.config(text=f"{confidence:.1f}%")
                                 self.confidence_label.config(fg=self.colors['warning'] if confidence >= 60 else self.colors['error'])
-                                # Pre-fill form fields
                                 self.name_var.set(best_name)
                                 self.set_var.set(best_set or '')
                                 self.num_var.set(best_num or '')
@@ -1067,6 +1080,9 @@ class UniversalScannerTab:
                             self._log(f"✗ NEEDS REVIEW: {card_name} ({confidence:.1f}%)", 'error')
                         else:
                             self._log(f"✗ NEEDS REVIEW: {confidence:.1f}% - {error}", 'error')
+
+                        # Zero-sort: placeholder call number even on failed scans
+                        self._auto_catalog(card, best_name, best_set or '', confidence, result.get('image_path', ''), needs_review=True)
                 else:
                     self._log(f"HTTP error: {r.status_code}", 'error')
 
@@ -1298,8 +1314,51 @@ class UniversalScannerTab:
             self.review_index += 1
             self._show_review_item(self.review_index)
 
+    def _auto_catalog(self, card, name, set_code, confidence, image_path, needs_review=False):
+        """Zero-sort: Every scanned card gets a call number immediately.
+        >=95% confidence: auto-accepted with full data.
+        <95% confidence: placeholder call number, flagged for manual review.
+        """
+        payload = {
+            'card_name': name,
+            'card_type': self.card_type,
+            'set_code': set_code,
+            'collector_number': card.get('collector_number', '') if card else '',
+            'condition': 'NM',
+            'foil': card.get('foil', False) if card else False,
+            'lang': 'EN',
+            'confidence': confidence,
+            'image_path': image_path,
+            'card': card or {},
+            'needs_review': needs_review,
+        }
+
+        def send():
+            try:
+                r = requests.post(
+                    f"{self.danielson_url}/api/review/confirm",
+                    json=payload,
+                    timeout=10
+                )
+                if r.status_code == 200:
+                    resp = r.json()
+                    cn = resp.get('call_number', '')
+                    # Store call number on current scan so _accept_card can UPDATE not INSERT
+                    if self.current_scan:
+                        self.current_scan['call_number'] = cn
+                    if needs_review:
+                        self._log(f"  -> {cn} (PENDING REVIEW)", 'warning')
+                    else:
+                        self._log(f"  -> {cn} cataloged", 'dim')
+                    self._refresh_card_count()
+                else:
+                    self._log(f"  -> Catalog failed: HTTP {r.status_code}", 'error')
+            except Exception as e:
+                self._log(f"  -> Catalog failed: {e}", 'error')
+        threading.Thread(target=send, daemon=True).start()
+
     def _accept_card(self):
-        """Accept current card"""
+        """Accept current card (manual override for review queue items)"""
         name = self.name_var.get().strip()
         if not name:
             messagebox.showwarning("Missing Data", "Card name required")
@@ -1309,9 +1368,11 @@ class UniversalScannerTab:
         self.success_count += 1
         self._update_session_stats()
 
-        # Send to DANIELSON — always, even for fresh scans (no call_number needed)
+        # Send correction to DANIELSON
         scan = self.current_scan or {}
         card = scan.get('card') or {}
+        existing_cn = scan.get('call_number', '')
+
         payload = {
             'card_name': name,
             'card_type': self.card_type,
@@ -1327,19 +1388,25 @@ class UniversalScannerTab:
 
         def send():
             try:
-                r = requests.post(
-                    f"{self.danielson_url}/api/review/confirm",
-                    json=payload,
-                    timeout=10
-                )
+                if existing_cn:
+                    # Card already has a call number from auto-catalog — UPDATE, don't create duplicate
+                    payload['call_number'] = existing_cn
+                    r = requests.post(
+                        f"{self.danielson_url}/api/library/update",
+                        json=payload,
+                        timeout=10
+                    )
+                else:
+                    # No call number yet — create new entry
+                    r = requests.post(
+                        f"{self.danielson_url}/api/review/confirm",
+                        json=payload,
+                        timeout=10
+                    )
                 if r.status_code == 200:
                     resp = r.json()
-                    cn = resp.get('call_number', '')
-                    if cn:
-                        self._log(f"  -> Cataloged as {cn}", 'dim')
-                    else:
-                        self._log(f"  -> Confirmed on DANIELSON", 'dim')
-                    # Update header card count from DANIELSON
+                    cn = resp.get('call_number', existing_cn)
+                    self._log(f"  -> {cn} confirmed", 'dim')
                     self._refresh_card_count()
                 else:
                     self._log(f"  -> API error: {r.status_code}", 'error')
@@ -1396,7 +1463,7 @@ class UniversalScannerTab:
     def _refresh_card_count(self):
         """Fetch updated card count from DANIELSON and update header."""
         try:
-            r = requests.get(f"{self.danielson_url}/api/library/stats", timeout=5)
+            r = requests.get(f"{self.danielson_url}/api/library/stats?type=all", timeout=5)
             if r.status_code == 200:
                 total = r.json().get('total_cards', 0)
                 # Update the app's header card count label (thread-safe)

@@ -622,6 +622,21 @@ class NexusApp:
             command=lambda: self._switch_game_mode("pokemon")
         )
         pokemon_rb.pack(anchor='w', pady=5)
+
+        # Sports option
+        sports_rb = tk.Radiobutton(
+            mode_frame,
+            text="\u26be Sports Cards (TCDB)",
+            variable=self.game_mode_var,
+            value="sports",
+            font=('Segoe UI', 11),
+            fg=self.colors.text_primary,
+            bg=self.colors.bg_surface,
+            activebackground=self.colors.bg_surface,
+            selectcolor=self.colors.bg_dark,
+            command=lambda: self._switch_game_mode("sports")
+        )
+        sports_rb.pack(anchor='w', pady=5)
         
         # Note about separate libraries
         note_frame = tk.Frame(game_frame, bg=self.colors.bg_dark, padx=10, pady=8)
@@ -1015,48 +1030,49 @@ class NexusApp:
                 # Could refresh UI elements specific to the industry here
                 break
     
+    # Game mode → server card_type mapping
+    GAME_TO_TYPE = {"magic": "mtg", "pokemon": "pokemon", "sports": "sports",
+                    "yugioh": "yugioh", "onepiece": "onepiece", "lorcana": "lorcana"}
+    GAME_NAMES = {"magic": "Magic: The Gathering", "pokemon": "Pokemon TCG",
+                  "sports": "Sports Cards", "yugioh": "Yu-Gi-Oh!",
+                  "onepiece": "One Piece", "lorcana": "Lorcana"}
+
     def _switch_game_mode(self, game: str):
-        """Switch between Magic and Pokemon game modes"""
+        """Switch active game mode — updates scanner card_type and saves to config."""
         from tkinter import messagebox
-        
+
         current = self.config.game.active_game if hasattr(self.config, 'game') else "magic"
         if game == current:
-            return  # Already on this mode
-        
-        game_names = {"magic": "Magic: The Gathering", "pokemon": "Pokemon TCG"}
-        
-        # Confirm switch
+            return
+
+        game_name = self.GAME_NAMES.get(game, game)
+        current_name = self.GAME_NAMES.get(current, current)
+
         if not messagebox.askyesno(
             "Switch Game Mode",
-            f"Switch to {game_names[game]}?\
-\
-"
-            f"This will load your {game_names[game]} collection.\
-"
-            f"Your {game_names[current]} collection will be preserved."
+            f"Switch to {game_name}?\n\n"
+            f"This will load your {game_name} collection.\n"
+            f"Your {current_name} collection will be preserved."
         ):
-            # Reset the radio button to current value
             self.game_mode_var.set(current)
             return
-        
+
         # Save to config
         self.config.game.active_game = game
         self.config.save()
-        logger.info(f"\ud83c\udfb4 Game mode switched to: {game}")
-        
-        # Update status
-        self._update_status(f"Game Mode: {game_names[game]}")
-        
-        # Notify user - full reload needed for library switch
+        logger.info(f"Game mode switched to: {game}")
+
+        # Update scanner tab card_type in real-time (no restart needed)
+        card_type = self.GAME_TO_TYPE.get(game, 'mtg')
+        if hasattr(self, 'scanner_tab') and self.scanner_tab:
+            self.scanner_tab.card_type = card_type
+            self.scanner_tab._log(f"Game mode: {game_name}", 'info')
+
+        self._update_status(f"Game Mode: {game_name}")
         messagebox.showinfo(
             "Game Mode Changed",
-            f"Now using {game_names[game]} mode.\
-\
-"
-            f"Please restart NEXUS to load your {game_names[game]} library.\
-\
-"
-            f"(Hot-reload coming in future update)"
+            f"Now using {game_name} mode.\n\n"
+            f"Scanner will catalog new scans to your {game_name} library."
         )
         
     def _create_status_bar(self):
