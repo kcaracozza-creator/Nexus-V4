@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>NEXUS Commander Deck Checklist</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card-bg: #16213e;
+    --accent: #0f3460;
+    --highlight: #e94560;
+    --text: #eee;
+    --text-dim: #888;
+    --found: #2ecc71;
+    --border: #333;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+  header {
+    background: var(--accent);
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,.5);
+  }
+  header h1 { font-size: 18px; font-weight: 700; }
+  header .sub { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+  .tabs {
+    display: flex;
+    overflow-x: auto;
+    background: var(--card-bg);
+    border-bottom: 2px solid var(--border);
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabs button {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+  .tabs button.active {
+    color: var(--highlight);
+    border-bottom-color: var(--highlight);
+  }
+
+  .progress-bar {
+    background: var(--card-bg);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .progress-bar .bar {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-bar .bar-fill {
+    height: 100%;
+    background: var(--found);
+    border-radius: 4px;
+    transition: width .3s ease;
+  }
+  .progress-bar .count {
+    font-size: 14px;
+    font-weight: 700;
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .search-box {
+    padding: 8px 16px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .search-box input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+  }
+  .search-box input:focus { border-color: var(--highlight); }
+
+  .card-list { padding: 8px; }
+
+  .card-item {
+    background: var(--card-bg);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    overflow: hidden;
+    border-left: 4px solid var(--border);
+    transition: border-color .2s;
+  }
+  .card-item.found { border-left-color: var(--found); }
+  .card-item.commander { border-left-color: gold; }
+  .card-item.commander.found { border-left-color: var(--found); }
+
+  .card-main {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    gap: 10px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .card-check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all .2s;
+  }
+  .card-item.found .card-check {
+    background: var(--found);
+    border-color: var(--found);
+  }
+  .card-item.found .card-check::after {
+    content: '\2713';
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .card-info { flex: 1; min-width: 0; }
+  .card-name {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card-item.found .card-name { text-decoration: line-through; color: var(--text-dim); }
+  .card-qty {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .cmdr-badge {
+    background: gold;
+    color: #000;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+  }
+
+  .card-expand {
+    width: 24px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 18px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .card-prints {
+    display: none;
+    padding: 0 12px 10px 46px;
+  }
+  .card-prints.open { display: block; }
+  .card-prints .print-item {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 3px 0;
+    font-family: monospace;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-prints .print-item:nth-child(even) { color: #aaa; }
+  .card-prints .set-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    filter: invert(0.7);
+  }
+  .card-prints .set-code {
+    font-weight: 700;
+    min-width: 40px;
+  }
+  .card-prints .set-name {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 10px;
+    color: #666;
+    margin-left: 4px;
+  }
+
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--accent);
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 -2px 8px rgba(0,0,0,.5);
+    z-index: 100;
+  }
+  .bottom-bar button {
+    background: var(--highlight);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .bottom-bar button.secondary {
+    background: var(--border);
+  }
+  .bottom-bar .total-progress {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .filter-row {
+    display: flex;
+    gap: 6px;
+    padding: 8px 16px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-row button {
+    background: var(--bg);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .filter-row button.active {
+    background: var(--highlight);
+    color: #fff;
+    border-color: var(--highlight);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>NEXUS Commander Checklist</h1>
+  <div class="sub">Find cards in the basement. Check them off.</div>
+</header>
+
+<div class="tabs" id="tabs"></div>
+<div class="progress-bar" id="progressBar">
+  <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  <div class="count" id="progressCount">0/0</div>
+</div>
+
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Search cards...">
+</div>
+
+<div class="filter-row">
+  <button class="active" data-filter="all">All</button>
+  <button data-filter="needed">Needed</button>
+  <button data-filter="found">Found</button>
+</div>
+
+<div class="card-list" id="cardList"></div>
+
+<div class="bottom-bar">
+  <button class="secondary" onclick="resetDeck()">Reset Deck</button>
+  <div class="total-progress" id="totalProgress">0/500 total</div>
+  <button onclick="exportProgress()">Export</button>
+</div>
+
+<script>
+// Deck data will be embedded here
+let DECKS = null;
+let currentDeck = null;
+let currentFilter = 'all';
+let checkedState = {}; // {deckName: {cardName: true/false}}
+
+const STORAGE_KEY = 'nexus_commander_checklist';
+const DECK_LABELS = {
+  'talrand_sky_summoner': 'Talrand (U)',
+  'zada_hedron_grinder': 'Zada (R)',
+  'fynn_the_fangbearer': 'Fynn (G)',
+  'edric_spymaster_of_trest': 'Edric (UG)',
+  'teysa_karlov': 'Teysa (WB)',
+};
+
+function loadState() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) checkedState = JSON.parse(s);
+  } catch(e) {}
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(checkedState));
+}
+
+function init() {
+  loadState();
+  // Load deck data from external JSON (or inline)
+  fetch('decks_data.json')
+    .then(r => r.json())
+    .then(data => {
+      DECKS = data;
+      buildTabs();
+      // Select first deck
+      const firstKey = Object.keys(DECKS)[0];
+      selectDeck(firstKey);
+    })
+    .catch(e => {
+      document.getElementById('cardList').innerHTML =
+        '<p style="padding:20px;color:var(--highlight)">Error loading decks_data.json. Make sure it is in the same folder as this HTML file.</p>';
+    });
+}
+
+function buildTabs() {
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = '';
+  for (const key of Object.keys(DECKS)) {
+    const btn = document.createElement('button');
+    btn.textContent = DECK_LABELS[key] || key;
+    btn.dataset.deck = key;
+    btn.onclick = () => selectDeck(key);
+    tabs.appendChild(btn);
+  }
+}
+
+function selectDeck(key) {
+  currentDeck = key;
+  if (!checkedState[key]) checkedState[key] = {};
+
+  // Update tab active state
+  document.querySelectorAll('.tabs button').forEach(b => {
+    b.classList.toggle('active', b.dataset.deck === key);
+  });
+
+  document.getElementById('searchInput').value = '';
+  renderCards();
+  updateProgress();
+}
+
+function renderCards() {
+  const deck = DECKS[currentDeck];
+  const list = document.getElementById('cardList');
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const checked = checkedState[currentDeck] || {};
+
+  let html = '';
+  for (const name of deck.order) {
+    const card = deck.cards[name];
+    const isFound = !!checked[name];
+
+    // Filter
+    if (currentFilter === 'needed' && isFound) continue;
+    if (currentFilter === 'found' && !isFound) continue;
+
+    // Search
+    if (search && !name.toLowerCase().includes(search)) {
+      // Also search printings
+      const printMatch = card.prints.some(p => {
+        if (typeof p === 'object') return (p.sc + ' ' + p.sn + ' ' + p.cn).toLowerCase().includes(search);
+        return p.toLowerCase().includes(search);
+      });
+      if (!printMatch) continue;
+    }
+
+    const classes = ['card-item'];
+    if (isFound) classes.push('found');
+    if (card.cmdr) classes.push('commander');
+
+    const printsHtml = card.prints.length > 0
+      ? card.prints.map(p => {
+          if (typeof p === 'object') {
+            const iconUrl = `https://svgs.scryfall.io/sets/${p.sc.toLowerCase()}.svg`;
+            return `<div class="print-item">
+              <img class="set-icon" src="${iconUrl}" onerror="this.style.display='none'" alt="${escHtml(p.sc)}">
+              <span class="set-code">${escHtml(p.sc)}</span>
+              #${escHtml(p.cn)}
+              <span class="set-name">${escHtml(p.sn)}</span>
+            </div>`;
+          }
+          return `<div class="print-item">${escHtml(p)}</div>`;
+        }).join('')
+      : '<div class="print-item">Any set (basic land)</div>';
+
+    html += `
+      <div class="${classes.join(' ')}" data-card="${escAttr(name)}">
+        <div class="card-main" onclick="toggleCard('${escJs(name)}')">
+          <div class="card-check"></div>
+          <div class="card-info">
+            <div class="card-name">
+              ${escHtml(name)}
+              ${card.cmdr ? '<span class="cmdr-badge">CMDR</span>' : ''}
+            </div>
+            <div class="card-qty">x${card.qty} &middot; ${card.prints.length} printings</div>
+          </div>
+          <div class="card-expand" onclick="event.stopPropagation();togglePrints(this)">\u25BC</div>
+        </div>
+        <div class="card-prints">${printsHtml}</div>
+      </div>`;
+  }
+
+  list.innerHTML = html || '<p style="padding:20px;text-align:center;color:var(--text-dim)">No cards match.</p>';
+}
+
+function toggleCard(name) {
+  if (!checkedState[currentDeck]) checkedState[currentDeck] = {};
+  checkedState[currentDeck][name] = !checkedState[currentDeck][name];
+  saveState();
+  renderCards();
+  updateProgress();
+}
+
+function togglePrints(el) {
+  const prints = el.closest('.card-item').querySelector('.card-prints');
+  prints.classList.toggle('open');
+  el.textContent = prints.classList.contains('open') ? '\u25B2' : '\u25BC';
+}
+
+function updateProgress() {
+  const deck = DECKS[currentDeck];
+  const checked = checkedState[currentDeck] || {};
+  const total = deck.order.length;
+  const found = deck.order.filter(n => checked[n]).length;
+
+  document.getElementById('barFill').style.width = (total ? (found/total*100) : 0) + '%';
+  document.getElementById('progressCount').textContent = `${found}/${total}`;
+
+  // Total across all decks
+  let totalAll = 0, foundAll = 0;
+  for (const key of Object.keys(DECKS)) {
+    const d = DECKS[key];
+    totalAll += d.order.length;
+    const c = checkedState[key] || {};
+    foundAll += d.order.filter(n => c[n]).length;
+  }
+  document.getElementById('totalProgress').textContent = `${foundAll}/${totalAll} total`;
+}
+
+function resetDeck() {
+  if (confirm('Reset all checkmarks for this deck?')) {
+    checkedState[currentDeck] = {};
+    saveState();
+    renderCards();
+    updateProgress();
+  }
+}
+
+function exportProgress() {
+  let text = 'NEXUS Commander Deck Checklist Export\n';
+  text += '=' .repeat(50) + '\n\n';
+  for (const key of Object.keys(DECKS)) {
+    const deck = DECKS[key];
+    const checked = checkedState[key] || {};
+    const found = deck.order.filter(n => checked[n]).length;
+    text += `${DECK_LABELS[key] || key}: ${found}/${deck.order.length}\n`;
+    text += '-'.repeat(30) + '\n';
+    for (const name of deck.order) {
+      const card = deck.cards[name];
+      const mark = checked[name] ? '[X]' : '[ ]';
+      text += `${mark} ${name} x${card.qty}`;
+      if (card.cmdr) text += ' (COMMANDER)';
+      text += '\n';
+    }
+    text += '\n';
+  }
+
+  const blob = new Blob([text], {type: 'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'commander_checklist_export.txt';
+  a.click();
+}
+
+// Utility
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s) { return s.replace(/"/g,'&quot;'); }
+function escJs(s) { return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+// Search handler
+document.getElementById('searchInput').addEventListener('input', renderCards);
+
+// Filter handlers
+document.querySelectorAll('.filter-row button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-row button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderCards();
+  });
+});
+
+init();
+</script>
+</body>
+</html>

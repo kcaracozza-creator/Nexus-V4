@@ -1,0 +1,85 @@
+1 Aetherize
+1 Alania, Divergent Storm
+1 Ash Barrens
+1 Auroral Procession
+1 Bender's Waterskin
+1 Big Score
+1 Bountiful Landscape
+1 Burning Wish
+1 Cinder Glade
+1 Command Tower
+1 Consider
+1 Cultivator's Caravan
+1 Cunning Wish
+1 Divide by Zero
+1 Doublecast
+1 Electrodominance
+1 Errant, Street Artist
+1 Escape to the Wilds
+1 Eureka Moment
+1 Exotic Orchard
+1 Fact or Fiction
+1 Fae of Wishes
+1 Fertile Ground
+1 Fog
+5 Forest
+1 Frantic Search
+1 Frontier Bivouac
+1 Frostboil Snarl
+1 Galvanic Iteration
+1 Game Trail
+1 Gandalf the Grey
+1 Glademuse
+1 Goblin Electromancer
+1 Growth Spiral
+1 Gruul Turf
+1 Harrow
+1 Heritage Reclamation
+1 Hinterland Harbor
+1 Invasion of Arcavios
+1 Invert Polarity
+8 Island
+1 Izzet Boilerworks
+1 Joint Exploration
+1 Kalamax, the Stormsire
+1 Leadership Vacuum
+1 Leyline Immersion
+1 Living Wish
+1 Lumbering Worldwagon
+1 Magma Opus
+1 Mizzium Mortars
+1 Mizzix's Mastery
+6 Mountain
+1 Mystic Confluence
+1 Opt
+1 Path of Ancestry
+1 Planar Genesis
+1 Prismatic Lens
+1 Quandrix Apprentice
+1 Ral, Storm Conduit
+1 Reality Shift
+1 Regrowth
+1 Repeated Reverberation
+1 Research/Development
+1 Roiling Regrowth
+1 Rootbound Crag
+1 School Daze
+1 Shivan Reef
+1 Simic Growth Chamber
+1 Skullwinder
+1 Songcrafter Mage
+1 Stormcatch Mentor
+1 Stump Stomp
+1 Sulfur Falls
+1 Tangled Islet
+1 Teach by Example
+1 Temple of Epiphany
+1 Third Path Iconoclast
+1 Thousand-Year Storm
+1 Twinferno
+1 Unexpected Windfall
+1 Veloheart Bike
+1 Vineglimmer Snarl
+1 Wilderness Reclamation
+1 Wish
+

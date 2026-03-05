@@ -1,0 +1,23 @@
+// MTTGG Custom Build: "Sci-Fi Aggro Swarm"
+// Built around your strongest inventory cards
+// Total estimated build cost: Under $10
+
+4 Mistwalker
+4 Knight Luminary
+4 Flight-Deck Coordinator
+4 Frontline War-Rager
+4 Skystinger
+4 Starfighter Pilot
+4 Sami, Ship's Engineer
+3 Nebula Dragon
+
+4 Focus Fire
+4 Plasma Bolt
+4 Radiant Strike
+3 Rig for War
+
+4 Gnawing Crescendo
+2 Sami's Curiosity
+
+18 Mountain
+4 Plains

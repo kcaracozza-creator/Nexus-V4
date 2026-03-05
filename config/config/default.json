@@ -1,0 +1,66 @@
+{
+  "system": {
+    "name": "Nexus Card System",
+    "version": "1.0.0",
+    "platform": "Windows",
+    "mode": "desktop"
+  },
+  "paths": {
+    "base_dir": "E:\\MTTGG\\PYTHON SOURCE FILES\\config",
+    "data_dir": "data",
+    "inventory_dir": "data/inventory",
+    "scans_dir": "data/scans",
+    "library_dir": "data/library",
+    "decks_dir": "data/decks",
+    "templates_dir": "data/Decklist templates",
+    "cache_dir": "data/SCRYFALL_CACHE",
+    "backup_dir": "data/backups",
+    "logs_dir": "data/logs"
+  },
+  "database": {
+    "type": "sqlite",
+    "host": "localhost",
+    "port": 5432,
+    "name": "nexus_cards",
+    "user": "nexus",
+    "password": "",
+    "sqlite_path": "data/nexus_cards.db"
+  },
+  "api": {
+    "enabled": false,
+    "host": "0.0.0.0",
+    "port": 8000,
+    "base_url": "http://localhost:8000",
+    "nexus_cards_url": "https://nexus-cards.com/api"
+  },
+  "sync": {
+    "enabled": false,
+    "interval": 300,
+    "auto_upload": false
+  },
+  "quickbooks": {
+    "enabled": false,
+    "company_file": "",
+    "username": "",
+    "password": ""
+  },
+  "hardware": {
+    "scanner_enabled": true,
+    "camera_enabled": true,
+    "ir_sensor_enabled": false,
+    "scanner_port": "COM3",
+    "camera_index": 0,
+    "gpu_enabled": true,
+    "egpu_enabled": false,
+    "gpu_device": "auto",
+    "gpu_memory_fraction": 0.9,
+    "enable_mixed_precision": true,
+    "sd_card_enabled": true,
+    "sd_auto_upload": false
+  },
+  "ui": {
+    "theme": "professional",
+    "fullscreen": false,
+    "kiosk_mode": false
+  }
+}

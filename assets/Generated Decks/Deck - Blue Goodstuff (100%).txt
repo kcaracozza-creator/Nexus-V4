@@ -1,0 +1,37 @@
+# Blue Goodstuff
+# Theme: Color Identity - Blue
+# Strategy: Strong Blue cards and synergies
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+1 Adaptive Training Post
+1 Ancestral Vision
+1 Archmage Emeritus
+1 Baral's Expertise
+1 Curse of the Swine
+1 Daring Saboteur
+1 Eligeth, Crossroads Augur
+2 Emissary Escort
+2 Extraordinary Journey
+1 Haughty Djinn
+1 Imprisoned in the Moon
+50 Island
+1 Lier, Disciple of the Drowned
+1 Lunar Insight
+4 Minamo, School at Water's Edge
+1 Mindspring Merfolk
+4 Moonlit Meditation
+1 Narset's Reversal
+1 Possession Engine
+1 Sakashima's Will
+4 Sea Drake
+4 Seahunter
+4 Starfield Vocalist
+4 Stolen by the Fae
+2 Storm Crow
+1 Sublime Epiphany
+2 Synthesizer Labship
+1 Transcendent Dragon
+1 Voracious Bibliophile
+

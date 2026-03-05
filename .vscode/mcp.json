@@ -1,0 +1,27 @@
+{
+    "servers": {
+        "narwhal-council-relay": {
+            "type": "http",
+            "url": "https://narwhal-council-relay.kcaracozza.workers.dev/mcp",
+            "description": "NEXUS Narwhal Council - agent coordination, scanner status, social media, email relay"
+        },
+        "nexus-ssh": {
+            "type": "stdio",
+            "command": "C:\\Users\\kcara\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+            "args": ["-m", "mcp_ssh_server"],
+            "env": {
+                "SSH_HOSTS": "192.168.1.219,192.168.1.154,192.168.1.152",
+                "SSH_KEY_PATH": "C:\\Users\\kcara\\.ssh\\id_rsa",
+                "SSH_TIMEOUT": "10",
+                "COMMAND_TIMEOUT": "30"
+            },
+            "description": "Direct SSH to NEXUS fleet: DANIELSON(.219), BROCK(.154), ZULTAN(.152)"
+        },
+        "nexus-network": {
+            "type": "stdio",
+            "command": "C:\\Users\\kcara\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+            "args": ["-m", "mcp_network_diagnostics"],
+            "description": "Fleet network diagnostics: ping, port scan, connectivity checks"
+        }
+    }
+}

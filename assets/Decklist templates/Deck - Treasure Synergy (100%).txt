@@ -1,0 +1,40 @@
+# Treasure Synergy
+# Theme: Mechanic - Treasure
+# Strategy: Synergistic treasure strategy
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+1 Ash Barrens
+1 Big Score
+2 Blooming Blast
+1 Brazen Freebooter
+2 Command Tower
+2 Common Crook
+4 Contested Game Ball
+4 Enterprising Scallywag
+4 Evolving Wilds
+6 Forest
+2 Ganax, Astral Hunter
+1 Giant Growth
+4 Glittermonger
+2 Guild Artisan
+4 Heap Gate
+1 Impulsive Pilferer
+4 Jewel Thief
+4 Llanowar Elves
+1 Magma Opus
+4 Mahadi, Emporium Master
+1 Malcolm, Keen-Eyed Navigator
+6 Mountain
+6 Plains
+1 Ponder
+1 Prismari Command
+1 Prosperous Pirates
+4 Rampant Growth
+1 Sailor of Means
+4 Shiny Impetus
+1 Storm-Kiln Artist
+6 Swamp
+1 Terramorphic Expanse
+

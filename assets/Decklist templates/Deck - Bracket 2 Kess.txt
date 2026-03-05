@@ -1,0 +1,95 @@
+1 Abrade
+1 Aetherize
+1 Arcane Signet
+1 Archmage Emeritus
+1 Bedevil
+1 Blasphemous Act
+1 Blightstep Pathway
+1 Bojuka Bog
+1 Brainstorm
+1 Cascade Bluffs
+1 Chaos Warp
+1 Choked Estuary
+1 Chromatic Lantern
+1 Clearwater Pathway
+1 Command Tower
+1 Commit/Memory
+1 Consider
+1 Cormela, Glamour Thief
+1 Counterspell
+1 Dark Ritual
+1 Dimir Aqueduct
+1 Dimir Signet
+1 Disrupt Decorum
+1 Double Vision
+1 Dragonskull Summit
+1 Drowned Catacomb
+1 Exotic Orchard
+1 Expansion/Explosion
+1 Fact or Fiction
+1 Faithless Looting
+1 Feed the Swarm
+1 Ferrous Lake
+1 Flare of Duplication
+1 Forbidden Alchemy
+1 Foreboding Ruins
+1 Frantic Search
+1 Frostboil Snarl
+1 Goblin Electromancer
+1 Hero's Downfall
+1 Increasing Vengeance
+1 Insult/Injury
+1 Invert Polarity
+3 Island
+1 Izzet Boilerworks
+1 Izzet Charm
+1 Izzet Signet
+1 Kess, Dissident Mage
+1 Lightning Bolt
+1 Mana Geyser
+3 Mountain
+1 Murmuring Mystic
+1 Negate
+1 Nightscape Familiar
+1 Opt
+1 Preordain
+1 Professor Onyx
+1 Pull from Tomorrow
+1 Rakdos Carnarium
+1 Rakdos Charm
+1 Rakdos Signet
+1 Ral, Storm Conduit
+1 Reiterate
+1 Return the Favor
+1 Reverberate
+1 Riverglide Pathway
+1 Secrets of the Dead
+1 Sedgemoor Witch
+1 Seething Song
+1 Shivan Reef
+1 Smoldering Marsh
+1 Sol Ring
+1 Storm King's Thunder
+1 Storm-Kiln Artist
+1 Sulfur Falls
+1 Sulfurous Springs
+1 Sunken Hollow
+3 Swamp
+1 Swarm Intelligence
+1 Tainted Isle
+1 Tainted Peak
+1 Talisman of Creativity
+1 Talisman of Dominance
+1 Talisman of Indulgence
+1 Talrand, Sky Summoner
+1 Teferi's Ageless Insight
+1 Terminate
+1 Thought Scour
+1 Thousand-Year Storm
+1 Thrill of Possibility
+1 Twinferno
+1 Underground River
+1 Windfall
+1 Withering Torment
+1 Young Pyromancer
+

@@ -1,0 +1,96 @@
+1 Abrade
+1 Academy Wall
+1 Adaptive Training Post
+1 Alania, Divergent Storm
+1 Ancestral Vision
+1 Arcane Signet
+1 Archmage Emeritus
+1 Ash Barrens
+1 Balmor, Battlemage Captain
+1 Big Score
+1 Cascade Bluffs
+1 Cathartic Reunion
+1 Command Tower
+1 Compulsive Research
+1 Consider
+1 Coruscation Mage
+1 Curse of Opulence
+1 Deep Analysis
+1 Direct Current
+1 Evolving Wilds
+1 Exotic Orchard
+1 Expansion/Explosion
+1 Expressive Iteration
+1 Faithless Looting
+1 Fellwar Stone
+1 Ferrous Lake
+1 Frantic Search
+1 Frolicking Familiar
+1 Galvanic Iteration
+1 Goblin Electromancer
+1 Guttersnipe
+1 Haughty Djinn
+1 Heartfire Immolator
+13 Island
+1 Izzet Signet
+1 Kitsa, Otterball Elite
+1 Lier, Disciple of the Drowned
+1 Light Up the Stage
+1 Lightning Strike
+1 Mana Geyser
+13 Mountain
+1 Narset's Reversal
+1 Opt
+1 Ornithopter of Paradise
+1 Path of Ancestry
+1 Ponder
+1 Pongify
+1 Preordain
+1 Prismari Command
+1 Ral, Storm Conduit
+1 Reliquary Tower
+1 Renegade Tactics
+1 Shivan Reef
+1 Shore Up
+1 Smelt-Ward Minotaur
+1 Sol Ring
+1 Sonic Assault
+1 Spellheart Chimera
+1 Storm-Kiln Artist
+1 Stormcatch Mentor
+1 Stormchaser's Talent
+1 Stormsplitter
+1 Sulfur Falls
+1 Swiftwater Cliffs
+1 Syncopate
+1 Temple of Epiphany
+1 Thieving Otter
+1 Third Path Iconoclast
+1 Thousand-Year Storm
+1 Thrill of Possibility
+1 Twinferno
+1 Unknown Shores
+1 Valley Floodcaller
+1 Veyran, Voice of Duality
+1 Will of the Jeskai
+1 Young Pyromancer
+
+1 Baral and Kari Zev
+1 Baral's Expertise
+1 Caldera Pyremaw
+1 Curse of the Swine
+1 Divination
+1 Electrodominance
+1 Firemind Vessel
+1 Magma Opus
+1 Manaform Hellkite
+1 Rite of Replication
+1 Shiny Impetus
+1 Smelt
+1 Spellgorger Weird
+1 Spinehorn Minotaur
+1 Sublime Epiphany
+1 Think Twice
+1 Transcendent Dragon
+1 Transforming Flourish
+1 Voracious Bibliophile

@@ -1,0 +1,12 @@
+{
+  "server_url": "http://192.168.1.152:5000",
+  "user": {
+    "email": "nexus@local.shop",
+    "id": "792cc4b7-c90e-4fa7-aed7-6d11bd10c8e5",
+    "role": "seller",
+    "seller_id": "dd3befab-91ee-460d-8a79-091adb6ae45f",
+    "subscription_tier": "free",
+    "username": "NEXUS Shop"
+  },
+  "token": ""
+}

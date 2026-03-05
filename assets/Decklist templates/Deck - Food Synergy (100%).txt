@@ -1,0 +1,33 @@
+# Food Synergy
+# Theme: Mechanic - Food
+# Strategy: Synergistic food strategy
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+4 Bake into a Pie
+4 Bakersbane Duo
+4 Bartered Cow
+2 Cache Grab
+2 Command Tower
+4 Crumb and Get It
+4 Curious Pair // Treats to Share
+4 Evolving Wilds
+4 Fell the Pheasant
+9 Forest
+4 Fortifying Provisions
+1 Giant Growth
+2 Hot Dog Cart
+4 Llanowar Elves
+3 Midnight Snack
+9 Mountain
+2 Nocturnal Hunger
+9 Plains
+4 Rampant Growth
+4 Savor
+9 Swamp
+1 Swords to Plowshares
+4 Tempting Witch
+1 Terramorphic Expanse
+2 Valley Rally
+

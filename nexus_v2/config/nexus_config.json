@@ -1,0 +1,47 @@
+{
+  "scanner": {
+    "snarf_ip": "192.168.1.219",
+    "snarf_port": 5001,
+    "brok_ip": "192.168.1.219",
+    "brok_port": 5001,
+    "brok_hdd_path": "/mnt/nexus_data",
+    "brok_ssh_user": "danielson",
+    "scanner_ip": "192.168.1.219",
+    "scanner_port": 5001,
+    "ocr_ip": "192.168.1.219",
+    "ocr_port": 5001,
+    "timeout_seconds": 2,
+    "retry_attempts": 3,
+    "device_type": "DANIELSON Laptop",
+    "ocr_confidence_threshold": 70.0,
+    "camera_index": 0,
+    "camera_width": 1920,
+    "camera_height": 1080
+  },
+  "database": {
+    "path": "./data/nexus_library.db",
+    "backup_count": 5
+  },
+  "ai": {
+    "learning_enabled": true,
+    "grading_confidence_threshold": 0.85
+  },
+  "ui": {
+    "theme": "pro",
+    "font_family": "Segoe UI",
+    "font_size": 11,
+    "window_width": 1400,
+    "window_height": 900,
+    "color_accent": "#10b981"
+  },
+  "marketplace": {
+    "enabled": true,
+    "api_url": "https://nexus-cards.com"
+  },
+  "game": {
+    "active_game": "magic",
+    "magic_library": "nexus_library.json",
+    "pokemon_library": "pokemon_library.json"
+  },
+  "version": "2.1.3"
+}

@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<!--
+NEXUS 8-DOF Robot Arm URDF Model
+================================
+Patent Pending - Kevin Caracozza
+
+Joints:
+  0: Base (rotation around Z)
+  1: Shoulder (rotation around Y)
+  2: Elbow (rotation around Y)
+  3: WristRoll (rotation around X)
+  4: WristPitch (rotation around Y)
+  5: Gripper (vacuum - not simulated as joint)
+  6: LiftShoulder (rotation around Y)
+  7: LiftTilt (rotation around Y)
+
+Coordinate System: Z-up, X-forward
+Units: meters, radians
+-->
+<robot name="nexus_arm">
+
+  <!-- Base Link (fixed to table) - 72.3mm diameter x 56.7mm tall -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.036" length="0.057"/>
+      </geometry>
+      <origin xyz="0 0 0.0285"/>
+      <material name="dark_grey">
+        <color rgba="0.2 0.2 0.2 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.036" length="0.057"/>
+      </geometry>
+      <origin xyz="0 0 0.0285"/>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- Joint 0: Base Rotation -->
+  <joint name="base_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="turntable"/>
+    <origin xyz="0 0 0.01" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14159" upper="3.14159" effort="10" velocity="2"/>
+  </joint>
+
+  <link name="turntable">
+    <visual>
+      <geometry>
+        <cylinder radius="0.03" length="0.015"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.2 0.4 0.8 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.03" length="0.015"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <!-- Joint 1: Shoulder -->
+  <joint name="shoulder_joint" type="revolute">
+    <parent link="turntable"/>
+    <child link="upper_arm"/>
+    <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="10" velocity="2"/>
+  </joint>
+
+  <!-- Upper arm: 120mm link from connector_straight.stl -->
+  <link name="upper_arm">
+    <visual>
+      <origin xyz="0 0 0.060"/>
+      <geometry>
+        <box size="0.036 0.036 0.120"/>
+      </geometry>
+      <material name="silver">
+        <color rgba="0.7 0.7 0.7 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.060"/>
+      <geometry>
+        <box size="0.036 0.036 0.120"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.15"/>
+      <origin xyz="0 0 0.060"/>
+      <inertia ixx="0.0002" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.00005"/>
+    </inertial>
+  </link>
+
+  <!-- Joint 2: Elbow -->
+  <joint name="elbow_joint" type="revolute">
+    <parent link="upper_arm"/>
+    <child link="forearm"/>
+    <origin xyz="0 0 0.120" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.0" upper="2.0" effort="10" velocity="2"/>
+  </joint>
+
+  <!-- Forearm: 120mm link -->
+  <link name="forearm">
+    <visual>
+      <origin xyz="0 0 0.060"/>
+      <geometry>
+        <box size="0.036 0.036 0.120"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.060"/>
+      <geometry>
+        <box size="0.036 0.036 0.120"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0.060"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.00003"/>
+    </inertial>
+  </link>
+
+  <!-- Joint 3: Wrist Roll -->
+  <joint name="wrist_roll_joint" type="revolute">
+    <parent link="forearm"/>
+    <child link="wrist_roll"/>
+    <origin xyz="0 0 0.120" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-3.14159" upper="3.14159" effort="5" velocity="3"/>
+  </joint>
+
+  <link name="wrist_roll">
+    <visual>
+      <geometry>
+        <cylinder radius="0.012" length="0.02"/>
+      </geometry>
+      <origin rpy="0 1.5708 0"/>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.012" length="0.02"/>
+      </geometry>
+      <origin rpy="0 1.5708 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.05"/>
+      <inertia ixx="0.00002" ixy="0" ixz="0" iyy="0.00002" iyz="0" izz="0.00002"/>
+    </inertial>
+  </link>
+
+  <!-- Joint 4: Wrist Pitch -->
+  <joint name="wrist_pitch_joint" type="revolute">
+    <parent link="wrist_roll"/>
+    <child link="gripper_mount"/>
+    <origin xyz="0 0 0.015" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="5" velocity="3"/>
+  </joint>
+
+  <link name="gripper_mount">
+    <visual>
+      <origin xyz="0 0 0.015"/>
+      <geometry>
+        <box size="0.025 0.025 0.03"/>
+      </geometry>
+      <material name="dark_grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.015"/>
+      <geometry>
+        <box size="0.025 0.025 0.03"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.08"/>
+      <origin xyz="0 0 0.015"/>
+      <inertia ixx="0.00003" ixy="0" ixz="0" iyy="0.00003" iyz="0" izz="0.00002"/>
+    </inertial>
+  </link>
+
+  <!-- Vacuum Gripper (end effector) -->
+  <joint name="gripper_joint" type="fixed">
+    <parent link="gripper_mount"/>
+    <child link="vacuum_gripper"/>
+    <origin xyz="0 0 0.03" rpy="0 0 0"/>
+  </joint>
+
+  <link name="vacuum_gripper">
+    <visual>
+      <geometry>
+        <cylinder radius="0.015" length="0.025"/>
+      </geometry>
+      <material name="orange">
+        <color rgba="1.0 0.5 0.0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.015" length="0.025"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.03"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+  </link>
+
+</robot>

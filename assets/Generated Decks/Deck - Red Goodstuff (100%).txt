@@ -1,0 +1,37 @@
+# Red Goodstuff
+# Theme: Color Identity - Red
+# Strategy: Strong Red cards and synergies
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+1 Brass's Bounty
+1 Burning Anger
+1 Burnout Bashtronaut
+1 Caldera Pyremaw
+1 Chandra, Flameshaper
+2 Devastating Onslaught
+1 Electrodominance
+1 Electroduplicate
+4 Fury
+1 Gastal Thrillroller
+2 Gleeful Demolition
+1 Hidetsugu's Second Rite
+4 Invoke Calamity
+1 Kellan, Planar Trailblazer
+1 Manaform Hellkite
+2 Memorial Vault
+50 Mountain
+4 Opportunistic Dragon
+2 Pain for All
+2 Possibility Technician
+1 Realm-Scorcher Hellkite
+1 Rite of the Dragoncaller
+2 Rust Harvester
+2 Terminal Velocity
+1 Transforming Flourish
+1 Twinflame Tyrant
+4 Unholy Heat
+4 Weapons Manufacturing
+1 Will of the Jeskai
+

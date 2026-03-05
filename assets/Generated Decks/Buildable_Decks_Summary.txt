@@ -1,0 +1,342 @@
+MTTGG BUILDABLE DECKS SUMMARY
+========================================
+Generated: 2025-11-10 21:00:25
+Total buildable decks: 56
+Inventory cards analyzed: 2613
+
+Wizard Tribal: 100.0%
+  Theme: Tribal - Wizard
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Warlock Tribal: 100.0%
+  Theme: Tribal - Warlock
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Soldier Tribal: 100.0%
+  Theme: Tribal - Soldier
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Warrior Tribal: 100.0%
+  Theme: Tribal - Warrior
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Rogue Tribal: 100.0%
+  Theme: Tribal - Rogue
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Scout Tribal: 100.0%
+  Theme: Tribal - Scout
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Druid Tribal: 100.0%
+  Theme: Tribal - Druid
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Elemental, Tribal: 100.0%
+  Theme: Tribal - Elemental,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Bird, Tribal: 100.0%
+  Theme: Tribal - Bird,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Knight Tribal: 100.0%
+  Theme: Tribal - Knight
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Bird Tribal: 100.0%
+  Theme: Tribal - Bird
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Cleric Tribal: 100.0%
+  Theme: Tribal - Cleric
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Aura Tribal: 100.0%
+  Theme: Tribal - Aura
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Elf, Tribal: 100.0%
+  Theme: Tribal - Elf,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Horror Tribal: 100.0%
+  Theme: Tribal - Horror
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Human, Tribal: 100.0%
+  Theme: Tribal - Human,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Equipment Tribal: 100.0%
+  Theme: Tribal - Equipment
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Beast Tribal: 100.0%
+  Theme: Tribal - Beast
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Angel Tribal: 100.0%
+  Theme: Tribal - Angel
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Merfolk, Tribal: 100.0%
+  Theme: Tribal - Merfolk,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Artificer Tribal: 100.0%
+  Theme: Tribal - Artificer
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Pirate Tribal: 100.0%
+  Theme: Tribal - Pirate
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Goblin, Tribal: 100.0%
+  Theme: Tribal - Goblin,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Dragon Tribal: 100.0%
+  Theme: Tribal - Dragon
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Zombie, Tribal: 100.0%
+  Theme: Tribal - Zombie,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Shaman Tribal: 100.0%
+  Theme: Tribal - Shaman
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Cat Tribal: 100.0%
+  Theme: Tribal - Cat
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Elemental Tribal: 100.0%
+  Theme: Tribal - Elemental
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Construct Tribal: 100.0%
+  Theme: Tribal - Construct
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Zombie Tribal: 100.0%
+  Theme: Tribal - Zombie
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Vampire, Tribal: 100.0%
+  Theme: Tribal - Vampire,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Cat, Tribal: 100.0%
+  Theme: Tribal - Cat,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Spirit Tribal: 100.0%
+  Theme: Tribal - Spirit
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Dinosaur Tribal: 100.0%
+  Theme: Tribal - Dinosaur
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Samurai Tribal: 100.0%
+  Theme: Tribal - Samurai
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Adventure Tribal: 100.0%
+  Theme: Tribal - Adventure
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Spacecraft Tribal: 100.0%
+  Theme: Tribal - Spacecraft
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Wall Tribal: 100.0%
+  Theme: Tribal - Wall
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Insect, Tribal: 100.0%
+  Theme: Tribal - Insect,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Vehicle Tribal: 100.0%
+  Theme: Tribal - Vehicle
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Robot, Tribal: 100.0%
+  Theme: Tribal - Robot,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Faerie, Tribal: 100.0%
+  Theme: Tribal - Faerie,
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Pilot Tribal: 100.0%
+  Theme: Tribal - Pilot
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Red Goodstuff: 100.0%
+  Theme: Color Identity - Red
+  Total cards: 100
+  Available: 100
+  Missing: 0 cards
+
+Black Goodstuff: 100.0%
+  Theme: Color Identity - Black
+  Total cards: 100
+  Available: 100
+  Missing: 0 cards
+
+Green Goodstuff: 100.0%
+  Theme: Color Identity - Green
+  Total cards: 100
+  Available: 100
+  Missing: 0 cards
+
+Blue Goodstuff: 100.0%
+  Theme: Color Identity - Blue
+  Total cards: 100
+  Available: 100
+  Missing: 0 cards
+
+White Goodstuff: 100.0%
+  Theme: Color Identity - White
+  Total cards: 100
+  Available: 100
+  Missing: 0 cards
+
+4-Color Goodstuff: 100.0%
+  Theme: Color Identity - 4-Color
+  Total cards: 81
+  Available: 81
+  Missing: 0 cards
+
+4-Color Goodstuff: 100.0%
+  Theme: Color Identity - 4-Color
+  Total cards: 90
+  Available: 90
+  Missing: 0 cards
+
+4-Color Goodstuff: 100.0%
+  Theme: Color Identity - 4-Color
+  Total cards: 81
+  Available: 81
+  Missing: 0 cards
+
+Food Synergy: 100.0%
+  Theme: Mechanic - Food
+  Total cards: 100
+  Available: 100
+  Missing: 0 cards
+
+Gift Synergy: 100.0%
+  Theme: Mechanic - Gift
+  Total cards: 99
+  Available: 99
+  Missing: 0 cards
+
+Treasure Synergy: 100.0%
+  Theme: Mechanic - Treasure
+  Total cards: 87
+  Available: 87
+  Missing: 0 cards
+
+First Strike Synergy: 100.0%
+  Theme: Mechanic - First Strike
+  Total cards: 84
+  Available: 84
+  Missing: 0 cards
+
+Lifelink Synergy: 100.0%
+  Theme: Mechanic - Lifelink
+  Total cards: 100
+  Available: 100
+  Missing: 0 cards
+

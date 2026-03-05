@@ -1,0 +1,31 @@
+# Black Goodstuff
+# Theme: Color Identity - Black
+# Strategy: Strong Black cards and synergies
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+2 Alpharael, Stonechosen
+1 Ashiok, Wicked Manipulator
+4 Beseech the Mirror
+4 Blacklance Paragon
+4 Bone Splinters
+1 Drag to the Bottom
+2 Entropic Battlecruiser
+1 Fleshbag Marauder
+1 Gilt-Leaf Winnower
+4 Greed
+1 High-Society Hunter
+4 Mukotai Soulripper
+1 Nine-Lives Familiar
+4 Osteomancer Adept
+1 Plague Reaver
+1 Quag Feast
+2 Requiem Monolith
+4 Sudden Edict
+2 Sunset Saboteur
+50 Swamp
+1 Tinybones, Bauble Burglar
+4 Tormod, the Desecrator
+1 Zul Ashur, Lich Lord
+

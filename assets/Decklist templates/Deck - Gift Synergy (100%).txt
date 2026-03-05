@@ -1,0 +1,32 @@
+# Gift Synergy
+# Theme: Mechanic - Gift
+# Strategy: Synergistic gift strategy
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+1 Ash Barrens
+2 Blooming Blast
+2 Command Tower
+1 Consumed by Greed
+4 Crumb and Get It
+4 Evolving Wilds
+10 Forest
+1 Giant Growth
+10 Island
+4 Llanowar Elves
+4 Long River's Pull
+4 Longstalk Brawl
+4 Mind Spiral
+10 Mountain
+2 Nocturnal Hunger
+2 Parting Gust
+10 Plains
+1 Ponder
+4 Rampant Growth
+4 Sazacap's Brew
+10 Swamp
+1 Terramorphic Expanse
+2 Valley Rally
+2 Wildfire Howl
+

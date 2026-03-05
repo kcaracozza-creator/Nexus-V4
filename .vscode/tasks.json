@@ -1,0 +1,141 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run MTTGG Unified System",
+            "type": "shell",
+            "command": "python",
+            "args": ["PYTHON SOURCE FILES/mttgg_unified_step3.py"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/PYTHON SOURCE FILES"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Test Hardware Scanner",
+            "type": "shell",
+            "command": "python",
+            "args": ["PYTHON SOURCE FILES/hardware_scanner.py", "test"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/PYTHON SOURCE FILES"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Setup Hardware Scanner",
+            "type": "shell",
+            "command": "python",
+            "args": ["PYTHON SOURCE FILES/setup_hardware_scanner.py"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/PYTHON SOURCE FILES"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Deck Builder",
+            "type": "shell",
+            "command": "python",
+            "args": ["PYTHON SOURCE FILES/deck_builder.py"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/PYTHON SOURCE FILES"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Install MTTGG Dependencies",
+            "type": "shell",
+            "command": "pip",
+            "args": ["install", "-r", "requirements.txt"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run AI Card Recognition",
+            "type": "shell",
+            "command": "python",
+            "args": ["PYTHON SOURCE FILES/ai_card_recognition.py"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run MTTGG Unified Automation",
+            "type": "shell",
+            "command": "python",
+            "args": ["PYTHON SOURCE FILES/mttgg_unified_automation.py"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Create MTTGG Standalone Build",
+            "type": "shell",
+            "command": "python",
+            "args": ["PYTHON SOURCE FILES/build_standalone_final.py"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/PYTHON SOURCE FILES"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

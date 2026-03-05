@@ -1,0 +1,11 @@
+name = "nexus-hq"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nexus-hq"
+database_id = "1c765fc6-f8fd-4f90-aa24-d4bc235f6b59"
+
+# Set secrets via: npx wrangler secret put ADMIN_PASSWORD
+# Set secrets via: npx wrangler secret put SESSION_SECRET

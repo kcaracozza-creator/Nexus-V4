@@ -1,0 +1,26 @@
+# Lifelink Synergy
+# Theme: Mechanic - Lifelink
+# Strategy: Synergistic lifelink strategy
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+4 Basri's Acolyte
+1 Brightblade Stoat
+4 Child of Night
+4 Comet Crawler
+1 Danitha Capashen, Paragon
+4 Dawnstrike Vanguard
+4 Desperate Farmer // Depraved Harvester
+4 Exalted Sunborn
+4 Fell Gravship
+4 Gargantuan Leech
+4 Ghastly Gloomhunter
+4 Insatiable Harpy
+4 Leech Gauntlet
+1 Mangara, the Diplomat
+25 Plains
+1 Seraph of Dawn
+26 Swamp
+1 Swords to Plowshares
+

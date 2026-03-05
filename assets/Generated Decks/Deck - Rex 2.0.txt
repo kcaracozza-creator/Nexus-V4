@@ -1,0 +1,79 @@
+1 Aether Hub
+1 Aether Theorist
+1 Aetherflux Conduit
+1 Aethergeode Miner
+1 Aetherling
+1 Aethertide Whale
+1 Aqueous Form
+1 Arcade Gannon
+1 Arcanis the Omnipotent
+1 Azorius Chancery
+1 Command Tower
+1 Conversion Apparatus
+1 Cut Your Losses
+1 Darksteel Citadel
+1 Decoction Module
+1 Deranged Assistant
+1 Didn't Say Please
+1 Disenchant
+1 Dispatch
+1 Dovin's Veto
+1 Dreamborn Muse
+1 Drowned Secrets
+1 Eddytrail Hawk
+1 Electrostatic Pummeler
+1 Emry, Lurker of the Loch
+1 Farmstead Gleaner
+1 Flaming Fist
+1 Fractured Sanity
+1 Frantic Search
+1 Generous Gift
+1 Ghostly Pilferer
+1 Glacial Fortress
+1 Glimmer of Genius
+1 Horseshoe Crab
+1 Illusionist's Bracers
+13 Island
+1 Jodah's Avenger
+1 Lae'zel, Vlaakith's Champion
+1 Lightning Greaves
+1 Maddening Cacophony
+1 Millikin
+1 Minister of Inquiries
+1 Negate
+1 Omen Hawker
+1 Otherworldly Gaze
+1 Overwhelmed Apprentice
+1 Palladium Myr
+1 Path to Exile
+1 Pili-Pala
+11 Plains
+1 Port Town
+1 Prairie Stream
+1 Psychic Corrosion
+1 Puresight Merrow
+1 Refute
+1 Rex, Cyber-Hound
+1 Roil Cartographer
+1 Ruin Crab
+1 Sentry Bot
+1 Shipwreck Moray
+1 Skycloud Expanse
+1 Sol Ring
+1 Space-Time Anomaly
+1 Sphinx of the Revelation
+1 Static Prison
+1 Stroke of Midnight
+1 Swiftfoot Boots
+1 Swords to Plowshares
+1 Tempest Harvester
+1 Temple of the False God
+1 Thirst for Knowledge
+1 Thought Scour
+1 Thriving Turtle
+1 Training Grounds
+1 Traumatize
+1 Tune the Narrative
+1 Whispersilk Cloak
+1 Wrath of the Skies
+

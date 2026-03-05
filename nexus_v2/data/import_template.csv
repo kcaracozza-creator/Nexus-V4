@@ -1,0 +1,4 @@
+name,set_code,collector_number,quantity,price,foil,rarity,condition,language
+"Lightning Bolt",2X2,205,4,,false,uncommon,NM,en
+"Force of Will",ALL,42,1,,false,uncommon,LP,en
+"Shivan Dragon",M14,154,2,,true,rare,NM,en

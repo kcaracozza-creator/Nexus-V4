@@ -1,0 +1,20 @@
+# NEXUS Robot Arm Simulation Requirements
+# For Ubuntu Server 192.168.1.159
+
+# Physics simulation
+pybullet>=3.2.5
+
+# RL environment
+gymnasium>=0.29.0
+
+# RL algorithms
+stable-baselines3>=2.0.0
+
+# Math/arrays
+numpy>=1.24.0
+
+# Visualization (optional, for TensorBoard)
+tensorboard>=2.14.0
+
+# PyTorch (required by stable-baselines3)
+torch>=2.0.0

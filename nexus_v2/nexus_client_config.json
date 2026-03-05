@@ -1,0 +1,8 @@
+{
+  "api_key": "YOUR_NEXUS_API_KEY",
+  "anthropic_api_key": "YOUR_ANTHROPIC_API_KEY",
+  "hq_url": "https://nexus-hq-tno1.onrender.com",
+  "hq_url_local": "http://localhost:5050",
+  "client_name": "NEXUS Prime - Kevin HQ",
+  "client_id": "1C6314E7"
+}

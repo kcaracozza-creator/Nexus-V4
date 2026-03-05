@@ -1,0 +1,92 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: MTTGG Main System",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/PYTHON SOURCE FILES/mttgg_unified_step3.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/PYTHON SOURCE FILES",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/PYTHON SOURCE FILES"
+            }
+        },
+        {
+            "name": "Python: Hardware Scanner",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/PYTHON SOURCE FILES/hardware_scanner.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/PYTHON SOURCE FILES",
+            "args": [
+                "interactive"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/PYTHON SOURCE FILES"
+            }
+        },
+        {
+            "name": "Python: Setup Hardware Scanner",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/PYTHON SOURCE FILES/setup_hardware_scanner.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/PYTHON SOURCE FILES",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/PYTHON SOURCE FILES"
+            }
+        },
+        {
+            "name": "Python: Deck Builder",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/PYTHON SOURCE FILES/deck_builder.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/PYTHON SOURCE FILES",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/PYTHON SOURCE FILES"
+            }
+        },
+        {
+            "name": "Python: MTTGG Unified Automation",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/PYTHON SOURCE FILES/mttgg_unified_automation.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/PYTHON SOURCE FILES",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/PYTHON SOURCE FILES"
+            }
+        },
+        {
+            "name": "Python: AI Card Recognition",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/PYTHON SOURCE FILES/ai_card_recognition.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/PYTHON SOURCE FILES",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/PYTHON SOURCE FILES"
+            }
+        },
+        {
+            "name": "PowerShell: Run Current Script",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${file}",
+            "cwd": "${workspaceFolder}",
+            "attachDotnetDebugger": false
+        }
+    ]
+}

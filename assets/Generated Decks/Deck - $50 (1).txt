@@ -1,0 +1,70 @@
+1 Aetheric Amplifier
+1 Ancient Stone Idol
+1 Aphetto Alchemist
+1 Basalt Monolith
+1 Bladegriff Prototype
+1 Booby Trap
+1 Clockspinning
+1 Consider
+1 Contentious Plan
+1 Corridor Monitor
+1 Council's Deliberation
+1 Coveted Jewel
+1 Crackdown Construct
+1 Curate
+1 Deduce
+1 Depth Charge Colossus
+1 Dream's Grip
+1 Dreamstone Hedron
+1 Experimental Augury
+1 Extinguisher Battleship
+1 Fleeting Distraction
+1 Frantic Search
+1 Gate Colossus
+1 Geistwave
+1 Glimpse of Freedom
+1 God-Pharaoh's Gift
+1 Hithlain Knots
+1 Hulking Metamorph
+1 Infuse
+1 Ingenuity Engine
+1 Inkwell Leviathan
+1 Inverted Iceberg
+32 Island
+1 Jolt
+1 Laboratory Maniac
+1 Lady Octopus, Inspired Inventor
+1 Lightning Greaves
+1 Maelstrom Colossus
+1 Meteor Golem
+1 Midnight Clock
+1 Mind Stone
+1 Mindslaver
+1 Mirran Spy
+1 Myr Battlesphere
+1 Narset, Parter of Veils
+1 Niblis of the Breath
+1 Opt
+1 Platinum Angel
+1 Preordain
+1 Quicken
+1 Reach Through Mists
+1 Refocus
+1 Serum Snare
+1 Shuko
+1 Skullclamp
+1 Sol Ring
+1 Solemn Simulacrum
+1 Spine of Ish Sah
+1 Stinging Lionfish
+1 Surge Conductor
+1 Tezzeret's Gambit
+1 Thought Monitor
+1 Thought Scour
+1 Throne of Geth
+1 Thrummingbird
+1 Tolarian Kraken
+1 Triplicate Titan
+1 Walking Skyscraper
+1 Wondrous Crucible
+

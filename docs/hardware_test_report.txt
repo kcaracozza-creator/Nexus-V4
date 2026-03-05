@@ -1,0 +1,55 @@
+
+MTTGG Mechanical Hardware Test Report
+Generated: 2025-11-10 02:09:05
+========================================
+
+Hardware Configuration:
+- DSLR Camera for high-quality card imaging
+- Arduino with dual 5V motor control system
+- HW201 IR sensor for card presence detection
+- Photosensor for card removal confirmation
+
+Test Results Summary:
+✅ Python Environment: PASS
+❌ Arduino Hardware: FAIL
+✅ DSLR Camera: PASS
+❌ Mechanical Workflow: FAIL
+
+Detailed Results:
+================
+
+Python Environment:
+- Installed Packages: opencv-python, pyserial, numpy
+- Missing Packages: None
+
+Arduino Hardware:
+- Connection: ❌ Failed
+- Firmware v2.0: ❌ Not Found
+- HW201 Sensor: ❌ Failed
+- Photosensor: ❌ Failed
+- Eject Motor: ❌ Failed
+- Conveyor Motor: ❌ Failed
+
+DSLR Camera:
+- Status: ✅ Ready
+- Resolution: 1280x720
+- Frame Rate: 30.0 FPS
+- Test Capture: ✅ Success
+
+Mechanical Workflow:
+- Initialization: ❌ Failed
+- Hardware Test: ❌ Fail
+- Overall Status: ❌ Not Ready
+
+Next Steps:
+==========
+
+❌ SETUP INCOMPLETE - ISSUES DETECTED
+
+Please resolve the following issues:
+
+• Check Arduino connection and COM port
+• Upload arduino_scanner_firmware_v2.ino to Arduino
+• Install ArduinoJson library
+• Ensure all hardware components are connected
+• Verify wiring matches setup diagram

@@ -1,0 +1,88 @@
+1 Acorn Catapult
+1 Acorn Harvest
+1 Arcane Signet
+1 Bakersbane Duo
+1 Banner of Kinship
+1 Barren Moor
+1 Bloodroot Apothecary
+1 Blooming Marsh
+1 Bonebind Orator
+1 Bonecache Overseer
+1 Bushy Bodyguard
+1 Cache Grab
+1 Camellia, the Seedmiser
+1 Changeling Outcast
+1 Chatter of the Squirrel
+1 Chatterfang, Squirrel General
+1 Chatterstorm
+1 Chitterspitter
+1 Cloakwood Hermit
+1 Command Tower
+1 Corpseberry Cultivator
+1 Curious Forager
+1 Daggerfang Duo
+1 Deep Forest Hermit
+1 Drey Keeper
+1 Druid's Call
+1 Evolving Wilds
+1 Exotic Orchard
+8 Forest
+1 Gilded Goose
+1 Gingerbread Cabin
+1 Golgari Rot Farm
+1 Golgari Signet
+1 Haunted Mire
+1 Hazel of the Rootbloom
+1 Hazel's Brewmaster
+1 Heaped Harvest
+1 Honored Dreyleader
+1 Llanowar Wastes
+1 Maelstrom Pulse
+1 Mudflat Village
+1 Myriad Landscape
+1 Nested Shambler
+1 Nut Collector
+1 Oakhollow Village
+1 Osteomancer Adept
+1 Patchwork Banner
+1 Path of Ancestry
+1 Peregrin Took
+1 Pitiless Plunderer
+1 Preposterous Proportions
+1 Rampant Growth
+1 Ravenous Squirrel
+1 Revive the Shire
+1 Rootcast Apprenticeship
+1 Scavenger's Talent
+1 Scurrid Colony
+1 Scurry Oak
+1 Scurry of Squirrels
+1 Sol Ring
+1 Squirrel Mob
+1 Squirrel Nest
+1 Squirrel Sanctuary
+1 Squirrel Sovereign
+1 Squirrel Wrangler
+1 Stocking the Pantry
+7 Swamp
+1 Swarmyard
+1 Swarmyard Massacre
+1 Talisman of Resilience
+1 Temple of Malady
+1 Terramorphic Expanse
+1 The Odd Acorn Gang
+1 The Shire
+1 Thornvault Forager
+1 Tireless Provisioner
+1 Toski, Bearer of Secrets
+1 Tranquil Thicket
+1 Treetop Sentries
+1 Twilight Mire
+1 Valley Rotcaller
+1 Verdant Command
+1 Vinereap Mentor
+1 Viridescent Bog
+1 Wild Growth
+1 Windgrace's Judgment
+1 Woodland Cemetery
+

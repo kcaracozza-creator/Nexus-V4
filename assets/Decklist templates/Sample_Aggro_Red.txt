@@ -1,0 +1,22 @@
+﻿// Sample Aggro Red Deck  
+// Fast, aggressive strategy
+
+4 Lightning Bolt
+4 Shock
+4 Lava Spike
+4 Monastery Swiftspear
+4 Goblin Guide
+4 Eidolon of the Great Revel
+3 Skullcrack
+3 Rift Bolt
+2 Searing Blaze
+20 Mountain
+
+// Sideboard
+3 Destructive Revelry
+3 Smash to Smithereens
+2 Volcanic Fallout
+2 Relic of Progenitus
+2 Deflecting Palm  
+2 Path to Exile
+1 Grim Lavamancer

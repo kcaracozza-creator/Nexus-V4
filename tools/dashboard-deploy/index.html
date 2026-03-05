@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS Dev Dashboard | Real-Time Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-hover: #1a1a25;
+            --border: #2a2a3a;
+            --text: #e0e0e0;
+            --text-dim: #888;
+            --accent-gold: #ffd700;
+            --accent-blue: #4a9eff;
+            --accent-green: #4ade80;
+            --accent-red: #f87171;
+            --accent-purple: #a78bfa;
+            --louie-color: #ff00ff;
+            --clouse-color: #00ffff;
+            --mendel-color: #00ff00;
+            --jaques-color: #ffff00;
+            --nicholas-color: #4285f4;
+        --kevin-color: #ff8c00;
+        }
+
+        /* Kevin Chat Panel */
+        .kevin-chat {
+            background: var(--bg-card);
+            border: 2px solid var(--kevin-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .kevin-chat .card-title { color: var(--kevin-color); }
+
+        .chat-log {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 0.75rem;
+            height: 220px;
+            overflow-y: auto;
+            margin-bottom: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .chat-bubble {
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            margin-bottom: 0.4rem;
+            line-height: 1.4;
+        }
+
+        .chat-bubble.from-kevin {
+            background: rgba(255,140,0,0.15);
+            border-left: 3px solid var(--kevin-color);
+            color: #ffb347;
+        }
+
+        .chat-bubble.from-agent {
+            background: rgba(74,222,128,0.08);
+            border-left: 3px solid var(--accent-green);
+            color: var(--text);
+        }
+
+        .chat-bubble .sender {
+            font-weight: 700;
+            font-size: 0.7rem;
+            margin-bottom: 0.2rem;
+            opacity: 0.8;
+        }
+
+        .chat-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--bg-dark);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+
+        .chat-send-btn {
+            padding: 0.75rem 1.25rem;
+            background: var(--kevin-color);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        .chat-to {
+            width: 100%;
+            padding: 0.6rem;
+            background: var(--bg-dark);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon { font-size: 2rem; }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-gold), #ffec8b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-sub {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid var(--accent-green);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Layout */
+        .main {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 1rem;
+            padding: 1rem;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Card */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Infrastructure Grid */
+        .infra-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .infra-item {
+            background: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .infra-item.online { border-left-color: var(--accent-green); }
+        .infra-item.offline { border-left-color: var(--accent-red); }
+        .infra-item.timeout { border-left-color: var(--accent-gold); }
+
+        .infra-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .infra-status {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .infra-item.online .infra-status { color: var(--accent-green); }
+        .infra-item.offline .infra-status { color: var(--accent-red); }
+        .infra-item.timeout .infra-status { color: var(--accent-gold); }
+
+        /* Agent Windows */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .agent-window {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 0.75rem;
+            border-left: 3px solid;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .agent-window.louie { border-left-color: var(--louie-color); }
+        .agent-window.clouse { border-left-color: var(--clouse-color); }
+        .agent-window.mendel { border-left-color: var(--mendel-color); }
+        .agent-window.jaques { border-left-color: var(--jaques-color); }
+
+        .agent-header {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .agent-window.louie .agent-header { color: var(--louie-color); }
+        .agent-window.clouse .agent-header { color: var(--clouse-color); }
+        .agent-window.mendel .agent-header { color: var(--mendel-color); }
+        .agent-window.jaques .agent-header { color: var(--jaques-color); }
+
+        .agent-messages {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .agent-msg {
+            padding: 0.25rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .stat {
+            background: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-value.green { color: var(--accent-green); }
+        .stat-value.gold { color: var(--accent-gold); }
+        .stat-value.red { color: var(--accent-red); }
+        .stat-value.blue { color: var(--accent-blue); }
+
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            margin-top: 0.25rem;
+        }
+
+        /* Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a3a4a; }
+
+        /* Last Update */
+        .last-update {
+            text-align: center;
+            padding: 0.5rem;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main { grid-template-columns: 1fr; }
+            .agent-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <span class="logo-icon">🎴</span>
+            <div>
+                <div class="logo-text">NEXUS</div>
+                <div class="logo-sub">Real-Time Dashboard</div>
+            </div>
+        </div>
+        <div class="status-badge">
+            <span class="status-dot"></span>
+            <span id="statusText">Loading...</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <section>
+            <!-- Kevin Station Chat -->
+            <div class="kevin-chat">
+                <h3 class="card-title">📟 KEVIN — Station Chat</h3>
+                <div class="chat-log" id="kevinChatLog">
+                    <div class="chat-bubble from-agent"><div class="sender">SYSTEM</div>Station chat ready. Agents will respond here.</div>
+                </div>
+                <select class="chat-to" id="kevinChatTo">
+                    <option value="MENDEL">→ MENDEL (Dev)</option>
+                    <option value="NICHOLAS">→ NICHOLAS</option>
+                    <option value="CLOUSE">→ CLOUSE (Strategy)</option>
+                    <option value="JAQUES">→ JAQUES (Legal)</option>
+                    <option value="ALL">→ ALL AGENTS</option>
+                </select>
+                <div class="chat-row">
+                    <input class="chat-input" id="kevinChatInput" type="text" placeholder="Type message... (Enter to send)" />
+                    <button class="chat-send-btn" id="kevinSendBtn">SEND</button>
+                </div>
+                <div id="kevinSendStatus" style="font-size:0.75rem;color:var(--text-dim);margin-top:0.4rem;text-align:center;"></div>
+            </div>
+
+            <!-- Infrastructure Status -->
+            <div class="card">
+                <h3 class="card-title">🖥️ Infrastructure Status</h3>
+                <div class="infra-grid" id="infraStatus">
+                    <div class="infra-item">
+                        <div class="infra-name">ZULTAN</div>
+                        <div class="infra-status">Checking...</div>
+                    </div>
+                    <div class="infra-item">
+                        <div class="infra-name">DANIELSON</div>
+                        <div class="infra-status">Checking...</div>
+                    </div>
+                    <div class="infra-item">
+                        <div class="infra-name">Narwhal Council</div>
+                        <div class="infra-status">Checking...</div>
+                    </div>
+                    <div class="infra-item">
+                        <div class="infra-name">Marketplace API</div>
+                        <div class="infra-status">Checking...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent Communication -->
+            <div class="card">
+                <h3 class="card-title">💬 Agent Communication</h3>
+                <div class="agent-grid">
+                    <div class="agent-window louie">
+                        <div class="agent-header">🔊 LOUIE (Voice)</div>
+                        <div class="agent-messages" id="louieMessages">No messages</div>
+                    </div>
+                    <div class="agent-window clouse">
+                        <div class="agent-header">🎯 CLOUSE (Strategy)</div>
+                        <div class="agent-messages" id="clouseMessages">No messages</div>
+                    </div>
+                    <div class="agent-window mendel">
+                        <div class="agent-header">⚙️ MENDEL (Dev)</div>
+                        <div class="agent-messages" id="mendelMessages">No messages</div>
+                    </div>
+                    <div class="agent-window jaques">
+                        <div class="agent-header">⚖️ JAQUES (Legal)</div>
+                        <div class="agent-messages" id="jaquesMessages">No messages</div>
+                    </div>
+                    <div class="agent-window" style="border-left-color:var(--nicholas-color);grid-column:span 2;">
+                        <div class="agent-header" style="color:var(--nicholas-color);">🔬 NICHOLAS (Autonomous)</div>
+                        <div class="agent-messages" id="nicholasMessages">No messages</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ARM Status -->
+            <div class="card" style="border-color:#a78bfa;">
+                <h3 class="card-title" style="color:#a78bfa;">🦾 ARM Status (Serial Bridge)</h3>
+                <div id="armStatus" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;">
+                    <div style="color:var(--text-dim);">Checking...</div>
+                </div>
+            </div>
+
+            <!-- ARM Camera — zero-lag snapshot polling -->
+            <div class="card" style="border-color:#4a9eff;">
+                <h3 class="card-title" style="color:#4a9eff;">📷 ARM CAM — Live (snapshot mode)</h3>
+                <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
+                    <div style="flex:1;min-width:260px;">
+                        <img id="armCamImg"
+                             src=""
+                             alt="ARM Camera"
+                             style="width:100%;border-radius:8px;border:1px solid #2a2a3a;background:#000;min-height:200px;object-fit:contain;"
+                             onerror="this.style.opacity='0.3';"
+                        />
+                        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;align-items:center;flex-wrap:wrap;">
+                            <select id="armCamSelect" style="background:#12121a;color:#e0e0e0;border:1px solid #2a2a3a;border-radius:6px;padding:0.3rem 0.5rem;font-size:0.8rem;">
+                                <option value="arducam">arducam (48MP Arducam)</option>
+                                <option value="czur">czur (CZUR)</option>
+                            </select>
+                            <select id="armCamFps" style="background:#12121a;color:#e0e0e0;border:1px solid #2a2a3a;border-radius:6px;padding:0.3rem 0.5rem;font-size:0.8rem;">
+                                <option value="100">10 fps</option>
+                                <option value="200" selected>5 fps</option>
+                                <option value="500">2 fps</option>
+                                <option value="1000">1 fps</option>
+                            </select>
+                            <button id="armCamToggle" style="background:#4a9eff;color:#000;border:none;border-radius:6px;padding:0.3rem 0.75rem;cursor:pointer;font-weight:700;font-size:0.8rem;">▶ START</button>
+                            <span id="armCamStatus" style="font-size:0.75rem;color:var(--text-dim);">Paused</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Library Stats -->
+            <div class="card">
+                <h3 class="card-title">📊 ZULTAN Library Stats</h3>
+                <div class="stats-grid" id="libraryStats">
+                    <div class="stat">
+                        <div class="stat-value gold">-</div>
+                        <div class="stat-label">MTG Cards</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value green">-</div>
+                        <div class="stat-label">Pokemon</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value blue">-</div>
+                        <div class="stat-label">Sports</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value red">-</div>
+                        <div class="stat-label">Total Cards</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <!-- Send Message -->
+            <div class="card">
+                <h3 class="card-title">✉️ Send Message</h3>
+                <select id="recipientAgent" style="width: 100%; padding: 0.5rem; background: var(--bg-dark); color: var(--text); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif;">
+                    <option value="LOUIE">LOUIE (Voice)</option>
+                    <option value="CLOUSE">CLOUSE (Strategy)</option>
+                    <option value="MENDEL">MENDEL (Dev)</option>
+                    <option value="JAQUES">JAQUES (Legal)</option>
+                    <option value="NICHOLAS">NICHOLAS (Theoreticist)</option>
+                </select>
+                <textarea id="messageContent" placeholder="Type your message..." style="width: 100%; padding: 0.5rem; background: var(--bg-dark); color: var(--text); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif; min-height: 80px; resize: vertical;"></textarea>
+                <button id="sendMessage" style="width: 100%; padding: 0.75rem; background: var(--accent-green); color: #000; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                    📤 Send Message
+                </button>
+                <div id="sendStatus" style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-dim); text-align: center;"></div>
+            </div>
+
+            <!-- Endpoint Controls -->
+            <div class="card">
+                <h3 class="card-title">🔧 Controls</h3>
+                <button id="toggleEndpoints" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: var(--text); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-family: 'JetBrains Mono', monospace;">
+                    <span id="endpointStatus">Loading...</span>
+                </button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <h3 class="card-title">⚡ Quick Actions</h3>
+                <button onclick="window.open('http://192.168.1.152:8000/docs')" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: var(--accent-blue); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; margin-bottom: 0.5rem;">
+                    🚀 ZULTAN API Docs
+                </button>
+                <button onclick="window.open('https://nexus-marketplace-api.kcaracozza.workers.dev')" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: var(--accent-green); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; margin-bottom: 0.5rem;">
+                    🛒 Marketplace API
+                </button>
+                <button onclick="window.open('https://narwhal-council-relay.kcaracozza.workers.dev/sse')" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: var(--accent-purple); border: 1px solid var(--border); border-radius: 8px; cursor: pointer;">
+                    🐋 Narwhal Council
+                </button>
+            </div>
+
+            <!-- The Dream -->
+            <div class="card">
+                <h3 class="card-title">🛥️ The Dream</h3>
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">🚢</div>
+                    <div style="font-size: 1.25rem; font-weight: 700; color: var(--accent-gold);">$163M</div>
+                    <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">80ft Viking</div>
+                    <div style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem;">"PIPE DREAMS"</div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <div class="last-update" id="lastUpdate">Last updated: Never</div>
+
+    <script>
+        const ENDPOINTS = {
+            zultan: 'http://192.168.1.152:8000',
+            danielson: 'http://192.168.1.219:5001',
+            narwhal: 'https://narwhal-council-relay.kcaracozza.workers.dev',
+            marketplace: 'https://nexus-marketplace-api.kcaracozza.workers.dev'
+        };
+
+        const AGENTS = ['LOUIE', 'CLOUSE', 'MENDEL', 'JAQUES', 'NICHOLAS'];
+        let kevinSeenIds = new Set();
+
+        // Check infrastructure
+        async function checkInfrastructure() {
+            const checks = [
+                { name: 'ZULTAN', url: `${ENDPOINTS.zultan}/api/health` },
+                { name: 'DANIELSON', url: `${ENDPOINTS.danielson}/health` },
+                { name: 'Narwhal Council', url: `${ENDPOINTS.narwhal}/sse` },
+                { name: 'Marketplace API', url: `${ENDPOINTS.marketplace}/v1/cards` }
+            ];
+
+            const container = document.getElementById('infraStatus');
+            container.innerHTML = '';
+
+            for (const check of checks) {
+                const item = document.createElement('div');
+                item.className = 'infra-item';
+
+                try {
+                    const response = await fetch(check.url, {
+                        method: 'GET',
+                        mode: 'no-cors', // Allow cross-origin for status check
+                        cache: 'no-cache'
+                    });
+
+                    // no-cors returns opaque response, assume success if no error
+                    item.classList.add('online');
+                    item.innerHTML = `
+                        <div class="infra-name">${check.name}</div>
+                        <div class="infra-status">✅ ONLINE</div>
+                    `;
+                } catch (error) {
+                    item.classList.add('offline');
+                    item.innerHTML = `
+                        <div class="infra-name">${check.name}</div>
+                        <div class="infra-status">❌ OFFLINE</div>
+                    `;
+                }
+
+                container.appendChild(item);
+            }
+        }
+
+        // Get ZULTAN stats
+        async function getLibraryStats() {
+            try {
+                const response = await fetch(`${ENDPOINTS.zultan}/api/stats`);
+                const stats = await response.json();
+
+                const mtg = stats.mtg?.total_cards || 0;
+                const pokemon = stats.pokemon?.total_cards || 0;
+                const sports = stats.sports?.total_cards || 0;
+                const total = mtg + pokemon + sports;
+
+                document.querySelector('.stats-grid').innerHTML = `
+                    <div class="stat">
+                        <div class="stat-value gold">${mtg.toLocaleString()}</div>
+                        <div class="stat-label">MTG Cards</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value green">${pokemon.toLocaleString()}</div>
+                        <div class="stat-label">Pokemon</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value blue">${sports.toLocaleString()}</div>
+                        <div class="stat-label">Sports</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value red">${total.toLocaleString()}</div>
+                        <div class="stat-label">Total Cards</div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Failed to get library stats:', error);
+            }
+        }
+
+        // Get agent messages
+        async function getAgentMessages() {
+            for (const agent of AGENTS) {
+                try {
+                    // Get inbox
+                    const inboxResponse = await fetch(`${ENDPOINTS.narwhal}/api/get_messages?agent=${agent}`);
+                    const inbox = await inboxResponse.json();
+
+                    // Get outbox
+                    const outboxResponse = await fetch(`${ENDPOINTS.narwhal}/api/get_outbox?agent=${agent}`);
+                    const outbox = await outboxResponse.json();
+
+                    const container = document.getElementById(`${agent.toLowerCase()}Messages`);
+                    const inboxCount = inbox.count || 0;
+                    const outboxCount = outbox.count || 0;
+
+                    let html = `<div class="agent-msg">📥 Inbox: ${inboxCount} messages</div>`;
+                    html += `<div class="agent-msg">📤 Outbox: ${outboxCount} messages</div>`;
+
+                    if (inbox.messages && inbox.messages.length > 0) {
+                        const latest = inbox.messages[inbox.messages.length - 1];
+                        html += `<div class="agent-msg">Latest: ${latest.content?.substring(0, 50)}...</div>`;
+                    }
+
+                    container.innerHTML = html;
+                } catch (error) {
+                    const container = document.getElementById(`${agent.toLowerCase()}Messages`);
+                    container.innerHTML = '<div class="agent-msg">❌ Connection error</div>';
+                }
+            }
+        }
+
+        // Check endpoint status
+        async function checkEndpointStatus() {
+            try {
+                const response = await fetch(`${ENDPOINTS.narwhal}/admin/endpoints-status`);
+                const data = await response.json();
+                const enabled = data.enabled !== false;
+
+                const button = document.getElementById('endpointStatus');
+                button.textContent = enabled ? '🔓 Endpoints: OPEN' : '🔒 Endpoints: CLOSED';
+                button.style.color = enabled ? 'var(--accent-green)' : 'var(--accent-red)';
+            } catch (error) {
+                document.getElementById('endpointStatus').textContent = '❌ Status Unknown';
+            }
+        }
+
+        // ── Kevin chat send ──────────────────────────────────────────────────
+        async function kevinSend() {
+            const to      = document.getElementById('kevinChatTo').value;
+            const content = document.getElementById('kevinChatInput').value.trim();
+            const statusEl = document.getElementById('kevinSendStatus');
+            if (!content) return;
+
+            statusEl.textContent = '⏳ Sending...';
+
+            const targets = to === 'ALL' ? AGENTS : [to];
+            let ok = true;
+            for (const t of targets) {
+                try {
+                    const r = await fetch(`${ENDPOINTS.narwhal}/api/send_message`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ senderId: 'KEVIN', recipientId: t, content })
+                    });
+                    if (!r.ok) ok = false;
+                } catch { ok = false; }
+            }
+
+            if (ok) {
+                appendChat('KEVIN', content, 'from-kevin');
+                document.getElementById('kevinChatInput').value = '';
+                statusEl.textContent = `✅ Sent to ${to}`;
+                setTimeout(() => statusEl.textContent = '', 2000);
+            } else {
+                statusEl.textContent = '❌ Send failed';
+            }
+        }
+
+        function appendChat(sender, text, cls) {
+            const log = document.getElementById('kevinChatLog');
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${cls}`;
+            const ts = new Date().toLocaleTimeString();
+            bubble.innerHTML = `<div class="sender">${sender} · ${ts}</div>${escapeHtml(text)}`;
+            log.appendChild(bubble);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function escapeHtml(t) {
+            return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        document.getElementById('kevinSendBtn').addEventListener('click', kevinSend);
+        document.getElementById('kevinChatInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') kevinSend();
+        });
+
+        // ── SSE: live Kevin inbox — zero polling lag ─────────────────────────
+        function connectKevinSSE() {
+            const url = `${ENDPOINTS.narwhal}/api/sse?agent=KEVIN`;
+            const es = new EventSource(url);
+
+            es.addEventListener('message', e => {
+                try {
+                    const m = JSON.parse(e.data);
+                    const mid = m.id || e.lastEventId || Math.random().toString();
+                    if (!kevinSeenIds.has(mid)) {
+                        kevinSeenIds.add(mid);
+                        appendChat(m.from || m.senderId || '?', m.content || '', 'from-agent');
+                    }
+                } catch {}
+            });
+
+            es.addEventListener('backlog', e => {
+                try {
+                    const msgs = JSON.parse(e.data);
+                    for (const m of msgs) {
+                        const mid = m.id || Math.random().toString();
+                        if (!kevinSeenIds.has(mid)) {
+                            kevinSeenIds.add(mid);
+                            appendChat(m.from || m.senderId || '?', m.content || '', 'from-agent');
+                        }
+                    }
+                } catch {}
+            });
+
+            es.onerror = () => {
+                // SSE dropped — fall back to polling until reconnect
+                es.close();
+                setTimeout(() => {
+                    pollKevinInbox();          // one immediate poll
+                    setTimeout(connectKevinSSE, 5000);  // retry SSE in 5s
+                }, 2000);
+            };
+        }
+
+        // Fallback poll (used when SSE is reconnecting)
+        async function pollKevinInbox() {
+            try {
+                const r = await fetch(`${ENDPOINTS.narwhal}/api/get_messages?agent=KEVIN`);
+                const data = await r.json();
+                const msgs = data.messages || (Array.isArray(data) ? data : []);
+                for (const m of msgs) {
+                    if (!kevinSeenIds.has(m.id)) {
+                        kevinSeenIds.add(m.id);
+                        appendChat(m.from || m.senderId || '?', m.content || '', 'from-agent');
+                    }
+                }
+            } catch {}
+        }
+
+        // Start SSE (instant), fall back to poll if needed
+        connectKevinSSE();
+        pollKevinInbox(); // seed existing messages immediately
+
+        // Send message (legacy sidebar — keep working, now uses KEVIN)
+        document.getElementById('sendMessage').addEventListener('click', async () => {
+            const recipient = document.getElementById('recipientAgent').value;
+            const content = document.getElementById('messageContent').value;
+            const statusEl = document.getElementById('sendStatus');
+
+            if (!content.trim()) {
+                statusEl.textContent = '❌ Message cannot be empty';
+                statusEl.style.color = 'var(--accent-red)';
+                return;
+            }
+
+            statusEl.textContent = '⏳ Sending...';
+            statusEl.style.color = 'var(--accent-gold)';
+
+            try {
+                const response = await fetch(`${ENDPOINTS.narwhal}/api/send_message`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        recipientId: recipient,
+                        senderId: 'KEVIN',
+                        content: content
+                    })
+                });
+
+                if (response.ok) {
+                    statusEl.textContent = `✅ Sent to ${recipient}!`;
+                    statusEl.style.color = 'var(--accent-green)';
+                    document.getElementById('messageContent').value = '';
+                    setTimeout(() => { getAgentMessages(); statusEl.textContent = ''; }, 2000);
+                } else {
+                    const error = await response.text();
+                    statusEl.textContent = `❌ Failed: ${error.substring(0, 30)}`;
+                    statusEl.style.color = 'var(--accent-red)';
+                }
+            } catch (error) {
+                statusEl.textContent = '❌ Network error';
+                statusEl.style.color = 'var(--accent-red)';
+            }
+        });
+
+        // Toggle endpoints
+        document.getElementById('toggleEndpoints').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${ENDPOINTS.narwhal}/admin/toggle-endpoints`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                alert(`Endpoints ${data.enabled ? 'OPENED' : 'CLOSED'}`);
+                checkEndpointStatus();
+            } catch (error) {
+                alert('Failed to toggle endpoints');
+            }
+        });
+
+        // Refresh all data
+        async function refreshAll() {
+            document.getElementById('statusText').textContent = 'Refreshing...';
+
+            await Promise.all([
+                checkInfrastructure(),
+                getLibraryStats(),
+                getAgentMessages(),
+                checkEndpointStatus()
+            ]);
+
+            const now = new Date().toLocaleTimeString();
+            document.getElementById('lastUpdate').textContent = `Last updated: ${now}`;
+            document.getElementById('statusText').textContent = 'All Systems Operational';
+        }
+
+        // Auto-load dashboard — 3s refresh for agent windows
+        refreshAll();
+        setInterval(refreshAll, 3000);
+
+        // ── ARM Status — poll serial bridge ──────────────────────────────────
+        const ARM_BRIDGE = 'http://192.168.1.219:8218';
+        async function updateArmStatus() {
+            const el = document.getElementById('armStatus');
+            try {
+                const r = await fetch(`${ARM_BRIDGE}/api/arm/status`, {signal: AbortSignal.timeout(2000)});
+                const d = await r.json();
+                const j = d.joints || [];
+                const names = ['Base','Shldr','Elbow','WrRol','WrPit'];
+                const jointHtml = j.map((v,i) => `<span style="color:#e0e0e0;">${names[i]||i}: <b style="color:#a78bfa;">${Math.round(v)}°</b></span>`).join(' &nbsp; ');
+                el.innerHTML = `
+                    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;">
+                        <span style="color:${d.connected?'var(--accent-green)':'var(--accent-red)'};">${d.connected?'● CONNECTED':'● DISCONNECTED'}</span>
+                        <span>Vacuum: <b style="color:${d.vacuum?'var(--accent-green)':'var(--text-dim)'}">${d.vacuum?'ON':'off'}</b></span>
+                        <span>Port: <b>${d.port||'?'}</b></span>
+                    </div>
+                    <div style="margin-top:0.5rem;">${jointHtml}</div>`;
+            } catch(e) {
+                el.innerHTML = `<span style="color:var(--accent-red);">● Bridge offline — ${e.message||'timeout'}</span>`;
+            }
+        }
+        updateArmStatus();
+        setInterval(updateArmStatus, 2000);
+
+        // ── ARM CAM — zero-lag snapshot polling ──────────────────────────────
+        let armCamTimer = null;
+        let armCamRunning = false;
+        let armCamErrors = 0;
+
+        function armCamTick() {
+            const cam = document.getElementById('armCamSelect').value;
+            const url = `${ENDPOINTS.danielson}/api/snapshot?camera=${cam}&_=${Date.now()}`;
+            const img = document.getElementById('armCamImg');
+            const status = document.getElementById('armCamStatus');
+            const tmp = new Image();
+            tmp.onload = () => {
+                img.src = tmp.src;
+                img.style.opacity = '1';
+                armCamErrors = 0;
+                status.textContent = `Live · ${new Date().toLocaleTimeString()}`;
+                status.style.color = 'var(--accent-green)';
+            };
+            tmp.onerror = () => {
+                armCamErrors++;
+                status.textContent = `Cam offline (${armCamErrors})`;
+                status.style.color = 'var(--accent-red)';
+            };
+            tmp.src = url;
+        }
+
+        function armCamStart() {
+            if (armCamRunning) return;
+            armCamRunning = true;
+            document.getElementById('armCamToggle').textContent = '⏸ PAUSE';
+            const fps = parseInt(document.getElementById('armCamFps').value, 10);
+            armCamTick(); // immediate first frame
+            armCamTimer = setInterval(armCamTick, fps);
+        }
+
+        function armCamStop() {
+            armCamRunning = false;
+            clearInterval(armCamTimer);
+            armCamTimer = null;
+            document.getElementById('armCamToggle').textContent = '▶ START';
+            document.getElementById('armCamStatus').textContent = 'Paused';
+            document.getElementById('armCamStatus').style.color = 'var(--text-dim)';
+        }
+
+        document.getElementById('armCamToggle').addEventListener('click', () => {
+            armCamRunning ? armCamStop() : armCamStart();
+        });
+
+        // Restart with new FPS when changed
+        document.getElementById('armCamFps').addEventListener('change', () => {
+            if (armCamRunning) { armCamStop(); armCamStart(); }
+        });
+    </script>
+</body>
+</html>

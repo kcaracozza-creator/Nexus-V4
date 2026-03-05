@@ -1,0 +1,180 @@
+MTTGG SCANNER - WEEKEND BUILD GUIDE
+================================================================================
+
+TONIGHT - PARTS ARRIVE:
+================================================================================
+
+1. TEST ELECTRONICS FIRST (30 min):
+   - Unbox NEMA 17 stepper, A4988 driver, Arduino
+   - Wire: Driver STEP→Pin 2, DIR→Pin 3, GND→GND, VDD→5V
+   - Motor: 4 wires to driver A1/A2/B1/B2
+   - Power: 12V to driver VMOT/GND
+   - Upload: Arduino\xy_scanner_controller\xy_scanner_controller.ino
+   - Test: Send "G1 X100" via serial monitor → motor should turn
+   
+   IF MOTOR DOESN'T MOVE: Debug this BEFORE building anything else
+
+2. RENDER SCAD FILES (30 min):
+   - Open OpenSCAD
+   - File → Open each .scad file from root folder:
+     * nema17_motor_mount.scad
+     * lead_nut_bracket.scad
+     * lead_screw_end_support.scad
+     * linear_rail_mount_block.scad
+     * sorting_bin_divider.scad
+     * camera_overhead_mount.scad
+     * cable_clip.scad
+   - Press F6 (render)
+   - File → Export → Export as STL
+   - Save to: 3d printer\STL\
+
+3. START 3D PRINTING (queue these in order):
+   - cable_clip.stl x20 (5 min each = 100 min)
+   - lead_nut_bracket.stl x2 (30 min each = 60 min)
+   - nema17_motor_mount.scad x2 (45 min each = 90 min)
+   - linear_rail_mount_block.stl x8 (20 min each = 160 min)
+   - camera_overhead_mount.stl x1 (90 min)
+   - sorting_bin_divider.stl x4 (30 min each = 120 min)
+   - lead_screw_end_support.stl x4 (120 min each = 480 min)
+   
+   TOTAL: ~19 hours (let it run overnight + tomorrow)
+
+FRIDAY - MECHANICAL ASSEMBLY:
+================================================================================
+
+4. BUILD FRAME (morning):
+   - 2020 extrusion: 400mm x2 (X-axis), 400mm x2 (Y-axis)
+   - Install linear_rail_mount_blocks (8 total, 4 per rail)
+   - Mount MGN12H rails (screw to blocks)
+   - Install lead_screw_end_supports at each end
+   - Mount 8mm lead screws through supports
+   - Attach nema17_motor_mounts to extrusion
+   - Couple motors to lead screws (5mm flexible couplers)
+
+5. WIRE ELECTRONICS (afternoon):
+   - Arduino → 2x A4988 drivers (X and Y axes)
+   - X-axis: STEP→Pin2, DIR→Pin3, ENABLE→Pin4
+   - Y-axis: STEP→Pin5, DIR→Pin6, ENABLE→Pin7
+   - Limit switches: X-min→Pin9, X-max→Pin10, Y-min→Pin11, Y-max→Pin12
+   - 12V power: Split to both drivers VMOT
+   - GND: Common ground for Arduino + drivers + power supply
+
+6. TEST MOTION (evening):
+   - Upload xy_scanner_controller.ino
+   - Serial: "G28" → should home both axes
+   - Serial: "G1 X100 Y100" → should move to position
+   - Measure with ruler: Verify 100mm = actual 100mm
+   - Tune steps/mm in firmware if needed
+
+SATURDAY - CAMERA + AI:
+================================================================================
+
+7. MOUNT CAMERA (morning):
+   - Install camera_overhead_mount on frame
+   - Webcam at 250mm above scan position
+   - USB to PC
+   - Test: Run "python -c 'import cv2; cv2.VideoCapture(0).read()'"
+
+8. TEST AI GRADING (afternoon):
+   - Place 10 cards manually under camera
+   - Capture images: cv2.imwrite(f'test_{i}.jpg', frame)
+   - Run: python "PYTHON SOURCE FILES\card_grading_analyzer.py" test_1.jpg
+   - Check if grades make sense (compare to your visual inspection)
+   - Tune algorithm weights in card_grading_analyzer.py if needed
+
+SUNDAY - FEEDING + INTEGRATION:
+================================================================================
+
+9. CARD FEEDER (morning):
+   - Flash card_shuffler_controller.ino to second Arduino
+   - Wire SG90 servo → Pin 9
+   - Wire IR sensor → Pin A0
+   - Test: Load 20 cards, send "FEED" command
+   - Debug until single cards dispense cleanly
+
+10. END-TO-END TEST (afternoon):
+    - Integration script:
+      1. Serial: "FEED" → dispense card
+      2. Serial: "G1 X200 Y150" → move to pickup
+      3. Gripper servo → grab card
+      4. Serial: "G1 X200 Y200" → center under camera
+      5. Capture image → run AI grading
+      6. Serial: "G1 X50 Y50" → move to bin
+      7. Gripper release → drop card
+    
+    - Run 10 cards through complete cycle
+    - Time it: Should be ~60 sec/card initially
+    - Optimize speeds to hit 36 sec/card target
+
+TROUBLESHOOTING:
+================================================================================
+
+MOTOR WON'T MOVE:
+- Check wiring: STEP/DIR/ENABLE pins correct?
+- Check power: 12V connected to VMOT?
+- Check driver: Current pot adjusted? (clockwise = more power)
+- Test with multimeter: Is Arduino sending 5V pulses?
+
+HOMING FAILS:
+- Limit switches wired correctly? (Normally Open → closes when hit)
+- Serial monitor: Do you see "X_MIN triggered" when you press switch?
+- Check pins: Are they pulled HIGH in firmware?
+
+CAMERA NOT FOUND:
+- Try different USB port
+- Check index: cv2.VideoCapture(0) vs VideoCapture(1)
+- Install drivers: Logitech needs drivers on Windows
+
+AI GRADES WRONG:
+- Check image quality: Is card in focus? Lighting even?
+- Tune weights in card_grading_analyzer.py (centering/corners/edges/surface)
+- Test on known graded cards first (compare to PSA grades)
+
+CARDS JAM IN FEEDER:
+- Adjust servo timing (slower = more reliable)
+- Check IR sensor threshold (too sensitive = double feeds)
+- Add teflon spray to hopper walls
+
+CRITICAL PATH:
+================================================================================
+Friday night: Motors must be moving accurately
+Saturday night: Camera must be capturing clear images
+Sunday noon: One card must complete full cycle
+
+If ANY of these deadlines slip, you won't have a working demo.
+
+FILES YOU NEED:
+================================================================================
+Arduino firmware: 
+  - Arduino\xy_scanner_controller\xy_scanner_controller.ino
+  - Arduino\card_shuffler_controller\card_shuffler_controller.ino
+
+Python scripts:
+  - PYTHON SOURCE FILES\card_grading_analyzer.py
+  - PYTHON SOURCE FILES\xy_scanner_controller.py
+  - PYTHON SOURCE FILES\card_shuffler_controller.py
+  - PYTHON SOURCE FILES\mttgg_main_system.py
+
+3D models (render these TONIGHT):
+  - All .scad files in root folder → export to STL
+
+PARTS CHECKLIST:
+================================================================================
+□ 2x NEMA 17 stepper motors
+□ 2x A4988/DRV8825 stepper drivers
+□ 2x MGN12H linear rails (400mm)
+□ 4x MGN12H carriages
+□ 2x T8 lead screws (400mm, 8mm, 2mm pitch)
+□ 2x T8 anti-backlash nuts
+□ 2x 5mm flexible couplers
+□ 4x limit switches
+□ 1x IR card sensor
+□ 3x SG90 servos (feed, stopper, gripper)
+□ 1x Arduino Mega
+□ 1x 12V power supply
+□ 1x USB webcam
+□ 4x 2020 extrusion (400mm)
+□ M3/M5 screws + T-nuts
+□ PETG filament (1kg)
+
+GO TIME.

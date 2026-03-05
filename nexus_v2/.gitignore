@@ -1,0 +1,78 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# NEXUS Specific - Keep these OUT of git
+*.db
+*.sqlite
+*.sqlite3
+cache/
+logs/
+backups/
+*.log
+
+# Large data files
+data/SCRYFALL_CACHE/
+data/*.db
+*.pkl
+*.model
+
+# Keep in git
+!data/.gitkeep
+!cache/.gitkeep
+!logs/.gitkeep
+!backups/.gitkeep
+
+# API Keys and secrets
+.env
+.env.local
+*.key
+secrets.json
+
+# Test artifacts
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+
+# Build artifacts
+*.spec

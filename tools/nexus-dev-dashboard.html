@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS Dev Dashboard | Real-Time Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-hover: #1a1a25;
+            --border: #2a2a3a;
+            --text: #e0e0e0;
+            --text-dim: #888;
+            --accent-gold: #ffd700;
+            --accent-blue: #4a9eff;
+            --accent-green: #4ade80;
+            --accent-red: #f87171;
+            --accent-purple: #a78bfa;
+            --louie-color: #ff00ff;
+            --clouse-color: #00ffff;
+            --mendel-color: #00ff00;
+            --jaques-color: #ffff00;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon { font-size: 2rem; }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-gold), #ffec8b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-sub {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid var(--accent-green);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Main Layout */
+        .main {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 1rem;
+            padding: 1rem;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Inbox */
+        .inbox-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .inbox-select {
+            flex: 1;
+            padding: 0.5rem;
+            background: var(--bg-dark);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .inbox-filter {
+            padding: 0.5rem 1rem;
+            background: var(--bg-dark);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .inbox-filter.active {
+            background: var(--accent-blue);
+            color: #000;
+            border-color: var(--accent-blue);
+        }
+
+        .message-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .message-item {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .message-item:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent-blue);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .message-from {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .message-from.from-louie { color: var(--louie-color); }
+        .message-from.from-clouse { color: var(--clouse-color); }
+        .message-from.from-mendel { color: var(--mendel-color); }
+        .message-from.from-jaques { color: var(--jaques-color); }
+        .message-from.from-dashboard { color: var(--accent-gold); }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .message-content {
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: var(--text);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .message-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: rgba(74, 158, 255, 0.2);
+            border: 1px solid var(--accent-blue);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-left: 0.5rem;
+        }
+
+        .no-messages {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* Card */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Infrastructure Grid */
+        .infra-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .infra-item {
+            background: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .infra-item.online { border-left-color: var(--accent-green); }
+        .infra-item.offline { border-left-color: var(--accent-red); }
+        .infra-item.timeout { border-left-color: var(--accent-gold); }
+
+        .infra-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .infra-status {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .infra-item.online .infra-status { color: var(--accent-green); }
+        .infra-item.offline .infra-status { color: var(--accent-red); }
+        .infra-item.timeout .infra-status { color: var(--accent-gold); }
+
+        /* Agent Windows */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .agent-window {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 0.75rem;
+            border-left: 3px solid;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .agent-window.louie { border-left-color: var(--louie-color); }
+        .agent-window.clouse { border-left-color: var(--clouse-color); }
+        .agent-window.mendel { border-left-color: var(--mendel-color); }
+        .agent-window.jaques { border-left-color: var(--jaques-color); }
+
+        .agent-header {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .agent-window.louie .agent-header { color: var(--louie-color); }
+        .agent-window.clouse .agent-header { color: var(--clouse-color); }
+        .agent-window.mendel .agent-header { color: var(--mendel-color); }
+        .agent-window.jaques .agent-header { color: var(--jaques-color); }
+
+        .agent-messages {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .agent-msg {
+            padding: 0.25rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .stat {
+            background: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-value.green { color: var(--accent-green); }
+        .stat-value.gold { color: var(--accent-gold); }
+        .stat-value.red { color: var(--accent-red); }
+        .stat-value.blue { color: var(--accent-blue); }
+
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            margin-top: 0.25rem;
+        }
+
+        /* Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 1rem; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a3a4a; }
+
+        /* Last Update */
+        .last-update {
+            text-align: center;
+            padding: 0.5rem;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main { grid-template-columns: 1fr; }
+            .agent-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <span class="logo-icon">🎴</span>
+            <div>
+                <div class="logo-text">NEXUS</div>
+                <div class="logo-sub">Real-Time Dashboard</div>
+            </div>
+        </div>
+        <div class="status-badge">
+            <span class="status-dot"></span>
+            <span id="statusText">Loading...</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <section>
+            <!-- Infrastructure Status -->
+            <div class="card">
+                <h3 class="card-title">🖥️ Infrastructure Status</h3>
+                <div class="infra-grid" id="infraStatus">
+                    <div class="infra-item">
+                        <div class="infra-name">ZULTAN</div>
+                        <div class="infra-status">Checking...</div>
+                    </div>
+                    <div class="infra-item">
+                        <div class="infra-name">SNARF</div>
+                        <div class="infra-status">Checking...</div>
+                    </div>
+                    <div class="infra-item">
+                        <div class="infra-name">BROCK</div>
+                        <div class="infra-status">Checking...</div>
+                    </div>
+                    <div class="infra-item">
+                        <div class="infra-name">Narwhal Council</div>
+                        <div class="infra-status">Checking...</div>
+                    </div>
+                    <div class="infra-item">
+                        <div class="infra-name">Marketplace API</div>
+                        <div class="infra-status">Checking...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent Communication -->
+            <div class="card">
+                <h3 class="card-title">💬 Agent Communication</h3>
+                <div class="agent-grid">
+                    <div class="agent-window louie">
+                        <div class="agent-header">🔊 LOUIE (Voice)</div>
+                        <div class="agent-messages" id="louieMessages">No messages</div>
+                    </div>
+                    <div class="agent-window clouse">
+                        <div class="agent-header">🎯 CLOUSE (Strategy)</div>
+                        <div class="agent-messages" id="clouseMessages">No messages</div>
+                    </div>
+                    <div class="agent-window mendel">
+                        <div class="agent-header">⚙️ MENDEL (Dev)</div>
+                        <div class="agent-messages" id="mendelMessages">No messages</div>
+                    </div>
+                    <div class="agent-window jaques">
+                        <div class="agent-header">⚖️ JAQUES (Legal)</div>
+                        <div class="agent-messages" id="jaquesMessages">No messages</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inbox Viewer -->
+            <div class="card">
+                <h3 class="card-title">📬 Message Inbox</h3>
+                <div class="inbox-controls">
+                    <select id="inboxAgent" class="inbox-select">
+                        <option value="LOUIE">LOUIE (Voice)</option>
+                        <option value="CLOUSE">CLOUSE (Strategy)</option>
+                        <option value="MENDEL" selected>MENDEL (Dev)</option>
+                        <option value="JAQUES">JAQUES (Legal)</option>
+                    </select>
+                    <button id="filterInbox" class="inbox-filter active">📥 Inbox</button>
+                    <button id="filterOutbox" class="inbox-filter">📤 Outbox</button>
+                    <button id="refreshInbox" class="inbox-filter">🔄 Refresh</button>
+                </div>
+                <div class="message-list" id="messageList">
+                    <div class="no-messages">Loading messages...</div>
+                </div>
+            </div>
+
+            <!-- Library Stats -->
+            <div class="card">
+                <h3 class="card-title">📊 ZULTAN Library Stats</h3>
+                <div class="stats-grid" id="libraryStats">
+                    <div class="stat">
+                        <div class="stat-value gold">-</div>
+                        <div class="stat-label">MTG Cards</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value green">-</div>
+                        <div class="stat-label">Pokemon</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value blue">-</div>
+                        <div class="stat-label">Sports</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value red">-</div>
+                        <div class="stat-label">Total Cards</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <!-- Send Message -->
+            <div class="card">
+                <h3 class="card-title">✉️ Send Message</h3>
+                <select id="recipientAgent" style="width: 100%; padding: 0.5rem; background: var(--bg-dark); color: var(--text); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif;">
+                    <option value="LOUIE">LOUIE (Voice)</option>
+                    <option value="CLOUSE">CLOUSE (Strategy)</option>
+                    <option value="MENDEL">MENDEL (Dev)</option>
+                    <option value="JAQUES">JAQUES (Legal)</option>
+                </select>
+                <textarea id="messageContent" placeholder="Type your message..." style="width: 100%; padding: 0.5rem; background: var(--bg-dark); color: var(--text); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif; min-height: 80px; resize: vertical;"></textarea>
+                <button id="sendMessage" style="width: 100%; padding: 0.75rem; background: var(--accent-green); color: #000; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                    📤 Send Message
+                </button>
+                <div id="sendStatus" style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-dim); text-align: center;"></div>
+            </div>
+
+            <!-- Endpoint Controls -->
+            <div class="card">
+                <h3 class="card-title">🔧 Controls</h3>
+                <button id="toggleEndpoints" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: var(--text); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-family: 'JetBrains Mono', monospace;">
+                    <span id="endpointStatus">Loading...</span>
+                </button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <h3 class="card-title">⚡ Quick Actions</h3>
+                <button onclick="window.open('http://192.168.1.152:8000/docs')" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: var(--accent-blue); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; margin-bottom: 0.5rem;">
+                    🚀 ZULTAN API Docs
+                </button>
+                <button onclick="window.open('https://nexus-marketplace-api.kcaracozza.workers.dev')" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: var(--accent-green); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; margin-bottom: 0.5rem;">
+                    🛒 Marketplace API
+                </button>
+                <button onclick="window.open('https://narwhal-council-relay.kcaracozza.workers.dev/sse')" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); color: var(--accent-purple); border: 1px solid var(--border); border-radius: 8px; cursor: pointer;">
+                    🐋 Narwhal Council
+                </button>
+            </div>
+
+            <!-- The Dream -->
+            <div class="card">
+                <h3 class="card-title">🛥️ The Dream</h3>
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">🚢</div>
+                    <div style="font-size: 1.25rem; font-weight: 700; color: var(--accent-gold);">$163M</div>
+                    <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">80ft Viking</div>
+                    <div style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem;">"PIPE DREAMS"</div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <div class="last-update" id="lastUpdate">Last updated: Never</div>
+
+    <script>
+        const ENDPOINTS = {
+            zultan: 'http://192.168.1.152:8000',
+            danielson: 'http://192.168.1.219:5001',
+            snarf: 'http://192.168.1.219:5001',
+            brock: 'http://192.168.1.219:5001',
+            narwhal: 'https://narwhal-council-relay.kcaracozza.workers.dev',
+            marketplace: 'https://nexus-marketplace-api.kcaracozza.workers.dev'
+        };
+
+        const AGENTS = ['LOUIE', 'CLOUSE', 'MENDEL', 'JAQUES'];
+
+        // Check infrastructure
+        async function checkInfrastructure() {
+            const checks = [
+                { name: 'ZULTAN', url: `${ENDPOINTS.zultan}/api/health` },
+                { name: 'SNARF', url: `${ENDPOINTS.snarf}/health` },
+                { name: 'BROCK', url: `${ENDPOINTS.brock}/health` },
+                { name: 'Narwhal Council', url: `${ENDPOINTS.narwhal}/sse` },
+                { name: 'Marketplace API', url: `${ENDPOINTS.marketplace}/v1/cards` }
+            ];
+
+            const container = document.getElementById('infraStatus');
+            container.innerHTML = '';
+
+            for (const check of checks) {
+                const item = document.createElement('div');
+                item.className = 'infra-item';
+
+                try {
+                    const response = await fetch(check.url, {
+                        method: 'GET',
+                        mode: 'no-cors', // Allow cross-origin for status check
+                        cache: 'no-cache'
+                    });
+
+                    // no-cors returns opaque response, assume success if no error
+                    item.classList.add('online');
+                    item.innerHTML = `
+                        <div class="infra-name">${check.name}</div>
+                        <div class="infra-status">✅ ONLINE</div>
+                    `;
+                } catch (error) {
+                    item.classList.add('offline');
+                    item.innerHTML = `
+                        <div class="infra-name">${check.name}</div>
+                        <div class="infra-status">❌ OFFLINE</div>
+                    `;
+                }
+
+                container.appendChild(item);
+            }
+        }
+
+        // Get ZULTAN stats
+        async function getLibraryStats() {
+            try {
+                const response = await fetch(`${ENDPOINTS.zultan}/api/stats`);
+                const stats = await response.json();
+
+                const mtg = stats.mtg?.total_cards || 0;
+                const pokemon = stats.pokemon?.total_cards || 0;
+                const sports = stats.sports?.total_cards || 0;
+                const total = mtg + pokemon + sports;
+
+                document.querySelector('.stats-grid').innerHTML = `
+                    <div class="stat">
+                        <div class="stat-value gold">${mtg.toLocaleString()}</div>
+                        <div class="stat-label">MTG Cards</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value green">${pokemon.toLocaleString()}</div>
+                        <div class="stat-label">Pokemon</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value blue">${sports.toLocaleString()}</div>
+                        <div class="stat-label">Sports</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value red">${total.toLocaleString()}</div>
+                        <div class="stat-label">Total Cards</div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Failed to get library stats:', error);
+            }
+        }
+
+        // Get agent messages
+        async function getAgentMessages() {
+            for (const agent of AGENTS) {
+                const container = document.getElementById(`${agent.toLowerCase()}Messages`);
+
+                try {
+                    // Get inbox
+                    console.log(`Fetching inbox for ${agent}...`);
+                    const inboxResponse = await fetch(`${ENDPOINTS.narwhal}/api/get_messages?agent=${agent}`);
+
+                    if (!inboxResponse.ok) {
+                        throw new Error(`Inbox HTTP ${inboxResponse.status}: ${inboxResponse.statusText}`);
+                    }
+
+                    const inbox = await inboxResponse.json();
+                    console.log(`${agent} inbox:`, inbox);
+
+                    // Get outbox
+                    console.log(`Fetching outbox for ${agent}...`);
+                    const outboxResponse = await fetch(`${ENDPOINTS.narwhal}/api/get_outbox?agent=${agent}`);
+
+                    if (!outboxResponse.ok) {
+                        throw new Error(`Outbox HTTP ${outboxResponse.status}: ${outboxResponse.statusText}`);
+                    }
+
+                    const outbox = await outboxResponse.json();
+                    console.log(`${agent} outbox:`, outbox);
+
+                    const inboxCount = inbox.count || 0;
+                    const outboxCount = outbox.count || 0;
+
+                    let html = `<div class="agent-msg">📥 Inbox: ${inboxCount} messages</div>`;
+                    html += `<div class="agent-msg">📤 Outbox: ${outboxCount} messages</div>`;
+
+                    if (inbox.messages && inbox.messages.length > 0) {
+                        const latest = inbox.messages[inbox.messages.length - 1];
+                        // Handle both old format (message) and new format (content)
+                        const latestContent = latest.content || latest.message || '';
+                        const preview = latestContent.substring(0, 50);
+                        html += `<div class="agent-msg">Latest: ${preview}${latestContent.length > 50 ? '...' : ''}</div>`;
+                    }
+
+                    container.innerHTML = html;
+                } catch (error) {
+                    console.error(`Failed to get messages for ${agent}:`, error);
+                    container.innerHTML = `<div class="agent-msg">❌ Error: ${error.message}</div>`;
+                }
+            }
+        }
+
+        // Check endpoint status
+        async function checkEndpointStatus() {
+            try {
+                const response = await fetch(`${ENDPOINTS.narwhal}/admin/endpoints-status`);
+                const data = await response.json();
+                const enabled = data.enabled !== false;
+
+                const button = document.getElementById('endpointStatus');
+                button.textContent = enabled ? '🔓 Endpoints: OPEN' : '🔒 Endpoints: CLOSED';
+                button.style.color = enabled ? 'var(--accent-green)' : 'var(--accent-red)';
+            } catch (error) {
+                document.getElementById('endpointStatus').textContent = '❌ Status Unknown';
+            }
+        }
+
+        // Send message
+        document.getElementById('sendMessage').addEventListener('click', async () => {
+            const recipient = document.getElementById('recipientAgent').value;
+            const content = document.getElementById('messageContent').value;
+            const statusEl = document.getElementById('sendStatus');
+
+            if (!content.trim()) {
+                statusEl.textContent = '❌ Message cannot be empty';
+                statusEl.style.color = 'var(--accent-red)';
+                return;
+            }
+
+            statusEl.textContent = '⏳ Sending...';
+            statusEl.style.color = 'var(--accent-gold)';
+
+            try {
+                const response = await fetch(`${ENDPOINTS.narwhal}/api/send_message`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        recipientId: recipient,
+                        senderId: 'DASHBOARD',
+                        content: content
+                    })
+                });
+
+                if (response.ok) {
+                    statusEl.textContent = `✅ Sent to ${recipient}!`;
+                    statusEl.style.color = 'var(--accent-green)';
+                    document.getElementById('messageContent').value = '';
+
+                    // Refresh agent messages
+                    setTimeout(() => {
+                        getAgentMessages();
+                        statusEl.textContent = '';
+                    }, 2000);
+                } else {
+                    const error = await response.text();
+                    statusEl.textContent = `❌ Failed: ${error.substring(0, 30)}`;
+                    statusEl.style.color = 'var(--accent-red)';
+                }
+            } catch (error) {
+                statusEl.textContent = '❌ Network error';
+                statusEl.style.color = 'var(--accent-red)';
+            }
+        });
+
+        // Toggle endpoints
+        document.getElementById('toggleEndpoints').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${ENDPOINTS.narwhal}/admin/toggle-endpoints`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                alert(`Endpoints ${data.enabled ? 'OPENED' : 'CLOSED'}`);
+                checkEndpointStatus();
+            } catch (error) {
+                alert('Failed to toggle endpoints');
+            }
+        });
+
+        // Refresh all data
+        async function refreshAll() {
+            document.getElementById('statusText').textContent = 'Refreshing...';
+
+            await Promise.all([
+                checkInfrastructure(),
+                getLibraryStats(),
+                getAgentMessages(),
+                checkEndpointStatus()
+            ]);
+
+            const now = new Date().toLocaleTimeString();
+            document.getElementById('lastUpdate').textContent = `Last updated: ${now}`;
+            document.getElementById('statusText').textContent = 'All Systems Operational';
+        }
+
+        // Inbox state
+        let currentInboxAgent = 'MENDEL';
+        let currentInboxView = 'inbox'; // 'inbox' or 'outbox'
+
+        // Load inbox/outbox messages
+        async function loadInboxMessages() {
+            const agent = currentInboxAgent;
+            const view = currentInboxView;
+            const listEl = document.getElementById('messageList');
+
+            listEl.innerHTML = '<div class="no-messages">Loading messages...</div>';
+
+            try {
+                const endpoint = view === 'inbox' ? 'get_messages' : 'get_outbox';
+                const response = await fetch(`${ENDPOINTS.narwhal}/api/${endpoint}?agent=${agent}`);
+                const data = await response.json();
+
+                const messages = data.messages || [];
+
+                if (messages.length === 0) {
+                    listEl.innerHTML = `<div class="no-messages">No ${view} messages for ${agent}</div>`;
+                    return;
+                }
+
+                // Sort messages by timestamp (newest first)
+                messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                let html = '';
+                for (const msg of messages) {
+                    const fromClass = `from-${msg.from.toLowerCase()}`;
+                    const time = new Date(msg.timestamp).toLocaleString();
+                    const isInbox = view === 'inbox';
+                    const direction = isInbox ? '→ You' : `→ ${msg.to}`;
+
+                    // Handle both old format (message) and new format (content)
+                    const messageContent = msg.content || msg.message || '[No content]';
+                    const priority = msg.priority || 'normal';
+                    const priorityBadge = priority === 'urgent' ? '🔴 URGENT' : priority === 'high' ? '🟡 HIGH' : '';
+
+                    html += `
+                        <div class="message-item">
+                            <div class="message-header">
+                                <div>
+                                    <span class="message-from ${fromClass}">${msg.from}</span>
+                                    <span class="message-badge">${direction}</span>
+                                    ${priorityBadge ? `<span class="message-badge" style="background: rgba(255, 0, 0, 0.2); border-color: #ff0000;">${priorityBadge}</span>` : ''}
+                                </div>
+                                <span class="message-time">${time}</span>
+                            </div>
+                            <div class="message-content">${escapeHtml(messageContent)}</div>
+                        </div>
+                    `;
+                }
+
+                listEl.innerHTML = html;
+            } catch (error) {
+                console.error('Failed to load inbox:', error);
+                listEl.innerHTML = '<div class="no-messages">❌ Failed to load messages</div>';
+            }
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Inbox agent selector
+        document.getElementById('inboxAgent').addEventListener('change', (e) => {
+            currentInboxAgent = e.target.value;
+            loadInboxMessages();
+        });
+
+        // Filter buttons
+        document.getElementById('filterInbox').addEventListener('click', () => {
+            currentInboxView = 'inbox';
+            document.getElementById('filterInbox').classList.add('active');
+            document.getElementById('filterOutbox').classList.remove('active');
+            loadInboxMessages();
+        });
+
+        document.getElementById('filterOutbox').addEventListener('click', () => {
+            currentInboxView = 'outbox';
+            document.getElementById('filterOutbox').classList.add('active');
+            document.getElementById('filterInbox').classList.remove('active');
+            loadInboxMessages();
+        });
+
+        // Refresh inbox button
+        document.getElementById('refreshInbox').addEventListener('click', () => {
+            loadInboxMessages();
+        });
+
+        // Auto-load dashboard
+        refreshAll();
+        loadInboxMessages();
+        setInterval(() => {
+            refreshAll();
+            loadInboxMessages();
+        }, 10000);
+    </script>
+</body>
+</html>

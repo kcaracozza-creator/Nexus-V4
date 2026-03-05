@@ -1,0 +1,40 @@
+name = "narwhal-council-relay"
+main = "src/index.js"
+compatibility_date = "2024-11-05"
+
+[observability]
+enabled = true
+
+# KV Namespaces
+[[kv_namespaces]]
+binding = "MESSAGES"
+id = "08a95b0faa304f94938cbc3fc5493a37"
+
+[[kv_namespaces]]
+binding = "NARWHAL_TASKS"
+id = "aff8c5150bff4a6e8543d8c115e291ed"
+
+[[kv_namespaces]]
+binding = "NARWHAL_CONFIG"
+id = "bb29134c2b524ee7909ce774e2f078dd"
+
+[[kv_namespaces]]
+binding = "NEXUS_KNOWLEDGE"
+id = "d50accb3e3284321a23ef459a9fadb86"
+
+[[durable_objects.bindings]]
+name = "COUNCIL_ROOM"
+class_name = "CouncilRoom"
+
+# Workers AI for council daemon auto-responses
+[ai]
+binding = "AI"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["CouncilRoom"]
+
+# Note: Secrets should be set via wrangler secret put:
+# - OAUTH_CLIENT_ID
+# - OAUTH_CLIENT_SECRET
+# - ANTHROPIC_API_KEY

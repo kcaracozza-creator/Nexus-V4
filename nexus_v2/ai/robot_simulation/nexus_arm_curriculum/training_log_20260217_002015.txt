@@ -1,0 +1,7 @@
+[00:20:15] NEXUS Arm Curriculum Training - Run 20260217_002015
+[00:20:15] Save dir: nexus_arm_curriculum
+[00:20:15] 
+============================================================
+[00:20:15]   Phase 0 - Gripper Actuation (200-step episodes)
+[00:20:15]   500,000 timesteps  |  16 parallel envs  |  10 substeps
+[00:20:15] ============================================================

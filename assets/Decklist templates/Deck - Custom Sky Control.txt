@@ -1,0 +1,26 @@
+// MTTGG Custom Build: "Control the Skies"
+// Built around your flying creatures and control cards
+// High card counts ensure easy buildability
+
+4 Augury Raven
+4 Skystinger
+4 Starbreach Whale
+4 Galactic Wayfarer
+3 Nebula Dragon
+
+4 Strategic Planning
+4 Shattered Wings
+4 Depressurize
+4 Mental Modulation
+3 Embrace Oblivion
+
+4 Dead Weight
+4 Banishing Light
+3 Cryoshatter
+
+4 Sami's Curiosity
+2 Auxiliary Boosters
+
+12 Island
+8 Swamp
+4 Plains

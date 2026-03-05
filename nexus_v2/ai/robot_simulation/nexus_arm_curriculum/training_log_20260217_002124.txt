@@ -1,0 +1,34 @@
+[00:21:24] NEXUS Arm Curriculum Training - Run 20260217_002124
+[00:21:24] Save dir: nexus_arm_curriculum
+[00:21:24] 
+============================================================
+[00:21:24]   Phase 0 - Gripper Actuation (200-step episodes)
+[00:21:24]   500,000 timesteps  |  16 parallel envs  |  10 substeps
+[00:21:24] ============================================================
+[00:27:36]   Saved: nexus_arm_curriculum/phase_4.zip
+[00:27:38] 
+============================================================
+[00:27:38]   Phase 1 - Pick + Place on Lightbox
+[00:27:38]   1,000,000 timesteps  |  16 parallel envs  |  10 substeps
+[00:27:38] ============================================================
+[00:40:08]   Saved: nexus_arm_curriculum/phase_0.zip
+[00:40:09] 
+============================================================
+[00:40:09]   Phase 2 - Pick Back Off Lightbox
+[00:40:09]   1,000,000 timesteps  |  16 parallel envs  |  10 substeps
+[00:40:09] ============================================================
+[00:53:35]   Saved: nexus_arm_curriculum/phase_1.zip
+[00:53:36] 
+============================================================
+[00:53:36]   Phase 3 - Place in Sort Bin
+[00:53:36]   2,000,000 timesteps  |  16 parallel envs  |  20 substeps
+[00:53:36] ============================================================
+[01:21:08]   Saved: nexus_arm_curriculum/phase_2.zip
+[01:21:09] 
+============================================================
+[01:21:09]   Phase 4 - Full End-to-End (fine-tune)
+[01:21:09]   1,000,000 timesteps  |  16 parallel envs  |  20 substeps
+[01:21:09] ============================================================
+[01:38:45]   Saved: nexus_arm_curriculum/phase_3.zip
+[01:38:47] Final model saved: nexus_arm_curriculum/nexus_arm_final.zip
+[01:38:47] Training log: nexus_arm_curriculum/training_log_20260217_002124.txt

@@ -1,0 +1,25 @@
+// MTTGG Custom Build: "Budget Combo"
+// Built around card advantage and your strongest utility cards
+// Uses your high-count support spells
+
+4 Sami's Curiosity
+4 Strategic Planning
+4 Auxiliary Boosters
+3 Mental Modulation
+
+4 Augury Raven
+4 Galactic Wayfarer
+4 Flight-Deck Coordinator
+3 Sami, Ship's Engineer
+
+4 Shattered Wings
+4 Embrace Oblivion
+4 Dead Weight
+3 Banishing Light
+
+4 Cryogen Relic
+2 Melded Moxite
+
+12 Island
+8 Swamp
+4 Mountain

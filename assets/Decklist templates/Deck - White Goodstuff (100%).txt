@@ -1,0 +1,30 @@
+# White Goodstuff
+# Theme: Color Identity - White
+# Strategy: Strong White cards and synergies
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+1 Aligned Heart
+4 Armistice
+2 Beyond the Quiet
+4 Cloudsteel Kirin
+1 Dismantling Wave
+2 Dominaria's Judgment
+4 Dusk // Dawn
+4 Earnest Fellowship
+4 Exalted Sunborn
+2 Farewell
+2 Flowerfoot Swordmaster
+2 Friendly Neighborhood
+4 Giant Killer // Chop Down
+4 Haliya, Guided by Light
+4 Hardlight Containment
+1 Mangara, the Diplomat
+1 Monastery Mentor
+47 Plains
+4 Prismatic Ending
+1 Tempest Technique
+1 Valor's Flagship
+1 Vanquish the Horde
+

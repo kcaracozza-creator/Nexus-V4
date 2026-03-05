@@ -1,0 +1,16 @@
+{
+  "lightning bolt|2ed|157": {
+    "timestamp": "2026-01-14T11:28:15.338546",
+    "prices": [
+      {
+        "source": "Scryfall",
+        "price": 0.55,
+        "price_foil": null,
+        "url": "https://partner.tcgplayer.com/c/4931599/1830156/21018?subId1=api&u=https%3A%2F%2Fwww.tcgplayer.com%2Fproduct%2F9078%3Fpage%3D1",
+        "condition": "NM",
+        "in_stock": true,
+        "timestamp": "2026-01-14T11:28:14.784512"
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+# 4-Color Goodstuff
+# Theme: Color Identity - 4-Color
+# Strategy: Strong 4-Color cards and synergies
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+4 Asari Captain
+1 Ash Barrens
+1 Battlefield Forge
+1 Boros Signet
+4 Caparocti Sunborn
+1 Clifftop Retreat
+2 Command Tower
+4 Commander Liara Portyr
+4 Evolving Wilds
+4 Fireborn Knight
+2 Heartflame Duelist // Heartflame Slash
+4 Honored Crop-Captain
+4 Inspiring Veteran
+4 Justice Strike
+10 Mountain
+10 Plains
+4 Powerstone Minefield
+2 Raiyuu, Storm's Edge
+2 Rally the Peasants
+1 Reyav, Master Smith
+1 Rugged Prairie
+4 Sami, Ship's Engineer
+4 Swathcutter Giant
+1 Temple of Triumph
+1 Terramorphic Expanse
+1 Velomachus Lorehold
+

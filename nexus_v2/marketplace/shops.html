@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS for Card Shops - AI-Powered Scanning & Pricing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #09090b;
+            --bg-secondary: #18181b;
+            --bg-tertiary: #27272a;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #10b981;
+            --accent-hover: #059669;
+            --border: #27272a;
+            --success: #22c55e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover { color: var(--text-primary); }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn:hover { background: var(--primary-hover); }
+
+        .hero {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 32px;
+            background: linear-gradient(135deg, var(--accent) 0%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features-badges {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .badge::before {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        .hero .cta {
+            font-size: 20px;
+            margin-bottom: 32px;
+        }
+
+        .video-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 64px;
+            margin: 80px auto;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        .video-section h2 {
+            font-size: 40px;
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+
+        .video-section p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .video-placeholder {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--text-muted);
+            margin: 0 auto;
+        }
+
+        .how-it-works {
+            max-width: 1200px;
+            margin: 120px auto;
+            padding: 0 40px;
+        }
+
+        .how-it-works h2 {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 80px;
+            color: var(--accent);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 48px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-hover) 100%);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0 auto 24px;
+        }
+
+        .step h3 {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .step p {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .pricing-section {
+            background: var(--bg-secondary);
+            padding: 120px 40px;
+            margin-top: 120px;
+        }
+
+        .pricing-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .pricing-content h2 {
+            font-size: 48px;
+            margin-bottom: 24px;
+            color: var(--accent);
+        }
+
+        .pricing-content p {
+            font-size: 20px;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            margin-top: 64px;
+        }
+
+        .pricing-card {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 48px 32px;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-8px);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        .pricing-card h3 {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .pricing-card .price {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .pricing-card .period {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 32px;
+        }
+
+        .pricing-card li {
+            padding: 12px 0;
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .pricing-card li::before {
+            content: "✓";
+            color: var(--success);
+            font-weight: 700;
+            margin-right: 12px;
+        }
+
+        footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        footer .patent {
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 48px; }
+            .features-badges { flex-direction: column; }
+            .steps { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">NEXUS</a>
+            <nav>
+                <a href="/about.html">About</a>
+                <a href="/shops.html">For Shops</a>
+                <a href="/">Marketplace</a>
+                <a href="/" class="btn">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>Stop Typing.<br>Start Scanning.</h1>
+
+        <div class="features-badges">
+            <div class="badge">🛡️ Patent Pending (101 Claims)</div>
+            <div class="badge">🤖 AI-Powered Recognition</div>
+            <div class="badge">📱 Scan & List in Seconds</div>
+            <div class="badge">💰 Real-Time Pricing</div>
+        </div>
+
+        <p class="cta">NEXUS turns hours of manual entry into seconds of scanning.<br>
+        Built for card shops. Used by real stores. Patent pending.</p>
+
+        <a href="#video" class="btn" style="padding: 18px 36px; font-size: 18px;">
+            See NEXUS in Action
+        </a>
+    </div>
+
+    <div class="video-section" id="video">
+        <h2>SEE NEXUS IN ACTION</h2>
+        <p>Watch how our AI scanner identifies cards instantly, pulls real-time pricing,<br>
+        and lists them for sale in seconds.</p>
+        <div class="video-placeholder">
+            📹 Demo Video Coming Soon
+        </div>
+    </div>
+
+    <div class="how-it-works">
+        <h2>HOW IT WORKS</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Scan Your Cards</h3>
+                <p>Place any trading card on the NEXUS scanner. Our AI instantly identifies it from 100M+ cards.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Get Real-Time Pricing</h3>
+                <p>See market prices from multiple sources. Know exactly what your cards are worth.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>List & Sell</h3>
+                <p>One click to list. Your cards go live on the marketplace instantly.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="pricing-section">
+        <div class="pricing-content">
+            <h2>Simple Pricing</h2>
+            <p>No hidden fees. No long-term contracts. Just the tools you need to run your shop.</p>
+
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$299</div>
+                    <div class="period">one-time hardware</div>
+                    <ul>
+                        <li>NEXUS Scanner Hardware</li>
+                        <li>Desktop Software</li>
+                        <li>100M+ Card Database</li>
+                        <li>Real-Time Pricing</li>
+                        <li>Marketplace Access</li>
+                    </ul>
+                    <a href="/" class="btn" style="width: 100%;">Get Started</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <h3>Pro</h3>
+                    <div class="price">$499</div>
+                    <div class="period">one-time hardware</div>
+                    <ul>
+                        <li>Everything in Starter</li>
+                        <li>Multi-Station Support</li>
+                        <li>API Access</li>
+                        <li>Bulk Upload Tools</li>
+                        <li>Priority Support</li>
+                        <li>Custom Integrations</li>
+                    </ul>
+                    <a href="/" class="btn" style="width: 100%;">Get Pro</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">Custom</div>
+                    <div class="period">contact us</div>
+                    <ul>
+                        <li>Everything in Pro</li>
+                        <li>Unlimited Stations</li>
+                        <li>White-Label Options</li>
+                        <li>On-Premise Deployment</li>
+                        <li>Dedicated Support</li>
+                        <li>Custom Features</li>
+                    </ul>
+                    <a href="/" class="btn" style="width: 100%;">Contact Sales</a>
+                </div>
+            </div>
+
+            <p style="margin-top: 64px; font-size: 16px;">
+                Questions? Email us at <a href="mailto:sales@nexuscards.com" style="color: var(--accent);">sales@nexuscards.com</a>
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Copyright © 2025 Kevin Caracozza. All Rights Reserved.</p>
+        <p class="patent">🛡️ Patent Pending (101 Claims)</p>
+        <p style="margin-top: 32px;">
+            <a href="/about.html" style="color: var(--text-muted); margin: 0 16px;">About</a>
+            <a href="/shops.html" style="color: var(--text-muted); margin: 0 16px;">For Shops</a>
+            <a href="/" style="color: var(--text-muted); margin: 0 16px;">Marketplace</a>
+        </p>
+    </footer>
+</body>
+</html>

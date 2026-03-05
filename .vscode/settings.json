@@ -1,0 +1,41 @@
+{
+    // PowerShell Extension Settings
+    "powershell.debugging.attachDotnetDebugger": false,
+    "powershell.integratedConsole.showOnStartup": false,
+    "powershell.codeFormatting.preset": "OTBS",
+    
+    // Python Settings for MTTGG
+    "python.defaultInterpreterPath": ".venv/Scripts/python.exe",
+    "python.terminal.activateEnvironment": true,
+    
+    // File Associations for MTTGG
+    "files.associations": {
+        "*.ino": "cpp",
+        "*.spec": "python"
+    },
+    
+    // Terminal Settings
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "args": ["-NoProfile"]
+        }
+    },
+    
+    // Exclude patterns for MTTGG
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/build": true,
+        "**/dist": true,
+        "**/.pyc": true
+    },
+    
+    // Search exclude patterns
+    "search.exclude": {
+        "**/build": true,
+        "**/dist": true,
+        "**/__pycache__": true,
+        "**/default-cards-*.json": true
+    }
+}

@@ -1,0 +1,42 @@
+# ✨ Commit Summary (50 chars max)
+
+
+# 📝 Detailed Description
+# - What changed?
+# - Why was this change necessary?
+# - How does it improve the project?
+
+
+# 🎯 Type of Change (uncomment one)
+# feat:     New feature
+# fix:      Bug fix
+# docs:     Documentation update
+# style:    Code formatting/styling
+# refactor: Code restructuring
+# perf:     Performance improvement
+# test:     Testing updates
+# chore:    Build/tooling changes
+
+
+# 📋 Related Issues
+# Fixes #
+# Relates to #
+
+
+# ✅ Testing
+# - [ ] Tested locally
+# - [ ] All tests passing
+# - [ ] Documentation updated
+
+
+# 💡 Notes
+# Additional context or breaking changes
+
+
+# ═══════════════════════════════════════════════════════════
+# MTTGG Commit Template
+# Lines starting with '#' will be ignored
+# First line: Brief summary (50 chars)
+# Second line: Blank
+# Remaining lines: Detailed description
+# ═══════════════════════════════════════════════════════════

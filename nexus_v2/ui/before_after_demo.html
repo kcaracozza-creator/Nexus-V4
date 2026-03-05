@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS GUI Redesign - Before/After</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #08080a;
+            color: #f0f0f5;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #0d0e11 0%, #14151a 100%);
+            padding: 32px 48px;
+            border-bottom: 1px solid #2a2d38;
+        }
+        
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #d4a537;
+            margin-bottom: 8px;
+        }
+        
+        .page-header p {
+            color: #a0a3b1;
+            font-size: 16px;
+        }
+        
+        /* Toggle */
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            padding: 24px;
+            gap: 16px;
+            background: #0d0e11;
+            border-bottom: 1px solid #2a2d38;
+        }
+        
+        .toggle-btn {
+            padding: 12px 32px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .toggle-btn.active {
+            background: #d4a537;
+            color: #08080a;
+        }
+        
+        .toggle-btn:not(.active) {
+            background: #1a1b22;
+            color: #a0a3b1;
+        }
+        
+        .toggle-btn:hover:not(.active) {
+            background: #22242d;
+            color: #f0f0f5;
+        }
+        
+        /* Mockup Container */
+        .mockup-container {
+            padding: 32px;
+        }
+        
+        .mockup {
+            display: none;
+            background: #0d0e11;
+            border-radius: 8px;
+            border: 1px solid #2a2d38;
+            overflow: hidden;
+        }
+        
+        .mockup.active {
+            display: block;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════════════
+           BEFORE MOCKUP (Current kindergarten style)
+           ═══════════════════════════════════════════════════════════════════════ */
+        
+        .before-window {
+            background: #0d0d0d;
+        }
+        
+        .before-header {
+            background: yellow;
+            color: #8b0000;
+            padding: 12px 24px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            border: 3px solid #8b0000;
+        }
+        
+        .before-section {
+            border: 1px solid #d4af37;
+            margin: 10px;
+            padding: 15px;
+        }
+        
+        .before-section-title {
+            color: #d4af37;
+            font-size: 11px;
+            position: relative;
+            top: -25px;
+            left: 10px;
+            background: #0d0d0d;
+            display: inline-block;
+            padding: 0 5px;
+        }
+        
+        .before-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: -10px;
+        }
+        
+        .before-btn {
+            padding: 8px 14px;
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+            border: none;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .before-btn.purple { background: #4b0082; }
+        .before-btn.green { background: #2d5016; }
+        .before-btn.gold { background: #d4af37; color: black; }
+        .before-btn.red { background: #8b0000; }
+        .before-btn.teal { background: #16a085; }
+        .before-btn.orange { background: #f39c12; }
+        .before-btn.blue { background: #2980b9; }
+        .before-btn.dark { background: #1a1a1a; }
+        .before-btn.lime { background: #7cb342; color: black; }
+        .before-btn.yellow { background: #f1c40f; color: black; }
+        .before-btn.white { background: white; color: black; }
+        
+        .before-status {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+        
+        .before-status-label {
+            color: #d4af37;
+            width: 120px;
+        }
+        
+        .before-status-value {
+            color: red;
+        }
+        
+        .before-console {
+            background: black;
+            color: cyan;
+            font-family: Courier, monospace;
+            font-size: 13px;
+            padding: 10px;
+            height: 200px;
+            overflow: auto;
+            margin: 10px;
+        }
+        
+        .before-slider-row {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+        
+        .before-slider-label {
+            width: 100px;
+            color: #e8dcc4;
+            font-weight: bold;
+        }
+        
+        .before-slider {
+            flex: 1;
+            height: 20px;
+            background: #4b0082;
+            border-radius: 0;
+            margin: 0 10px;
+        }
+        
+        .before-slider-fill {
+            height: 100%;
+            background: #4b0082;
+        }
+        
+        .before-slider-value {
+            width: 40px;
+            color: #e8dcc4;
+        }
+        
+        .before-preview {
+            width: 200px;
+            height: 40px;
+            background: #00ff00;
+            border: 2px solid gray;
+            margin: 10px;
+        }
+        
+        /* ═══════════════════════════════════════════════════════════════════════
+           AFTER MOCKUP (Pro redesign)
+           ═══════════════════════════════════════════════════════════════════════ */
+        
+        .after-window {
+            background: #0d0e11;
+        }
+        
+        .after-content {
+            padding: 24px 32px;
+        }
+        
+        .after-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #d4a537;
+            margin-bottom: 4px;
+        }
+        
+        .after-header p {
+            font-size: 14px;
+            color: #a0a3b1;
+        }
+        
+        .after-columns {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        .after-column {
+            flex: 1;
+        }
+        
+        .after-section {
+            background: #14151a;
+            border: 1px solid #2a2d38;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        
+        .after-section-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid #2a2d38;
+        }
+        
+        .after-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #d4a537;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .after-section-content {
+            padding: 16px;
+        }
+        
+        .after-status-row {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1e2028;
+        }
+        
+        .after-status-row:last-child {
+            border-bottom: none;
+        }
+        
+        .after-status-label {
+            width: 120px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #d4a537;
+        }
+        
+        .after-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .after-status-dot.online { background: #10b981; }
+        .after-status-dot.offline { background: #ef4444; }
+        .after-status-dot.pending { background: #f59e0b; }
+        
+        .after-status-value {
+            font-size: 13px;
+            color: #a0a3b1;
+        }
+        
+        .after-btn {
+            padding: 10px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .after-btn.primary {
+            background: #d4a537;
+            color: #08080a;
+        }
+        
+        .after-btn.primary:hover {
+            background: #e8c468;
+        }
+        
+        .after-btn.secondary {
+            background: #7c5cff;
+            color: white;
+        }
+        
+        .after-btn.secondary:hover {
+            background: #9d84ff;
+        }
+        
+        .after-btn.success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .after-btn.warning {
+            background: #f59e0b;
+            color: #08080a;
+        }
+        
+        .after-btn.ghost {
+            background: #14151a;
+            color: #a0a3b1;
+        }
+        
+        .after-btn.ghost:hover {
+            background: #22242d;
+            color: #f0f0f5;
+        }
+        
+        .after-btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .after-console {
+            background: #0a0a0a;
+            color: #10b981;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            padding: 16px;
+            border-radius: 4px;
+            height: 200px;
+            overflow: auto;
+            line-height: 1.6;
+        }
+        
+        .after-slider-row {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+        
+        .after-slider-label {
+            width: 80px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #d4a537;
+        }
+        
+        .after-slider-track {
+            flex: 1;
+            height: 6px;
+            background: #1a1b22;
+            border-radius: 3px;
+            margin: 0 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .after-slider-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7c5cff, #9d84ff);
+            border-radius: 3px;
+        }
+        
+        .after-slider-value {
+            width: 50px;
+            font-size: 13px;
+            color: #a0a3b1;
+            font-family: 'Consolas', monospace;
+            text-align: right;
+        }
+        
+        .after-preview {
+            width: 120px;
+            height: 32px;
+            background: #00ff00;
+            border-radius: 4px;
+            border: 1px solid #2a2d38;
+        }
+        
+        .after-preview-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+        }
+        
+        .after-preview-text {
+            font-size: 13px;
+            color: #a0a3b1;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .after-presets {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #1e2028;
+        }
+        
+        .after-preset-label {
+            font-size: 12px;
+            color: #6b6f80;
+            margin-right: 8px;
+            align-self: center;
+        }
+        
+        /* Port row */
+        .after-port-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #1e2028;
+        }
+        
+        .after-select {
+            background: #1a1b22;
+            border: 1px solid #2a2d38;
+            border-radius: 4px;
+            padding: 8px 12px;
+            color: #f0f0f5;
+            font-size: 13px;
+        }
+        
+        .after-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 0;
+        }
+        
+        .after-checkbox input {
+            width: 16px;
+            height: 16px;
+            accent-color: #7c5cff;
+        }
+        
+        .after-checkbox label {
+            font-size: 13px;
+            color: #f0f0f5;
+        }
+        
+        /* Comparison bar */
+        .comparison-bar {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            padding: 24px;
+            background: #14151a;
+            border-top: 1px solid #2a2d38;
+        }
+        
+        .comparison-item {
+            text-align: center;
+        }
+        
+        .comparison-item .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .comparison-item .label {
+            font-size: 12px;
+            color: #6b6f80;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .comparison-item .value {
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        
+        .comparison-item .value.bad { color: #ef4444; }
+        .comparison-item .value.good { color: #10b981; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>🎨 NEXUS GUI Redesign</h1>
+        <p>From kindergarten project to enterprise platform</p>
+    </div>
+    
+    <div class="toggle-container">
+        <button class="toggle-btn active" onclick="showMockup('before')">❌ BEFORE (Current)</button>
+        <button class="toggle-btn" onclick="showMockup('after')">✅ AFTER (Pro Theme)</button>
+    </div>
+    
+    <div class="mockup-container">
+        <!-- BEFORE MOCKUP -->
+        <div class="mockup before-mockup active" id="before">
+            <div class="before-window">
+                <!-- Horrible yellow header -->
+                <div class="before-header">HARDWARE SCANNER SYSTEM</div>
+                
+                <!-- Hardware Status Section -->
+                <div class="before-section">
+                    <div class="before-section-title">Hardware Status</div>
+                    
+                    <div class="before-status">
+                        <span class="before-status-label">Arduino Port:</span>
+                        <select style="width: 80px; padding: 4px;">
+                            <option>AUTO</option>
+                            <option>COM3</option>
+                            <option>COM4</option>
+                        </select>
+                        <button class="before-btn purple">Scan Ports</button>
+                        <button class="before-btn green">Connect</button>
+                    </div>
+                    
+                    <div class="before-status">
+                        <span class="before-status-label">Arduino Status:</span>
+                        <span class="before-status-value">Disconnected</span>
+                    </div>
+                    <div class="before-status">
+                        <span class="before-status-label">Camera:</span>
+                        <span class="before-status-value">Not Found</span>
+                    </div>
+                    <div class="before-status">
+                        <span class="before-status-label">NeoPixel LEDs:</span>
+                        <span class="before-status-value">Offline</span>
+                    </div>
+                </div>
+                
+                <!-- Scanner Controls - RAINBOW SOUP -->
+                <div class="before-section">
+                    <div class="before-section-title">Scanner Controls</div>
+                    <div class="before-buttons">
+                        <button class="before-btn purple">Single Scan</button>
+                        <button class="before-btn green">Batch Scan</button>
+                        <button class="before-btn gold">Hardware Test</button>
+                        <button class="before-btn purple">Calibrate</button>
+                    </div>
+                </div>
+                
+                <!-- NeoPixel Controls - MORE RAINBOW SOUP -->
+                <div class="before-section">
+                    <div class="before-section-title">NeoPixel RGB Control (Firmware v4.0)</div>
+                    
+                    <div style="display: flex; align-items: center; margin: 10px 0;">
+                        <span class="before-status-label">Live Preview:</span>
+                        <div class="before-preview"></div>
+                        <span style="color: #e8dcc4; font-family: Arial; font-size: 13px;">RGB(0, 255, 0) | Brightness: 50%</span>
+                    </div>
+                    
+                    <div class="before-slider-row">
+                        <span class="before-slider-label">Red:</span>
+                        <div class="before-slider"><div class="before-slider-fill" style="width: 0%"></div></div>
+                        <span class="before-slider-value">0</span>
+                    </div>
+                    <div class="before-slider-row">
+                        <span class="before-slider-label">Green:</span>
+                        <div class="before-slider"><div class="before-slider-fill" style="width: 100%; background: #4b0082;"></div></div>
+                        <span class="before-slider-value">255</span>
+                    </div>
+                    <div class="before-slider-row">
+                        <span class="before-slider-label">Blue:</span>
+                        <div class="before-slider"><div class="before-slider-fill" style="width: 0%"></div></div>
+                        <span class="before-slider-value">0</span>
+                    </div>
+                    <div class="before-slider-row">
+                        <span class="before-slider-label">Brightness:</span>
+                        <div class="before-slider"><div class="before-slider-fill" style="width: 50%; background: #4b0082;"></div></div>
+                        <span class="before-slider-value">50%</span>
+                    </div>
+                    
+                    <div class="before-buttons" style="margin-top: 15px;">
+                        <button class="before-btn green">Send RGB to Arduino</button>
+                        <button class="before-btn red">Red</button>
+                        <button class="before-btn green">Green</button>
+                        <button class="before-btn blue">Blue</button>
+                        <button class="before-btn white">White</button>
+                        <button class="before-btn yellow">Yellow</button>
+                        <button class="before-btn purple">Purple</button>
+                        <button class="before-btn orange">Orange</button>
+                    </div>
+                    
+                    <div class="before-buttons" style="margin-top: 8px;">
+                        <button class="before-btn dark">Solid</button>
+                        <button class="before-btn dark">Pulse</button>
+                        <button class="before-btn dark">Rainbow</button>
+                        <button class="before-btn dark">Chase</button>
+                        <button class="before-btn dark">Sparkle</button>
+                    </div>
+                </div>
+                
+                <!-- Console -->
+                <div class="before-console">
+HARDWARE SCANNER READY
+========================================
+
+AWAITING HARDWARE CONNECTION...
+
+Auto-detecting Arduino port...
+Arduino not found on any port
+Camera 1 (8K Camera) initialized - 1280x720
+                </div>
+            </div>
+        </div>
+        
+        <!-- AFTER MOCKUP -->
+        <div class="mockup after-mockup" id="after">
+            <div class="after-window">
+                <div class="after-content">
+                    <!-- Clean header -->
+                    <div class="after-header">
+                        <h2>Hardware Scanner</h2>
+                        <p>Arduino control, camera integration, and LED management</p>
+                    </div>
+                    
+                    <div class="after-columns">
+                        <!-- Left Column -->
+                        <div class="after-column">
+                            <!-- Connection Status -->
+                            <div class="after-section">
+                                <div class="after-section-header">
+                                    <span class="after-section-title">Connection Status</span>
+                                </div>
+                                <div class="after-section-content">
+                                    <div class="after-port-row">
+                                        <span class="after-status-label">Arduino Port:</span>
+                                        <select class="after-select">
+                                            <option>AUTO</option>
+                                            <option>COM3</option>
+                                            <option>COM4</option>
+                                        </select>
+                                        <button class="after-btn ghost">Scan</button>
+                                        <button class="after-btn success">Connect</button>
+                                    </div>
+                                    
+                                    <div class="after-status-row">
+                                        <span class="after-status-label">Arduino</span>
+                                        <span class="after-status-dot offline"></span>
+                                        <span class="after-status-value">Disconnected</span>
+                                    </div>
+                                    <div class="after-status-row">
+                                        <span class="after-status-label">Camera</span>
+                                        <span class="after-status-dot offline"></span>
+                                        <span class="after-status-value">Not Found</span>
+                                    </div>
+                                    <div class="after-status-row">
+                                        <span class="after-status-label">NeoPixel LEDs</span>
+                                        <span class="after-status-dot offline"></span>
+                                        <span class="after-status-value">Offline</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Scanner Controls -->
+                            <div class="after-section">
+                                <div class="after-section-header">
+                                    <span class="after-section-title">Scanner Controls</span>
+                                </div>
+                                <div class="after-section-content">
+                                    <div class="after-checkbox">
+                                        <input type="checkbox" id="intake">
+                                        <label for="intake">INTAKE MODE (Track acquisition details)</label>
+                                    </div>
+                                    
+                                    <div class="after-btn-group">
+                                        <button class="after-btn primary">Single Scan</button>
+                                        <button class="after-btn secondary">Batch Scan</button>
+                                        <button class="after-btn warning">Hardware Test</button>
+                                        <button class="after-btn ghost">Calibrate</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- RGB Control -->
+                            <div class="after-section">
+                                <div class="after-section-header">
+                                    <span class="after-section-title">NeoPixel RGB Control</span>
+                                </div>
+                                <div class="after-section-content">
+                                    <div class="after-preview-row">
+                                        <span class="after-status-label">Preview:</span>
+                                        <div class="after-preview"></div>
+                                        <span class="after-preview-text">RGB(0, 255, 0) | 50%</span>
+                                    </div>
+                                    
+                                    <div class="after-slider-row">
+                                        <span class="after-slider-label">Red</span>
+                                        <div class="after-slider-track">
+                                            <div class="after-slider-fill" style="width: 0%"></div>
+                                        </div>
+                                        <span class="after-slider-value">0</span>
+                                    </div>
+                                    <div class="after-slider-row">
+                                        <span class="after-slider-label">Green</span>
+                                        <div class="after-slider-track">
+                                            <div class="after-slider-fill" style="width: 100%"></div>
+                                        </div>
+                                        <span class="after-slider-value">255</span>
+                                    </div>
+                                    <div class="after-slider-row">
+                                        <span class="after-slider-label">Blue</span>
+                                        <div class="after-slider-track">
+                                            <div class="after-slider-fill" style="width: 0%"></div>
+                                        </div>
+                                        <span class="after-slider-value">0</span>
+                                    </div>
+                                    <div class="after-slider-row">
+                                        <span class="after-slider-label">Brightness</span>
+                                        <div class="after-slider-track">
+                                            <div class="after-slider-fill" style="width: 50%"></div>
+                                        </div>
+                                        <span class="after-slider-value">50%</span>
+                                    </div>
+                                    
+                                    <div style="margin-top: 16px;">
+                                        <button class="after-btn success">Send to Arduino</button>
+                                    </div>
+                                    
+                                    <div class="after-presets">
+                                        <span class="after-preset-label">Presets:</span>
+                                        <button class="after-btn ghost">Red</button>
+                                        <button class="after-btn ghost">Green</button>
+                                        <button class="after-btn ghost">Blue</button>
+                                        <button class="after-btn ghost">White</button>
+                                        <button class="after-btn ghost">Off</button>
+                                    </div>
+                                    
+                                    <div class="after-presets">
+                                        <span class="after-preset-label">Patterns:</span>
+                                        <button class="after-btn ghost">Solid</button>
+                                        <button class="after-btn ghost">Pulse</button>
+                                        <button class="after-btn ghost">Rainbow</button>
+                                        <button class="after-btn ghost">Chase</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column -->
+                        <div class="after-column">
+                            <div class="after-section" style="height: 100%;">
+                                <div class="after-section-header">
+                                    <span class="after-section-title">Scan Output</span>
+                                </div>
+                                <div class="after-section-content">
+                                    <div class="after-console">
+HARDWARE SCANNER READY
+══════════════════════════════════════════════════════════════
+
+STATUS: Waiting for hardware connection
+
+AVAILABLE ACTIONS:
+  • Connect Arduino via USB port
+  • Run hardware diagnostics
+  • Calibrate scanner settings
+  • Control NeoPixel RGB LEDs
+
+Connect your hardware to begin scanning.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Comparison Stats -->
+    <div class="comparison-bar">
+        <div class="comparison-item">
+            <div class="icon">🎨</div>
+            <div class="label">Color Consistency</div>
+            <div class="value" id="color-stat">—</div>
+        </div>
+        <div class="comparison-item">
+            <div class="icon">📝</div>
+            <div class="label">Font Styles</div>
+            <div class="value" id="font-stat">—</div>
+        </div>
+        <div class="comparison-item">
+            <div class="icon">🔘</div>
+            <div class="label">Button Colors</div>
+            <div class="value" id="button-stat">—</div>
+        </div>
+        <div class="comparison-item">
+            <div class="icon">📐</div>
+            <div class="label">Visual Hierarchy</div>
+            <div class="value" id="hierarchy-stat">—</div>
+        </div>
+        <div class="comparison-item">
+            <div class="icon">💼</div>
+            <div class="label">Enterprise Ready</div>
+            <div class="value" id="enterprise-stat">—</div>
+        </div>
+    </div>
+    
+    <script>
+        function showMockup(view) {
+            // Toggle active mockup
+            document.querySelectorAll('.mockup').forEach(m => m.classList.remove('active'));
+            document.getElementById(view).classList.add('active');
+            
+            // Toggle active button
+            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update stats
+            if (view === 'before') {
+                document.getElementById('color-stat').textContent = '8+ random';
+                document.getElementById('color-stat').className = 'value bad';
+                
+                document.getElementById('font-stat').textContent = '4+ fonts';
+                document.getElementById('font-stat').className = 'value bad';
+                
+                document.getElementById('button-stat').textContent = '10+ colors';
+                document.getElementById('button-stat').className = 'value bad';
+                
+                document.getElementById('hierarchy-stat').textContent = 'None';
+                document.getElementById('hierarchy-stat').className = 'value bad';
+                
+                document.getElementById('enterprise-stat').textContent = 'NO';
+                document.getElementById('enterprise-stat').className = 'value bad';
+            } else {
+                document.getElementById('color-stat').textContent = '5 (system)';
+                document.getElementById('color-stat').className = 'value good';
+                
+                document.getElementById('font-stat').textContent = '2 fonts';
+                document.getElementById('font-stat').className = 'value good';
+                
+                document.getElementById('button-stat').textContent = '4 semantic';
+                document.getElementById('button-stat').className = 'value good';
+                
+                document.getElementById('hierarchy-stat').textContent = 'Clear';
+                document.getElementById('hierarchy-stat').className = 'value good';
+                
+                document.getElementById('enterprise-stat').textContent = 'YES';
+                document.getElementById('enterprise-stat').className = 'value good';
+            }
+        }
+        
+        // Initialize with before view stats
+        showMockup('before');
+        document.querySelector('.toggle-btn').classList.add('active');
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "contract_address": "0x72a4e96cF2203DF1C1D4d3543397feB2a26C728E",
+  "deployer": "0x1671223861ECDEebA3dc20dB4cA8c4a5de70734F",
+  "network": "polygon_mainnet",
+  "chain_id": 137,
+  "deployed_at": "2026-02-17T15:21:30Z",
+  "deploy_tx": "0xc02c2a4d0f8a5e92769cd49a34b8792be6d4cea4feed2bfa3ee941db156d3843",
+  "block_number": 83110822,
+  "gas_used": 3177735,
+  "authorized_scanners": [
+    1
+  ]
+}

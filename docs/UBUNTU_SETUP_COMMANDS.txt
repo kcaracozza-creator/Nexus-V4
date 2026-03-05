@@ -1,0 +1,129 @@
+NEXUS SCANNER - UBUNTU SETUP COMMANDS
+================================================================================
+
+AFTER UBUNTU INSTALLS (via SSH or direct):
+================================================================================
+
+1. UPDATE SYSTEM:
+   sudo apt update
+   sudo apt upgrade -y
+
+2. INSTALL PYTHON + DEPENDENCIES:
+   sudo apt install -y python3-pip python3-opencv python3-serial
+   sudo apt install -y git curl wget
+   pip3 install numpy pyserial opencv-python
+
+3. INSTALL ARDUINO IDE (for firmware upload):
+   sudo apt install -y arduino
+   sudo usermod -a -G dialout $USER
+   (log out and back in for dialout group to work)
+
+4. COPY PROJECT FILES FROM WINDOWS PC:
+   # On Windows PC, run:
+   scp -r E:\MTTGG ubuntu@<LAPTOP_IP>:/home/ubuntu/
+
+5. TEST CAMERA:
+   python3 -c "import cv2; print('Camera test:', cv2.VideoCapture(0).read()[0])"
+
+6. TEST ARDUINO CONNECTION:
+   ls /dev/ttyUSB* /dev/ttyACM*
+   (should show /dev/ttyACM0 or /dev/ttyUSB0)
+
+7. RUN SCANNER DEMO:
+   cd /home/ubuntu/MTTGG
+   python3 NEXUS_DEMO.py
+
+8. AUTO-START ON BOOT (for kiosk mode):
+   sudo nano /etc/systemd/system/nexus-scanner.service
+   
+   [Unit]
+   Description=Nexus Card Scanner
+   After=network.target
+   
+   [Service]
+   Type=simple
+   User=ubuntu
+   WorkingDirectory=/home/ubuntu/MTTGG
+   ExecStart=/usr/bin/python3 /home/ubuntu/MTTGG/NEXUS_DEMO.py
+   Restart=always
+   
+   [Install]
+   WantedBy=multi-user.target
+   
+   sudo systemctl enable nexus-scanner
+   sudo systemctl start nexus-scanner
+
+9. LOCK DOWN FOR KIOSK (prevent tampering):
+   sudo apt remove --purge snapd
+   sudo apt autoremove
+   
+   # Disable SSH after setup (or use key-only auth):
+   sudo systemctl disable ssh
+   
+   # Auto-login to scanner app:
+   sudo systemctl edit getty@tty1
+   [Service]
+   ExecStart=
+   ExecStart=-/sbin/agetty --autologin ubuntu --noclear %I $TERM
+
+10. FIND LAPTOP IP (to SSH from Windows):
+    # On Windows PC:
+    arp -a | findstr "dynamic"
+    
+    # Or check router DHCP clients page
+    
+    # Then SSH:
+    ssh ubuntu@192.168.x.x
+
+TROUBLESHOOTING:
+================================================================================
+
+CAMERA NOT FOUND:
+   ls /dev/video*
+   sudo apt install v4l-utils
+   v4l2-ctl --list-devices
+
+ARDUINO NOT DETECTED:
+   sudo dmesg | grep tty
+   sudo chmod 666 /dev/ttyACM0
+
+PERMISSION DENIED:
+   sudo usermod -a -G dialout $USER
+   sudo usermod -a -G video $USER
+   logout (then log back in)
+
+DISPLAY ISSUES WITH RX 580:
+   sudo ubuntu-drivers autoinstall
+   sudo reboot
+
+CHECK SCANNER SERVICE:
+   sudo systemctl status nexus-scanner
+   journalctl -u nexus-scanner -f
+
+STOP SCANNER SERVICE:
+   sudo systemctl stop nexus-scanner
+
+QUICK COMMANDS YOU'LL USE:
+================================================================================
+ls -la                  # List files with permissions
+cd /home/ubuntu/MTTGG   # Go to project folder
+python3 NEXUS_DEMO.py   # Run scanner
+sudo reboot             # Restart system
+sudo shutdown now       # Shut down
+ip addr show            # Show IP address
+ping google.com         # Test internet
+df -h                   # Check disk space
+htop                    # Monitor CPU/RAM
+nano file.txt           # Edit text file
+sudo systemctl status nexus-scanner  # Check scanner service
+
+FOR CUSTOMER DEMO (LOCKED KIOSK MODE):
+================================================================================
+1. Auto-login as ubuntu user
+2. Auto-start NEXUS_DEMO.py on boot
+3. Disable SSH access
+4. Remove unnecessary packages
+5. Full-screen scanner UI (no desktop visible)
+6. Physical power button only way to exit
+
+This makes it tamper-proof for rental deployment.

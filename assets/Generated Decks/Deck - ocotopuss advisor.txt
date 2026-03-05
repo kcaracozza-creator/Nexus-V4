@@ -1,0 +1,57 @@
+1 Aetherize
+1 Arcane Signet
+1 Archaeomancer
+1 Blinkmoth Nexus
+1 Brain Freeze
+1 Brainstorm
+1 Cephalid Coliseum
+1 Cloud of Faeries
+1 Consider
+1 Cosmic Epiphany
+1 Counterspell
+1 Curate
+1 Drowned Secrets
+1 Eluge, the Shoreless Sea
+1 Emergence Zone
+1 Energy Tap
+1 Engulf the Shore
+1 Faerie Conclave
+1 Flow of Knowledge
+1 Frantic Search
+1 Gather Specimens
+28 Island
+1 Jace, Wielder of Mysteries
+1 Laboratory Maniac
+1 Lightning Greaves
+1 Lock and Load
+1 Merchant Scroll
+1 Metallurgic Summonings
+1 Mistrise Village
+1 Mitotic Manipulation
+1 Murmuring Mystic
+1 Mystic Reflection
+1 Nulldrifter
+1 Octavia, Living Thesis
+18 Persistent Petitioners
+1 Personal Tutor
+1 Reliquary Tower
+1 Rivendell
+1 Run Away Together
+1 Rush of Knowledge
+1 Sapphire Medallion
+1 Scourge of Fleets
+1 Snap
+1 Sol Ring
+1 Solve the Equation
+1 Sudden Substitution
+1 Talrand, Sky Summoner
+1 Thought Scour
+1 Traverse Eternity
+1 Unauthorized Exit
+1 Visions of Beyond
+1 Wash Out
+1 Whelming Wave
+1 Windfall
+1 Windrider Wizard
+1 Winds of Rebuke
+

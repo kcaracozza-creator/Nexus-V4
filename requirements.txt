@@ -1,0 +1,68 @@
+# Nexus Card System - Requirements
+# Core dependencies for portable deployment
+
+# Configuration & Environment
+python-dotenv>=1.0.0
+
+# GUI Framework
+tkinter-tooltip>=2.1.0
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Database
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0  # PostgreSQL support
+
+# Web Scraping & APIs
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Image Processing & OCR
+opencv-python>=4.8.0
+Pillow>=10.0.0
+pytesseract>=0.3.10
+
+# Card Recognition & Fuzzy Matching
+# rapidfuzz: MIT license — replaces fuzzywuzzy + python-Levenshtein (which was LGPL)
+rapidfuzz>=3.0.0
+
+# Serial Communication (Hardware)
+pyserial>=3.5
+
+# QuickBooks Integration
+pywin32>=306  # Windows only
+
+# Excel/CSV Processing
+openpyxl>=3.1.0
+xlrd>=2.0.1
+
+# Web Framework (for API mode)
+fastapi>=0.104.0
+uvicorn>=0.24.0
+websockets>=12.0
+
+# Authentication & Security
+python-jose>=3.3.0
+passlib>=1.7.4
+bcrypt>=4.1.0
+
+# GPU Acceleration (choose based on hardware)
+# For NVIDIA GPUs:
+# torch>=2.0.0+cu118
+# For AMD GPUs (Windows):
+# torch-directml>=0.2.0  # AMD RX 580 support on Windows
+# For AMD GPUs (Linux ROCm):
+# torch @ https://download.pytorch.org/whl/rocm5.7/torch-2.0.0%2Brocm5.7-cp311-cp311-linux_x86_64.whl
+# tensorflow-rocm>=2.13.0  # AMD ROCm TensorFlow
+
+# Deployment & Monitoring
+gunicorn>=21.2.0  # Production server
+python-multipart>=0.0.6  # File uploads
+
+# Development Tools
+pytest>=7.4.0
+black>=23.0.0
+flake8>=6.1.0

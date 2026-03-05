@@ -1,0 +1,87 @@
+1 Aether Spellbomb
+1 Ancestral Blade
+1 Ancient Den
+1 Arcanist's Owl
+1 Automated Assembly Line
+1 Azorius Guildgate
+1 Belisarius Cawl
+1 Bonesplitter
+1 Celestial Purge
+1 Chief of the Foundry
+1 Cryptic Spires
+1 Darksteel Axe
+1 Darksteel Citadel
+1 Dispatch
+1 Dive Down
+1 Edgar, King of Figaro
+1 Ethercaste Knight
+1 Etherium Sculptor
+1 Evolving Wilds
+1 Ezrim, Agency Chief
+1 Foundry Inspector
+1 Freed from the Real
+1 Genku, Future Shaper
+1 Gold Myr
+1 Guidelight Optimizer
+1 Halimar Depths
+1 Hargilde, Kindly Runechanter
+1 Hindering Light
+1 Idyllic Grange
+9 Island
+1 Jhoira's Familiar
+1 Kangee, Sky Warden
+1 Kappa Cannoneer
+1 Karn, Scion of Urza
+1 Lonely Sandbar
+1 Losheel, Clockwork Scholar
+1 Lumen-Class Frigate
+1 Mana Leak
+1 Manakin
+1 Master's Call
+1 Meandering River
+1 Mechan Assembler
+1 Memorial to Genius
+1 Memorial to Glory
+1 Memory Guardian
+1 Mendicant Core, Guidelight
+1 Mirran Spy
+1 Momentary Blink
+1 Myr Battlesphere
+1 Myr Retriever
+1 Myrsmith
+1 Nanoform Sentinel
+1 Negate
+1 Palladium Myr
+1 Phalanx Tactics
+7 Plains
+1 Power Depot
+1 Reality Shift
+1 Rebbec, Architect of Ascension
+1 Renowned Weaponsmith
+1 Revoke Existence
+1 Riddle Gate Gargoyle
+1 Rook Turret
+1 Sai, Master Thopterist
+1 Scour for Scrap
+1 Sea of Clouds
+1 Secluded Steppe
+1 Sejiri Steppe
+1 Sharlayan, Nation of Scholars
+1 Shimmer Myr
+1 Silver Myr
+1 Sky Diamond
+1 Skycloud Expanse
+1 Spire of Industry
+1 Starting Column
+1 The Reality Chip
+1 Thirst for Knowledge
+1 Thopter Spy Network
+1 Thoughtcast
+1 Tranquil Cove
+1 Traxos, Scourge of Kroog
+1 Treasure Cruise
+1 Voltaic Servant
+1 Voyager Quickwelder
+1 Whirler Rogue
+1 Workshop Assistant
+

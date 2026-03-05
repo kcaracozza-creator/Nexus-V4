@@ -1,0 +1,47 @@
+{
+  "769f7d13-a312-4d79-8639-6ae248452448": {
+    "usd": 0.03,
+    "usd_foil": 0.11,
+    "usd_etched": 0.0,
+    "eur": 0.15,
+    "name": "Illvoi Galeblade",
+    "set": "eoe",
+    "timestamp": "2026-02-06T12:25:42.239405"
+  },
+  "01e6b701-d7a4-400d-b5f1-b6ef725248d1": {
+    "usd": 0.0,
+    "usd_foil": 0.0,
+    "usd_etched": 0.0,
+    "eur": 0.0,
+    "name": "Faerie Rogue",
+    "set": "tznc",
+    "timestamp": "2026-02-06T12:25:42.968032"
+  },
+  "0205d094-c846-4aa0-ade8-2a52c57b11da": {
+    "usd": 0.39,
+    "usd_foil": 2.23,
+    "usd_etched": 0.0,
+    "eur": 0.37,
+    "name": "Planeswalker's Mirth",
+    "set": "pls",
+    "timestamp": "2026-02-06T12:25:43.577849"
+  },
+  "394f432d-e59f-44ce-a166-1a939a648cbd": {
+    "usd": 0.0,
+    "usd_foil": 0.0,
+    "usd_etched": 0.57,
+    "eur": 0.0,
+    "name": "Inspiring Leader",
+    "set": "clb",
+    "timestamp": "2026-02-06T12:25:44.247891"
+  },
+  "31b8f1da-c8ea-41d5-b1ad-b714c22d3683": {
+    "usd": 0.07,
+    "usd_foil": 0.33,
+    "usd_etched": 0.0,
+    "eur": 0.11,
+    "name": "Inspiring Cleric",
+    "set": "xln",
+    "timestamp": "2026-02-06T12:25:44.933546"
+  }
+}

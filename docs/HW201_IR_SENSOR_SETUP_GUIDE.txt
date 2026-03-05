@@ -1,0 +1,158 @@
+🔍 HW201 IR SENSOR INTEGRATION GUIDE
+==========================================
+
+HARDWARE SETUP FOR PRECISE CARD EJECTION CONTROL
+
+🎯 PROBLEM SOLVED:
+The original "NO-IR" firmware was causing multiple cards to be ejected because
+it relied on timing instead of actual card detection. Adding HW201 IR sensors
+provides precise control to ensure exactly ONE card is processed at a time.
+
+📍 HW201 IR SENSOR PLACEMENT:
+
+┌─────────────────────────────────────────────────┐
+│                CARD FLOW PATH                   │
+│                                                 │
+│  [STACK] ──→ [IR1] ──→ [DSLR] ──→ [IR2] ──→ [OUT] │
+│              EJECT    CAMERA     POSITION       │
+│              DETECT   AREA       CONFIRM        │
+└─────────────────────────────────────────────────┘
+
+🔌 WIRING CONNECTIONS:
+
+HW201 IR Sensor #1 (Ejection Detection):
+• VCC → 5V (Arduino)
+• GND → GND (Arduino)  
+• OUT → Pin 7 (Digital)
+• Position: Between card stack and camera area
+
+HW201 IR Sensor #2 (Position Confirmation):
+• VCC → 5V (Arduino)
+• GND → GND (Arduino)
+• OUT → Pin A1 (Can be analog or digital)
+• Position: In camera scanning area
+
+💡 HW201 SENSOR BEHAVIOR:
+• OUTPUT HIGH (5V) = No object detected
+• OUTPUT LOW (0V) = Object detected
+• Detection range: ~3cm
+• Response time: <2ms
+
+🔧 MOUNTING RECOMMENDATIONS:
+
+IR1 - Ejection Detection:
+• Mount 2-3cm from card stack exit
+• Aim across card path (transmitter ↔ receiver)
+• Height: Card center level
+• Purpose: Detect when exactly one card passes
+
+IR2 - Position Confirmation:  
+• Mount in DSLR camera view area
+• Ensure card breaks beam when properly positioned
+• Height: Card center level
+• Purpose: Confirm card is ready for photography
+
+⚙️ FIRMWARE IMPROVEMENTS:
+
+✅ SINGLE CARD DETECTION:
+- Feed motor stops when IR1 detects card passage
+- Prevents multiple cards from being ejected
+- 500ms delay after detection ensures complete passage
+
+✅ PRECISE POSITIONING:
+- Card ejection stops when IR1 beam clears
+- IR2 confirms card is in camera position
+- Eliminates guesswork and timing issues
+
+✅ ENHANCED STATUS:
+- Status command now shows IR1, IR2, and line sensor
+- Real-time monitoring of all sensors
+- Better debugging and troubleshooting
+
+🚦 OPERATION SEQUENCE:
+
+1. FEED CARD:
+   - Motor starts feeding
+   - IR1 detects card → sets flag
+   - Card passes IR1 → stops motor
+   - Result: Exactly one card ejected
+
+2. POSITION FOR DSLR:
+   - Card moves to camera area
+   - IR2 detects card in position
+   - System ready for photography
+
+3. REMOVE CARD:
+   - Conveyor motor starts
+   - IR2 clears when card moves away
+   - Motor stops when removal complete
+
+🔍 TESTING COMMANDS:
+
+Connect to Arduino Serial Monitor (9600 baud):
+
+S - Status (shows all sensor states)
+   Example: "STATUS:0 IR1:0 IR2:1 LINE:345"
+   
+F - Feed single card (test IR1 detection)
+R - Remove/position card (test IR2 detection)  
+E - Reset system if error occurs
+
+📊 SENSOR VALUES:
+• IR1:1 = Card detected at ejection point
+• IR2:1 = Card detected at camera position
+• IR1:0, IR2:0 = No cards detected
+• IR1:0, IR2:1 = Card properly positioned for photo
+
+🛠️ TROUBLESHOOTING:
+
+MULTIPLE CARDS STILL EJECTING:
+• Check IR1 sensor alignment
+• Verify wiring to Pin 7
+• Test sensor with multimeter
+• Adjust sensor sensitivity if available
+
+CARD NOT DETECTED IN POSITION:
+• Check IR2 sensor alignment  
+• Verify wiring to Pin A1
+• Ensure card breaks IR2 beam when positioned
+• Check for obstructions in sensor path
+
+SENSORS NOT RESPONDING:
+• Verify 5V power to sensors
+• Check GND connections
+• Test sensor LED indicators
+• Use 'S' command to monitor real-time values
+
+⚡ BENEFITS OF IR SENSOR UPGRADE:
+
+✅ Prevents multiple card ejection
+✅ Precise positioning control
+✅ Real-time feedback
+✅ Professional automation quality
+✅ Compatible with DSLR timing requirements
+✅ Reduces card jams and errors
+✅ Better system reliability
+
+🎯 INTEGRATION WITH DSLR SYSTEM:
+
+The enhanced firmware works perfectly with your DSLR professional system:
+• 'P' command positions card precisely using IR sensors
+• 'L' command optimizes lighting for photography
+• DSLR captures when IR2 confirms proper positioning
+• Enhanced timing ensures sharp photos
+
+📝 INSTALLATION CHECKLIST:
+
+□ Mount IR1 sensor at ejection point
+□ Mount IR2 sensor at camera position  
+□ Wire IR1 to Pin 7 (digital)
+□ Wire IR2 to Pin A1 (analog/digital)
+□ Connect 5V and GND to both sensors
+□ Upload enhanced firmware
+□ Test with 'S' command
+□ Test single card ejection with 'F'
+□ Test positioning with 'R'  
+□ Verify DSLR integration
+
+Your system now has professional-grade precision control! 🎯📸

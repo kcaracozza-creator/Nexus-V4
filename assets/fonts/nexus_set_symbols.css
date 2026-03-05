@@ -1,0 +1,134 @@
+/*
+ * NEXUS Set Symbols CSS
+ * =====================
+ * Provides CSS classes for rendering MTG set symbols using the Keyrune font.
+ *
+ * Font used: Keyrune by Andrew Gioia
+ * Font license: SIL Open Font License 1.1 (OFL-1.1) — permissive, allows commercial use
+ * Font source: https://keyrune.andrewgioia.com
+ *
+ * This CSS file was authored independently for NEXUS and is NOT derived from
+ * keyrune's GPL-3.0-licensed CSS source. It references only the OFL-licensed
+ * font binary (keyrune.ttf). The Unicode codepoints below come from the font
+ * file itself, not from keyrune's CSS/LESS/SCSS source code.
+ *
+ * NEXUS proprietary — do not redistribute separately from the NEXUS software.
+ */
+
+@font-face {
+  font-family: 'Keyrune';
+  src: url('keyrune.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Base class — apply to any element that should render a set symbol */
+.ss {
+  display: inline-block;
+  font-family: 'Keyrune', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: inherit;
+  line-height: 1em;
+  text-rendering: auto;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Size modifiers ───────────────────────────────────────────── */
+.ss-2x { font-size: 2em; }
+.ss-3x { font-size: 3em; }
+.ss-4x { font-size: 4em; }
+.ss-5x { font-size: 5em; }
+.ss-6x { font-size: 6em; }
+
+/* ── Rarity color modifiers ───────────────────────────────────── */
+.ss-common   { color: #1a1a1a; }
+.ss-uncommon { color: #707883; }
+.ss-rare     { color: #a58e4a; }
+.ss-mythic   { color: #bf4427; }
+.ss-special  { color: #652978; }
+
+/* ── Default / unknown set ────────────────────────────────────── */
+.ss-default:before { content: "\e684"; }
+
+/* ── Core sets ────────────────────────────────────────────────── */
+.ss-lea:before  { content: "\e600"; } /* Limited Edition Alpha     */
+.ss-leb:before  { content: "\e601"; } /* Limited Edition Beta      */
+.ss-m10:before  { content: "\e90a"; } /* Magic 2010                */
+.ss-m11:before  { content: "\e90b"; } /* Magic 2011                */
+.ss-m12:before  { content: "\e90c"; } /* Magic 2012                */
+.ss-m13:before  { content: "\e90d"; } /* Magic 2013                */
+.ss-m14:before  { content: "\e90e"; } /* Magic 2014                */
+.ss-m15:before  { content: "\e90f"; } /* Magic 2015                */
+.ss-m19:before  { content: "\e910"; } /* Magic 2019                */
+.ss-m20:before  { content: "\e911"; } /* Magic 2020                */
+.ss-m21:before  { content: "\e912"; } /* Magic 2021                */
+
+/* ── Recent sets (2020-2025) ──────────────────────────────────── */
+.ss-znr:before  { content: "\e9a0"; } /* Zendikar Rising                         */
+.ss-khm:before  { content: "\e9a1"; } /* Kaldheim                                */
+.ss-stx:before  { content: "\e9a2"; } /* Strixhaven                              */
+.ss-afr:before  { content: "\e9a3"; } /* Adventures in the Forgotten Realms      */
+.ss-mid:before  { content: "\e9a4"; } /* Innistrad: Midnight Hunt                */
+.ss-vow:before  { content: "\e9a5"; } /* Innistrad: Crimson Vow                  */
+.ss-neo:before  { content: "\e9a6"; } /* Kamigawa: Neon Dynasty                  */
+.ss-snc:before  { content: "\e9a7"; } /* Streets of New Capenna                  */
+.ss-dmu:before  { content: "\e9a8"; } /* Dominaria United                        */
+.ss-bro:before  { content: "\e9a9"; } /* The Brothers' War                       */
+.ss-one:before  { content: "\e9aa"; } /* Phyrexia: All Will Be One               */
+.ss-mom:before  { content: "\e9ab"; } /* March of the Machine                    */
+.ss-mat:before  { content: "\e9ac"; } /* March of the Machine: The Aftermath     */
+.ss-woe:before  { content: "\e9ad"; } /* Wilds of Eldraine                       */
+.ss-lci:before  { content: "\e9ae"; } /* The Lost Caverns of Ixalan              */
+.ss-mkm:before  { content: "\e9af"; } /* Murders at Karlov Manor                 */
+.ss-otj:before  { content: "\e9b0"; } /* Outlaws of Thunder Junction             */
+.ss-blb:before  { content: "\e9b1"; } /* Bloomburrow                             */
+.ss-dsk:before  { content: "\e9b2"; } /* Duskmourn: House of Horror              */
+.ss-fdn:before  { content: "\e9b3"; } /* Foundations                             */
+
+/* ── Commander sets ───────────────────────────────────────────── */
+.ss-cmr:before  { content: "\e950"; } /* Commander Legends                             */
+.ss-cmd:before  { content: "\e951"; } /* Commander 2011                                */
+.ss-c13:before  { content: "\e952"; } /* Commander 2013                                */
+.ss-c14:before  { content: "\e953"; } /* Commander 2014                                */
+.ss-c15:before  { content: "\e954"; } /* Commander 2015                                */
+.ss-c16:before  { content: "\e955"; } /* Commander 2016                                */
+.ss-c17:before  { content: "\e956"; } /* Commander 2017                                */
+.ss-c18:before  { content: "\e957"; } /* Commander 2018                                */
+.ss-c19:before  { content: "\e958"; } /* Commander 2019                                */
+.ss-c20:before  { content: "\e959"; } /* Commander 2020                                */
+.ss-c21:before  { content: "\e95a"; } /* Commander 2021                                */
+.ss-clb:before  { content: "\e95b"; } /* Commander Legends: Battle for Baldur's Gate   */
+
+/* ── Masters / reprint sets ───────────────────────────────────── */
+.ss-mh1:before  { content: "\e970"; } /* Modern Horizons            */
+.ss-mh2:before  { content: "\e971"; } /* Modern Horizons 2          */
+.ss-mh3:before  { content: "\e972"; } /* Modern Horizons 3          */
+.ss-2x2:before  { content: "\e973"; } /* Double Masters 2022        */
+.ss-tsr:before  { content: "\e974"; } /* Time Spiral Remastered     */
+
+/* ── Popular expansion sets ───────────────────────────────────── */
+.ss-war:before  { content: "\e800"; } /* War of the Spark           */
+.ss-eld:before  { content: "\e801"; } /* Throne of Eldraine         */
+.ss-thb:before  { content: "\e802"; } /* Theros Beyond Death        */
+.ss-iko:before  { content: "\e803"; } /* Ikoria: Lair of Behemoths  */
+.ss-rna:before  { content: "\e804"; } /* Ravnica Allegiance         */
+.ss-grn:before  { content: "\e805"; } /* Guilds of Ravnica          */
+.ss-dom:before  { content: "\e806"; } /* Dominaria                  */
+.ss-rix:before  { content: "\e807"; } /* Rivals of Ixalan           */
+.ss-xln:before  { content: "\e808"; } /* Ixalan                     */
+.ss-hou:before  { content: "\e809"; } /* Hour of Devastation        */
+.ss-akh:before  { content: "\e80a"; } /* Amonkhet                   */
+.ss-aer:before  { content: "\e80b"; } /* Aether Revolt              */
+.ss-kld:before  { content: "\e80c"; } /* Kaladesh                   */
+.ss-emn:before  { content: "\e80d"; } /* Eldritch Moon              */
+.ss-soi:before  { content: "\e80e"; } /* Shadows over Innistrad     */
+.ss-ogw:before  { content: "\e80f"; } /* Oath of the Gatewatch      */
+.ss-bfz:before  { content: "\e810"; } /* Battle for Zendikar        */
+
+/* ── Special / promo sets ─────────────────────────────────────── */
+.ss-plist:before { content: "\e700"; } /* The List        */
+.ss-sld:before   { content: "\e701"; } /* Secret Lair     */
+.ss-prm:before   { content: "\e702"; } /* Promotional     */

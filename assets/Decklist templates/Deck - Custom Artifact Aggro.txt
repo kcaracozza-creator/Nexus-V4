@@ -1,0 +1,24 @@
+// MTTGG Custom Build: "Artifact Synergy"
+// Built around your artifact cards and support
+// Uses your highest-count artifacts
+
+4 Cryogen Relic
+4 Melded Moxite
+4 Chrome Companion
+4 Mechan Shieldmate
+4 Nanoform Sentinel
+3 Oreplate Pangolin
+
+4 Weftblade Enhancer
+4 Zookeeper Mechan
+3 Exosuit Savior
+
+4 Auxiliary Boosters
+4 Orbital Plunge
+3 Comet Crawler
+
+4 Sami's Curiosity
+2 Drill Too Deep
+
+18 Mountain
+6 Plains

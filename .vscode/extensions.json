@@ -1,0 +1,32 @@
+{
+    "recommendations": [
+        // Python Development
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-python.pylint",
+        
+        // PowerShell Development
+        "ms-vscode.powershell",
+        
+        // Arduino Development  
+        "vsciot-vscode.vscode-arduino",
+        "ms-vscode.cpptools",
+        
+        // CSV/Data File Support
+        "mechatroner.rainbow-csv",
+        "janisdd.vscode-edit-csv",
+        
+        // Markdown Support
+        "yzhang.markdown-all-in-one",
+        
+        // Git Support
+        "eamodio.gitlens",
+        
+        // File Management
+        "alefragnani.project-manager",
+        
+        // Code Quality
+        "ms-python.flake8",
+        "ms-python.black-formatter"
+    ]
+}

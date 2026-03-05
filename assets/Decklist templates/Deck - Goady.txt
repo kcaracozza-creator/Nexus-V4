@@ -1,0 +1,81 @@
+1 Aetherize
+1 Ancestral Vision
+1 Aqueous Form
+1 Arcane Signet
+1 Assault Suit
+1 Blighted Agent
+1 Bloodthirsty Blade
+1 Choked Estuary
+1 Command Tower
+1 Counterspell
+1 Curse of the Swine
+1 Darkwater Catacombs
+1 Dauthi Horror
+1 Dauthi Voidwalker
+1 Decanter of Endless Water
+1 Demonic Taskmaster
+1 Desecration Elemental
+1 Dimir Aqueduct
+1 Dimir Guildgate
+1 Dimir Signet
+1 Dissipation Field
+1 Drifter il-Dal
+1 Drown in the Loch
+1 Drowned Catacomb
+1 Ebon Drake
+1 Ebonblade Reaper
+1 Etrata, the Silencer
+1 Evil Eye of Orms-by-Gore
+1 Exotic Orchard
+1 Fellwar Stone
+1 Flesh Reaver
+1 Flitterstep Eidolon
+1 Go for the Throat
+1 Greater Harvester
+1 Inkfathom Infiltrator
+1 Inkwell Leviathan
+11 Island
+1 Jon Irenicus, Shattered One
+1 Kaya's Ghostform
+1 Latch Seeker
+1 Looter il-Kor
+1 Lord of the Pit
+1 Malleable Impostor
+1 Master of the Feast
+1 Mocking Doppelganger
+1 Modify Memory
+1 Morkrut Necropod
+1 Myriad Landscape
+1 Necromantic Selection
+1 Parasitic Impetus
+1 Persist
+1 Phyrexian Soulgorger
+1 Phyrexian Vatmother
+1 Ponder
+1 Psychic Impetus
+1 Read the Bones
+1 Reality Shift
+1 Reliquary Tower
+1 Rite of Belzenlok
+1 Rogue's Passage
+1 Rotting Regisaur
+1 Rust Elemental
+1 Shifting Grift
+1 Sly Instigator
+1 Sol Ring
+1 Sublime Epiphany
+1 Sunken Hollow
+1 Sunken Ruins
+11 Swamp
+1 Temple of Deceit
+1 Terramorphic Expanse
+1 Tezzeret's Gambit
+1 The Master, Mesmerist
+1 Thought Devourer
+1 Thought Eater
+1 Vashta Nerada
+1 Vow of Flight
+1 Vow of Torment
+1 Wretched Anurid
+1 Yukora, the Prisoner
+

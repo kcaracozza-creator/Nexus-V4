@@ -1,0 +1,96 @@
+1 Abundant Harvest
+1 Aetherize
+1 Arboreal Grazer
+1 Aurelia, the Law Above
+1 Aven Interrupter
+1 Battlefield Forge
+1 Blackblade Reforged
+1 Blighted Burgeoning
+1 Boros Garrison
+1 Brokers Hideout
+1 Brushland
+1 Cabaretti Courtyard
+1 Careful Cultivation
+1 Colossal Dreadmask
+1 Colossification
+1 Copperline Gorge
+1 Darkmoss Bridge
+1 Dawnhart Rejuvenator
+1 Deceptive Landscape
+1 Detention Sphere
+1 Disdainful Stroke
+1 Dismal Backwater
+1 Dovin's Veto
+1 Drana, Liberator of Malakir
+1 Dream Trawler
+1 Dreamtide Whale
+1 Dress Down
+1 Eccentric Farmer
+1 Fateful Absence
+1 Fell Stinger
+1 Fellwar Stone
+1 Field of Ruin
+2 Forest
+1 Garth One-Eye
+1 Glacial Fortress
+1 Go for the Throat
+1 Grisly Salvage
+1 Hall of Storm Giants
+1 Haunted Mire
+1 Hinata, Dawn-Crowned
+1 Infernal Grasp
+1 Inspiring Vantage
+2 Island
+1 Jaya, Fiery Negotiator
+1 Karmic Guide
+1 Kutzil, Malamet Exemplar
+1 Kyodai, Soul of Kamigawa
+1 Leyline of Sanctity
+1 Liesa, Shroud of Dusk
+1 Llanowar Wastes
+1 Meddling Mage
+1 Memory Deluge
+1 Mind Stone
+2 Mountain
+1 Murderous Rider
+1 Mysterious Limousine
+1 Narset, Parter of Veils
+1 Natural State
+1 Nature's Embrace
+1 Niv-Mizzet, Parun
+1 Obscura Storefront
+1 Oko, the Ringleader
+1 Orzhov Basilica
+1 Overcharged Amalgam
+1 Perilous Landscape
+2 Plains
+1 Prairie Stream
+1 Quicksilver Amulet
+1 Radiant Grove
+1 Razorverge Thicket
+1 Restless Prairie
+1 Rienne, Angel of Rebirth
+1 Sacred Peaks
+1 Sailor of Means
+1 Seraphic Steed
+1 Sheltering Landscape
+1 Shifting Ceratops
+1 Skyclave Apparition
+1 Soul Partition
+1 Soul Transfer
+1 Soul-Guide Lantern
+1 Springleaf Drum
+1 Supreme Verdict
+2 Swamp
+1 Sword of Vengeance
+1 Tajic, Blade of the Legion
+1 Temple of Mystery
+1 Tibalt, Rakish Instigator
+1 Timeless Dragon
+1 Tranquil Cove
+1 Unauthorized Exit
+1 Underground River
+1 Warren Warleader
+1 Windborn Muse
+1 Yavimaya Coast
+

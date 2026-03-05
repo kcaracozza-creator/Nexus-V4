@@ -1,0 +1,25 @@
+// MTTGG Custom Build: "Token Swarm"
+// Built around your token generation and pump spells
+// Leverages your massive creature counts
+
+4 Intrepid Tenderfoot
+4 Squire's Lightblade
+4 Luxknight Breacher
+4 Starport Security
+3 Gravpack Monoist
+
+4 Gnawing Crescendo
+4 Zealous Display
+4 Bombard
+4 Radiant Strike
+3 Rig for War
+
+4 Banishing Light
+4 Dead Weight
+3 Divert Disaster
+
+4 Fungal Colossus
+2 Thawbringer
+
+16 Plains
+8 Forest

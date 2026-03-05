@@ -1,0 +1,79 @@
+1 Aarakocra Sneak
+1 Academy Manufactor
+1 Aetherize
+1 Agent of the Shadow Thieves
+1 Arcane Signet
+1 Baleful Strix
+1 Blood Money
+1 Blur
+1 Bojuka Bog
+1 Cadaver Imp
+1 Cavern Harpy
+1 Changeling Outcast
+1 Cloudkin Seer
+1 Command Tower
+1 Creeping Tar Pit
+1 Curator of Destinies
+1 Darkwater Catacombs
+1 Deadly Cover-Up
+1 Dimir Aqueduct
+1 Dimir Keyrune
+1 Dimir Signet
+1 Displace
+1 Dreadwing Scavenger
+1 Dungeon Delver
+1 Dungeon Map
+1 Dungeoneer's Pack
+1 Faerie Conclave
+1 Feed the Swarm
+1 Fetid Pools
+1 Feywild Caretaker
+1 From the Catacombs
+1 Ghostly Flicker
+1 Ghostly Pilferer
+1 Gossip's Talent
+1 Hide on the Ceiling
+1 Hive of the Eye Tyrant
+1 Homunculus Horde
+1 Illusionist's Stratagem
+1 Imoen, Mystic Trickster
+1 Infernal Grasp
+12 Island
+1 Meneldor, Swift Savior
+1 Moonlit Meditation
+1 Mulldrifter
+1 Myriad Landscape
+1 Mystic Sanctuary
+1 Overlord of the Floodpits
+1 Passageway Seer
+1 Path of Ancestry
+1 Plasmancer
+1 Puppeteer Clique
+1 Rapid Hybridization
+1 Ravenloft Adventurer
+1 Rescue from the Underworld
+1 Rilsa Rael, Kingpin
+1 Rogue's Passage
+1 Safana, Calimport Cutthroat
+1 Sarevok's Tome
+1 Siren's Ruse
+1 Slither Blade
+1 Sneaky Snacker
+1 Sol Ring
+1 Solemn Simulacrum
+1 Stridehangar Automaton
+1 Sunken Hollow
+12 Swamp
+1 Tainted Isle
+1 Talisman of Dominance
+1 Teferi's Time Twist
+1 Temple of Deceit
+1 Tomb of Horrors Adventurer
+1 Ultimecia, Time Sorceress
+1 Underdark Explorer
+1 Vicious Battlerager
+1 Voidwalk
+1 Whirler Rogue
+1 Worldwalker Helm
+1 Worn Powerstone
+

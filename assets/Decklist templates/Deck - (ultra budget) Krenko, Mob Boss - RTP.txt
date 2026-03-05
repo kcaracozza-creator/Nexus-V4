@@ -1,0 +1,76 @@
+1 Abrade
+1 Adaptive Automaton
+1 Battle Cry Goblin
+1 Beetleback Chief
+1 Big Score
+1 Buried Ruin
+1 Castle Embereth
+1 Chaos Warp
+1 Demand Answers
+1 Dragon Fodder
+1 Dragon Throne of Tarkir
+1 Empty the Warrens
+1 Ferocity of the Wilds
+1 Forgotten Cave
+1 Foundry Street Denizen
+1 Gleeful Demolition
+1 Goblin Assault
+1 Goblin Burrows
+1 Goblin Caves
+1 Goblin Chirurgeon
+1 Goblin Instigator
+1 Goblin Lookout
+1 Goblin Matron
+1 Goblin Motivator
+1 Goblin Oriflamme
+1 Goblin Rabblemaster
+1 Goblin Ringleader
+1 Goblin Surprise
+1 Goblin War Drums
+1 Goblin War Party
+1 Goblin Warchief
+1 Goblin Wardriver
+1 Goblinslide
+1 Guttersnipe
+1 Hammer of Purphoros
+1 Heraldic Banner
+1 Hordeling Outburst
+1 Icon of Ancestry
+1 Jandor's Saddlebags
+1 Krenko's Command
+1 Krenko, Baron of Tin Street
+1 Krenko, Mob Boss
+1 Labyrinth of Skophos
+1 Legion Warboss
+1 Lightning Bolt
+1 Mechanized Warfare
+1 Metallic Mimic
+1 Mogg War Marshal
+1 Molten Gatekeeper
+26 Mountain
+1 Myriad Landscape
+1 Null Elemental Blast
+1 Opal Palace
+1 Outpost Siege
+1 Path of Ancestry
+1 Pirate's Pillage
+1 Puppet Strings
+1 Raid Bombardment
+1 Rising of the Day
+1 Rogue's Passage
+1 Scavenger Grounds
+1 Searslicer Goblin
+1 Seize the Spoils
+1 Siege Smash
+1 Siege-Gang Commander
+1 Skirk Prospector
+1 Squee, Dubious Monarch
+1 Steel Hellkite
+1 Sword of the Paruns
+1 Thrill of Possibility
+1 Tormenting Voice
+1 Umaro, Raging Yeti
+1 Volley Veteran
+1 Wayfarer's Bauble
+1 You See a Pair of Goblins
+

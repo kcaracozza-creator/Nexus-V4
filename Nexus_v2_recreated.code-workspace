@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"uri": "vscode-vfs://github/kcaracozza-creator/Nexus_v2_recreated"
+		}
+	],
+	"settings": {
+		"chat.useAgentSkills": true,
+		"workbench.list.smoothScrolling": true,
+		"terminal.integrated.smoothScrolling": true,
+		"workbench.reduceMotion": "off",
+		"claudeCode.allowDangerouslySkipPermissions": true
+	}
+}

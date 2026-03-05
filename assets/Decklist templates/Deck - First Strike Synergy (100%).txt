@@ -1,0 +1,35 @@
+# First Strike Synergy
+# Theme: Mechanic - First Strike
+# Strategy: Synergistic first strike strategy
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+1 Alena, Kessig Trapper
+4 Arcbound Shikari
+1 Ash Barrens
+1 Baral and Kari Zev
+2 Brazen Collector
+1 Brightblade Stoat
+2 Command Tower
+1 Danitha Capashen, Paragon
+4 Era of Enlightenment // Hand of Enlightenment
+4 Evolving Wilds
+7 Forest
+4 Gallant Pie-Wielder
+1 Giant Growth
+4 Go-Shintai of Ancient Wars
+7 Island
+4 Llanowar Elves
+7 Mountain
+7 Plains
+1 Ponder
+2 Raiyuu, Storm's Edge
+4 Rampant Growth
+4 Razorfoot Griffin
+1 Steel Leaf Paladin
+4 Sunblade Angel
+1 Terramorphic Expanse
+1 Valor's Flagship
+4 Wedgelight Rammer
+

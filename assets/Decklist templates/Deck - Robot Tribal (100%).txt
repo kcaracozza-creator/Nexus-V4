@@ -1,0 +1,13 @@
+# Robot, Tribal
+# Theme: Tribal - Robot,
+# Strategy: Aggressive robot, tribal strategy
+# Buildability: 100.0%
+# Generated: 2025-11-10 21:00:25
+
+# Other
+1 Ash Barrens
+2 Command Tower
+4 Evolving Wilds
+91 Island
+1 Terramorphic Expanse
+

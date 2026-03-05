@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About NEXUS - Software That Goes Harder Than Its Hardware</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #09090b;
+            --bg-secondary: #18181b;
+            --bg-tertiary: #27272a;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #10b981;
+            --accent-hover: #059669;
+            --border: #27272a;
+            --success: #22c55e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn:hover { background: var(--primary-hover); }
+
+        .hero {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--accent) 0%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .tagline {
+            font-size: 24px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        .hero .highlight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 0 auto 80px;
+            padding: 0 40px;
+        }
+
+        .section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px;
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 32px;
+            margin-bottom: 24px;
+            color: var(--accent);
+        }
+
+        .section h3 {
+            font-size: 24px;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .section p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .feature-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .feature-card h4 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 32px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+        }
+
+        .stat .number {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .stat .label {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-top: 1px solid var(--border);
+        }
+
+        .cta h2 {
+            font-size: 40px;
+            margin-bottom: 24px;
+        }
+
+        .cta p {
+            font-size: 20px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">NEXUS</a>
+            <a href="/" class="btn">Back to Marketplace</a>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>Software That Goes Harder<br>Than Its Hardware</h1>
+        <p class="tagline">
+            NEXUS isn't just a scanner. It's a <span class="highlight">software-first revolution</span><br>
+            that turns commodity hardware into an intelligent card recognition system.
+        </p>
+    </div>
+
+    <div class="content">
+        <div class="section">
+            <h2>The Story</h2>
+            <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 32px; flex-wrap: wrap;">
+                <div style="width: 120px; height: 120px; background: var(--bg-tertiary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 800; color: var(--accent); border: 3px solid var(--accent);">
+                    KC
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="font-size: 28px; margin-bottom: 8px;">Kevin Caracozza</h3>
+                    <p style="color: var(--text-muted); margin: 0;">Inventor & Founder</p>
+                </div>
+            </div>
+            <p>
+                Kevin Caracozza has been collecting trading cards for 25 years and running businesses for 26.
+                When he couldn't find a system that actually worked for his collection, he built one.
+            </p>
+            <p>
+                NEXUS started in a New Jersey lab with a simple idea: what if scanning and selling a card
+                was as easy as scanning a barcode?
+            </p>
+            <p>
+                Today, NEXUS uses AI-powered recognition to identify cards from over 100 million items,
+                pulls real-time pricing from multiple sources, and lets shop owners list inventory in
+                seconds instead of hours.
+            </p>
+            <p style="font-weight: 600; color: var(--accent);">
+                101 patent claims filed. Real shops using it daily. This is just the beginning.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>The Philosophy</h2>
+            <p>
+                Most card scanning systems are limited by their hardware. Expensive cameras,
+                proprietary sensors, locked-down ecosystems. NEXUS flips the script.
+            </p>
+            <p>
+                We believe the <strong>intelligence should live in the software</strong>, not the hardware.
+                NEXUS runs on Raspberry Pi 5s, commodity Edge TPUs, and consumer-grade CZUR scanners.
+                The hardware is replaceable. The software is irreplaceable.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>The Architecture</h2>
+            <h3>🎯 5-Stage Confidence Waterfall (ACR Pipeline)</h3>
+            <p>
+                Every card goes through a cascading recognition pipeline that exits at ≥95% confidence:
+            </p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>1. Art Recognition</h4>
+                    <p>Coral Edge TPU + FAISS vector search against 390K+ card embeddings</p>
+                </div>
+                <div class="feature-card">
+                    <h4>2. Enhanced OCR</h4>
+                    <p>EasyOCR GPU + Tesseract fallback for set codes & collector numbers</p>
+                </div>
+                <div class="feature-card">
+                    <h4>3. Metadata Lookup</h4>
+                    <p>Cross-reference against 521K MTG, 19.8K Pokemon, 1.84M sports cards</p>
+                </div>
+                <div class="feature-card">
+                    <h4>4. Claude Vision</h4>
+                    <p>AI-powered visual analysis for edge cases and rare cards</p>
+                </div>
+            </div>
+
+            <h3>⚡ Distributed Intelligence</h3>
+            <p>
+                <strong>BROCK</strong> (Pi 5): Art recognition server with Coral M.2 TPU<br>
+                <strong>SNARF</strong> (Pi 5): OCR engine with GPU acceleration<br>
+                <strong>ZULTAN</strong> (RTX 3060): FAISS index, metadata API, marketplace server
+            </p>
+            <p>
+                Each node is specialized. Each node is replaceable. The system is resilient.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>By The Numbers</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="number">390K+</div>
+                    <div class="label">Card Embeddings</div>
+                </div>
+                <div class="stat">
+                    <div class="number">95%</div>
+                    <div class="label">Min Confidence</div>
+                </div>
+                <div class="stat">
+                    <div class="number">1.84M</div>
+                    <div class="label">Sports Cards</div>
+                </div>
+                <div class="stat">
+                    <div class="number">5</div>
+                    <div class="label">Recognition Stages</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>What Makes NEXUS Different</h2>
+
+            <h3>🧠 Bulletproof OCR Engine (Patent Claim 2)</h3>
+            <p>
+                Never crashes. Auto-detects Tesseract installation across platforms.
+                Multi-pass validation with 3-tier fallback strategy. Retry logic with exponential backoff.
+                Graceful degradation when things go wrong.
+            </p>
+
+            <h3>🎨 Coral-Accelerated Art Matching</h3>
+            <p>
+                Runs entirely on a $70 Coral Edge TPU. Extracts 512-dimensional embeddings in milliseconds.
+                FAISS similarity search finds the closest match from 370K+ Magic cards, 19.8K Pokemon cards.
+            </p>
+
+            <h3>🔗 Multi-TCG Unified API</h3>
+            <p>
+                One API. Three card games. MTG (Scryfall), Pokemon (TCGDex), Sports (TCDB).
+                Normalized schema. Consistent responses. Works with any card type.
+            </p>
+
+            <h3>🏪 Built-in Marketplace</h3>
+            <p>
+                Scan cards → List for sale → Get paid. All in one system.
+                Stripe checkout. Multi-seller support. Inventory sync from desktop app.
+                The marketplace isn't an add-on—it's part of the core product.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>The Vision</h2>
+            <p>
+                NEXUS is <strong>software-defined card recognition</strong>. The hardware is commodity.
+                The intelligence is distributed. The system is modular.
+            </p>
+            <p>
+                Want to swap the Coral TPU for a different accelerator? Go ahead.<br>
+                Want to run OCR on a different Pi? Easy.<br>
+                Want to replace the CZUR scanner with a flatbed? It's just an image source.
+            </p>
+            <p>
+                The hardware is a vehicle. <strong>The software is the product.</strong>
+            </p>
+        </div>
+    </div>
+
+    <div class="cta">
+        <h2>Ready to see it in action?</h2>
+        <p>Browse thousands of cards scanned by NEXUS systems across the network.</p>
+        <a href="/" class="btn" style="display: inline-block; padding: 16px 32px; font-size: 18px;">
+            Explore the Marketplace
+        </a>
+    </div>
+
+    <footer>
+        <p>Copyright © 2025 Kevin Caracozza. All Rights Reserved. Patent Pending.</p>
+        <p style="margin-top: 12px; color: var(--accent);">
+            NEXUS: Software that goes harder than its hardware.
+        </p>
+    </footer>
+</body>
+</html>

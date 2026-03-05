@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Sports Cards - NEXUS Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #09090b;
+            --bg-secondary: #18181b;
+            --bg-tertiary: #27272a;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #10b981;
+            --accent-hover: #059669;
+            --border: #27272a;
+            --success: #22c55e;
+            --sports: #3b82f6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: system-ui;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .game-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--sports);
+            padding: 8px 16px;
+            border-radius: 6px;
+            color: var(--sports);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 32px auto;
+            padding: 0 24px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 24px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .filter-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .filter-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .filter-option input[type="checkbox"],
+        .filter-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+
+        .price-range {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .price-input {
+            flex: 1;
+            padding: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .results-count {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .sort-select {
+            padding: 10px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .card-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .card-item:hover {
+            border-color: var(--sports);
+            transform: translateY(-4px);
+        }
+
+        .card-image-container {
+            background: var(--bg-tertiary);
+            aspect-ratio: 0.715;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-condition {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .card-rookie {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--sports);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .card-info {
+            padding: 14px;
+        }
+
+        .card-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-set {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .card-stock {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 64px;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 16px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        @media (max-width: 1024px) {
+            .main-container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">NEXUS</a>
+            <div class="game-badge">⚾ Sports Cards</div>
+            <a href="/" class="btn btn-secondary">← All Games</a>
+        </div>
+    </header>
+
+    <div class="search-bar">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search sports cards..." onkeyup="handleSearch(event)">
+    </div>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="filter-section">
+                <div class="filter-title">Sport</div>
+                <label class="filter-option">
+                    <input type="radio" name="sport" value="baseball" onchange="applyFilters()" checked> ⚾ Baseball
+                </label>
+                <label class="filter-option">
+                    <input type="radio" name="sport" value="basketball" onchange="applyFilters()"> 🏀 Basketball
+                </label>
+                <label class="filter-option">
+                    <input type="radio" name="sport" value="football" onchange="applyFilters()"> 🏈 Football
+                </label>
+                <label class="filter-option">
+                    <input type="radio" name="sport" value="hockey" onchange="applyFilters()"> 🏒 Hockey
+                </label>
+                <label class="filter-option">
+                    <input type="radio" name="sport" value="soccer" onchange="applyFilters()"> ⚽ Soccer
+                </label>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-title">Price Range</div>
+                <div class="price-range">
+                    <input type="number" class="price-input" id="priceMin" placeholder="Min" onchange="applyFilters()">
+                    <span>-</span>
+                    <input type="number" class="price-input" id="priceMax" placeholder="Max" onchange="applyFilters()">
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-title">Condition</div>
+                <label class="filter-option">
+                    <input type="checkbox" value="NM" onchange="applyFilters()"> Near Mint
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox" value="LP" onchange="applyFilters()"> Lightly Played
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox" value="MP" onchange="applyFilters()"> Moderately Played
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox" value="HP" onchange="applyFilters()"> Heavily Played
+                </label>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-title">Options</div>
+                <label class="filter-option">
+                    <input type="checkbox" id="rookieOnly" onchange="applyFilters()"> Rookie Cards Only
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox" id="autoOnly" onchange="applyFilters()"> Autographs Only
+                </label>
+            </div>
+        </aside>
+
+        <main>
+            <div class="results-header">
+                <div class="results-count">
+                    Showing <strong id="showingCount">0</strong> of <strong id="totalCount">0</strong> sports cards
+                </div>
+                <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+                    <option value="newest">Newest First</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
+                    <option value="name">Name: A-Z</option>
+                </select>
+            </div>
+
+            <div class="card-grid" id="cardGrid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Loading sports cards...
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin + '/api';
+        let allListings = [];
+        let currentPage = 1;
+        let perPage = 48;
+
+        async function loadListings() {
+            const grid = document.getElementById('cardGrid');
+            grid.innerHTML = '<div class="loading"><div class="spinner"></div>Loading sports cards...</div>';
+
+            try {
+                const params = new URLSearchParams({
+                    page: currentPage,
+                    per_page: perPage,
+                    game_type: 'sports',
+                    sort: document.getElementById('sortSelect').value
+                });
+
+                const sport = document.querySelector('input[name="sport"]:checked')?.value;
+                if (sport) params.append('sport', sport);
+
+                const search = document.getElementById('searchInput').value.trim();
+                if (search) params.append('search', search);
+
+                const minPrice = document.getElementById('priceMin').value;
+                if (minPrice) params.append('min_price', minPrice);
+
+                const maxPrice = document.getElementById('priceMax').value;
+                if (maxPrice) params.append('max_price', maxPrice);
+
+                const conditions = [...document.querySelectorAll('.filter-section input[value="NM"], .filter-section input[value="LP"], .filter-section input[value="MP"], .filter-section input[value="HP"]')]
+                    .filter(c => c.checked).map(c => c.value);
+                if (conditions.length > 0) params.append('condition', conditions.join(','));
+
+                if (document.getElementById('rookieOnly').checked) params.append('rookie', 'true');
+                if (document.getElementById('autoOnly').checked) params.append('autograph', 'true');
+
+                const res = await fetch(`${API_URL}/listings?${params}`);
+                const data = await res.json();
+
+                allListings = data.listings || [];
+
+                document.getElementById('showingCount').textContent = allListings.length;
+                document.getElementById('totalCount').textContent = data.total || 0;
+
+                renderListings();
+            } catch (e) {
+                console.error('Failed to load listings:', e);
+                grid.innerHTML = '<div class="loading">Failed to load cards</div>';
+            }
+        }
+
+        function renderListings() {
+            const grid = document.getElementById('cardGrid');
+
+            if (!allListings.length) {
+                grid.innerHTML = '<div class="loading">No cards found</div>';
+                return;
+            }
+
+            grid.innerHTML = allListings.map(card => `
+                <div class="card-item" onclick="window.location.href='/?card=${card.id}'">
+                    <div class="card-image-container">
+                        ${card.image_url ?
+                            `<img src="${card.image_url}" alt="${card.card_name}" class="card-image" loading="lazy">` :
+                            `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted)">No Image</div>`
+                        }
+                        <span class="card-condition">${card.condition || 'NM'}</span>
+                        ${card.rookie ? '<span class="card-rookie">RC</span>' : ''}
+                    </div>
+                    <div class="card-info">
+                        <div class="card-name" title="${card.card_name}">${card.card_name}</div>
+                        <div class="card-set">${card.set_name || card.set_code || 'Unknown Set'}</div>
+                        <div class="card-footer">
+                            <span class="card-price">$${parseFloat(card.price).toFixed(2)}</span>
+                            <span class="card-stock">${card.quantity} left</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                currentPage = 1;
+                loadListings();
+            }
+        }
+
+        function applyFilters() {
+            currentPage = 1;
+            loadListings();
+        }
+
+        loadListings();
+    </script>
+</body>
+</html>
