@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
-NEXUS V2 - Universal Scanner Tab
-Professional 3-column layout - NO SCROLLING TO MORDOR
+NEXUS V4 - Universal Scanner Tab
+Professional 3-column layout with V4 pipeline integration.
+4-Step ACR: Capture → OCR → Art Match → Cross-Ref
+Consensus Gate: CONVERGENCE, COLOR, COLLECTOR_LOCK, PHASH signals
+Camera health monitoring + golden settings restore
 """
 
 import os
@@ -31,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 
 class UniversalScannerTab:
-    """Universal Scanner - Professional 3-Column Layout"""
+    """Universal Scanner - Professional 3-Column Layout with V4 Pipeline"""
 
     def __init__(self, parent_notebook, config=None, library=None):
         self.notebook = parent_notebook
@@ -53,19 +56,17 @@ class UniversalScannerTab:
 
         # Mode and type
         self.scan_mode = 'single'  # single, bulk, pregrading
-        # Default card_type from config game mode
         _game_to_type = {"magic": "mtg", "pokemon": "pokemon", "sports": "sports",
                          "yugioh": "yugioh", "onepiece": "onepiece", "lorcana": "lorcana"}
         active_game = getattr(getattr(_config, 'game', None), 'active_game', 'magic') if _config else 'magic'
         self.card_type = _game_to_type.get(active_game, 'mtg')
 
-        # 5-step status
+        # 4-step status (V4 pipeline)
         self.step_status = {
-            'edge': 'pending',
-            'type': 'pending',
-            'art': 'pending',
+            'capture': 'pending',
             'ocr': 'pending',
-            'match': 'pending'
+            'art': 'pending',
+            'xref': 'pending'
         }
 
         # Review queue
@@ -150,7 +151,7 @@ class UniversalScannerTab:
 
         # Left: Title
         tk.Label(
-            header, text="⚡ UNIVERSAL SCANNER",
+            header, text="NEXUS V4 SCANNER",
             font=('Segoe UI', 18, 'bold'),
             fg=self.colors['gold'],
             bg=self.colors['surface']
@@ -169,9 +170,9 @@ class UniversalScannerTab:
 
         self.mode_buttons = {}
         modes = [
-            ('single', '⚡ SINGLE TCG', '(Fastest)', self.colors['success']),
-            ('bulk', '📦 BULK', '(Any TCG)', self.colors['warning']),
-            ('pregrading', '🔍 PREGRADING', '(Grade Est.)', self.colors['accent'])
+            ('single', 'SINGLE TCG', '(Fastest)', self.colors['success']),
+            ('bulk', 'BULK', '(Any TCG)', self.colors['warning']),
+            ('pregrading', 'PREGRADING', '(Grade Est.)', self.colors['accent'])
         ]
 
         for mode_id, mode_name, mode_sub, color in modes:
@@ -193,24 +194,24 @@ class UniversalScannerTab:
             btn.pack()
             self.mode_buttons[mode_id] = btn
 
-        # Right: 5-Step indicators + Connection status
+        # Right: 4-Step indicators + Connection status
         right_header = tk.Frame(header, bg=self.colors['surface'])
         right_header.pack(side='right', padx=20)
 
-        # 5-Step mini indicators
+        # 4-Step mini indicators (V4 pipeline)
         step_frame = tk.Frame(right_header, bg=self.colors['surface'])
         step_frame.pack(side='left', padx=(0, 30))
 
         tk.Label(
-            step_frame, text="5-STEP:",
+            step_frame, text="ACR:",
             font=('Segoe UI', 8),
             fg=self.colors['text_dim'],
             bg=self.colors['surface']
         ).pack(side='left', padx=(0, 5))
 
         self.step_mini_labels = {}
-        steps = ['edge', 'type', 'art', 'ocr', 'match']
-        step_names = ['Edge', 'Type', 'Art', 'OCR', 'Match']
+        steps = ['capture', 'ocr', 'art', 'xref']
+        step_names = ['Cap', 'OCR', 'Art', 'XRef']
 
         for i, (step_id, step_name) in enumerate(zip(steps, step_names)):
             lbl = tk.Label(
@@ -237,40 +238,34 @@ class UniversalScannerTab:
         content = tk.Frame(self.frame, bg=self.colors['bg'])
         content.pack(fill='both', expand=True, padx=10, pady=10)
 
-        # Configure grid weights
-        content.grid_columnconfigure(0, weight=1, minsize=280)   # Left column
-        content.grid_columnconfigure(1, weight=2, minsize=450)   # Center column
-        content.grid_columnconfigure(2, weight=1, minsize=320)   # Right column
+        content.grid_columnconfigure(0, weight=1, minsize=280)
+        content.grid_columnconfigure(1, weight=2, minsize=450)
+        content.grid_columnconfigure(2, weight=1, minsize=320)
         content.grid_rowconfigure(0, weight=1)
 
-        # ─────────────────────────────────────────────────────────────
-        # LEFT COLUMN: Controls
-        # ─────────────────────────────────────────────────────────────
+        # LEFT COLUMN
         left_col = tk.Frame(content, bg=self.colors['surface'])
         left_col.grid(row=0, column=0, sticky='nsew', padx=(0, 5))
 
         self._create_card_type_panel(left_col)
         self._create_scan_button(left_col)
-        self._create_5step_panel(left_col)
+        self._create_4step_panel(left_col)
+        self._create_camera_health_panel(left_col)
         self._create_session_stats(left_col)
 
-        # ─────────────────────────────────────────────────────────────
-        # CENTER COLUMN: Preview + Log
-        # ─────────────────────────────────────────────────────────────
+        # CENTER COLUMN
         center_col = tk.Frame(content, bg=self.colors['surface'])
         center_col.grid(row=0, column=1, sticky='nsew', padx=5)
 
         self._create_preview_panel(center_col)
         self._create_scan_log(center_col)
 
-        # ─────────────────────────────────────────────────────────────
-        # RIGHT COLUMN: Review & Match
-        # ─────────────────────────────────────────────────────────────
+        # RIGHT COLUMN
         right_col = tk.Frame(content, bg=self.colors['surface'])
         right_col.grid(row=0, column=2, sticky='nsew', padx=(5, 0))
 
         self._create_match_panel(right_col)
-        self._create_validation_panel(right_col)
+        self._create_consensus_panel(right_col)
         self._create_review_form(right_col)
         self._create_action_buttons(right_col)
 
@@ -291,16 +286,15 @@ class UniversalScannerTab:
 
         self.type_buttons = {}
         types = [
-            ('mtg', '🎴 MTG', self.colors['mtg']),
-            ('pokemon', '⚡ Pokemon', self.colors['pokemon']),
-            ('yugioh', '👁 Yu-Gi-Oh', self.colors['yugioh']),
-            ('sports', '⚾ Sports', self.colors['sports']),
-            ('onepiece', '🏴‍☠️ One Piece', self.colors['onepiece']),
-            ('lorcana', '✨ Lorcana', self.colors['lorcana']),
-            ('fab', '⚔ FaB', self.colors['fab'])
+            ('mtg', 'MTG', self.colors['mtg']),
+            ('pokemon', 'Pokemon', self.colors['pokemon']),
+            ('yugioh', 'Yu-Gi-Oh', self.colors['yugioh']),
+            ('sports', 'Sports', self.colors['sports']),
+            ('onepiece', 'One Piece', self.colors['onepiece']),
+            ('lorcana', 'Lorcana', self.colors['lorcana']),
+            ('fab', 'FaB', self.colors['fab'])
         ]
 
-        # 2 columns, 4 rows
         for i, (type_id, type_name, color) in enumerate(types):
             row = i // 2
             col = i % 2
@@ -308,7 +302,7 @@ class UniversalScannerTab:
             btn = tk.Button(
                 frame, text=type_name,
                 font=('Segoe UI', 9, 'bold'),
-                bg=color if type_id == 'mtg' else self.colors['surface2'],
+                bg=color if type_id == self.card_type else self.colors['surface2'],
                 fg='white',
                 activebackground=color,
                 relief='flat',
@@ -328,7 +322,7 @@ class UniversalScannerTab:
         frame.pack(fill='x', padx=10, pady=10)
 
         self.scan_btn = tk.Button(
-            frame, text="🔍 SCAN CARD",
+            frame, text="SCAN CARD",
             font=('Segoe UI', 16, 'bold'),
             bg=self.colors['success'],
             fg='white',
@@ -340,7 +334,6 @@ class UniversalScannerTab:
         )
         self.scan_btn.pack(fill='x')
 
-        # Stats line
         self.stats_label = tk.Label(
             frame,
             text="Scans: 0 | Success: 0 | Avg: --ms",
@@ -350,10 +343,10 @@ class UniversalScannerTab:
         )
         self.stats_label.pack(pady=(5, 0))
 
-    def _create_5step_panel(self, parent):
-        """5-Step process panel with status indicators"""
+    def _create_4step_panel(self, parent):
+        """4-Step ACR process panel with status indicators"""
         frame = tk.LabelFrame(
-            parent, text="5-Step Process",
+            parent, text="ACR Pipeline (V4)",
             font=('Segoe UI', 10, 'bold'),
             fg=self.colors['accent'],
             bg=self.colors['surface'],
@@ -363,20 +356,18 @@ class UniversalScannerTab:
 
         self.step_labels = {}
         steps = [
-            ('edge', '1: Edge Detection', 'Crop card from background'),
-            ('type', '2: Type ID', 'Card type identification'),
-            ('art', '3: Art Validation', 'Embedding (bulletproof)'),
-            ('ocr', '4: OCR', 'Text extraction'),
-            ('match', '5: Cross-Reference', '99%+ accuracy match')
+            ('capture', '1: Capture', 'Camera + lights'),
+            ('ocr', '2: OCR', 'Name + collector #'),
+            ('art', '3: Art Match', 'FAISS embedding'),
+            ('xref', '4: Cross-Ref', 'ZULTAN lookup'),
         ]
 
         for step_id, step_name, step_desc in steps:
             row = tk.Frame(frame, bg=self.colors['surface'])
             row.pack(fill='x', padx=8, pady=2)
 
-            # Status indicator
             status_lbl = tk.Label(
-                row, text="○",
+                row, text="\u25cb",
                 font=('Segoe UI', 11),
                 fg=self.colors['text_dim'],
                 bg=self.colors['surface'],
@@ -384,25 +375,91 @@ class UniversalScannerTab:
             )
             status_lbl.pack(side='left')
 
-            # Step name
-            name_lbl = tk.Label(
+            tk.Label(
                 row, text=f"Step {step_name}",
                 font=('Segoe UI', 9, 'bold'),
                 fg=self.colors['text'],
                 bg=self.colors['surface']
-            )
-            name_lbl.pack(side='left')
+            ).pack(side='left')
 
-            # Description
-            desc_lbl = tk.Label(
+            tk.Label(
                 row, text=f"  {step_desc}",
                 font=('Segoe UI', 8),
                 fg=self.colors['text_dim'],
                 bg=self.colors['surface']
-            )
-            desc_lbl.pack(side='left')
+            ).pack(side='left')
 
             self.step_labels[step_id] = status_lbl
+
+    def _create_camera_health_panel(self, parent):
+        """Camera health check and golden settings restore"""
+        frame = tk.LabelFrame(
+            parent, text="Camera Health",
+            font=('Segoe UI', 10, 'bold'),
+            fg=self.colors['accent'],
+            bg=self.colors['surface'],
+            bd=1, relief='solid'
+        )
+        frame.pack(fill='x', padx=10, pady=5)
+
+        # Health status
+        status_row = tk.Frame(frame, bg=self.colors['surface'])
+        status_row.pack(fill='x', padx=8, pady=(5, 2))
+
+        tk.Label(
+            status_row, text="Status:",
+            font=('Segoe UI', 9),
+            fg=self.colors['text_dim'],
+            bg=self.colors['surface']
+        ).pack(side='left')
+
+        self.camera_health_label = tk.Label(
+            status_row, text="--",
+            font=('Consolas', 9, 'bold'),
+            fg=self.colors['text_dim'],
+            bg=self.colors['surface']
+        )
+        self.camera_health_label.pack(side='left', padx=5)
+
+        # Golden settings info
+        self.camera_settings_label = tk.Label(
+            frame, text="Exp:-- Gain:-- Focus:--",
+            font=('Consolas', 8),
+            fg=self.colors['text_dim'],
+            bg=self.colors['surface']
+        )
+        self.camera_settings_label.pack(padx=8, pady=2)
+
+        # Buttons
+        btn_row = tk.Frame(frame, bg=self.colors['surface'])
+        btn_row.pack(fill='x', padx=8, pady=(2, 8))
+
+        tk.Button(
+            btn_row, text="Check",
+            font=('Segoe UI', 8, 'bold'),
+            bg=self.colors['surface2'],
+            fg=self.colors['text'],
+            relief='flat', cursor='hand2',
+            command=self._check_camera_health
+        ).pack(side='left', padx=(0, 4))
+
+        tk.Button(
+            btn_row, text="Restore Golden",
+            font=('Segoe UI', 8, 'bold'),
+            bg=self.colors['warning'],
+            fg='white',
+            relief='flat', cursor='hand2',
+            command=self._restore_golden_settings
+        ).pack(side='left', padx=(0, 4))
+
+        tk.Button(
+            btn_row, text="USB Reset",
+            font=('Segoe UI', 8, 'bold'),
+            bg=self.colors['error'],
+            fg='white',
+            relief='flat', cursor='hand2',
+            command=self._usb_reset_camera
+        ).pack(side='left')
 
     def _create_session_stats(self, parent):
         """Session statistics"""
@@ -420,7 +477,7 @@ class UniversalScannerTab:
             font=('Consolas', 9),
             bg=self.colors['bg'],
             fg=self.colors['text'],
-            height=6,
+            height=5,
             state='disabled',
             relief='flat'
         )
@@ -451,7 +508,6 @@ class UniversalScannerTab:
         )
         self.preview_canvas.pack(fill='both', expand=True, padx=5, pady=5)
 
-        # Placeholder text
         self.preview_canvas.create_text(
             225, 200,
             text="Card preview\nwill appear here",
@@ -474,7 +530,6 @@ class UniversalScannerTab:
         )
         frame.pack(fill='x', padx=10, pady=(5, 10))
 
-        # Header with clear button
         header = tk.Frame(frame, bg=self.colors['surface'])
         header.pack(fill='x', padx=5, pady=(5, 0))
 
@@ -499,7 +554,6 @@ class UniversalScannerTab:
         )
         self.log_text.pack(fill='x', padx=5, pady=5)
 
-        # Configure tags
         self.log_text.tag_configure('success', foreground=self.colors['success'])
         self.log_text.tag_configure('error', foreground=self.colors['error'])
         self.log_text.tag_configure('warning', foreground=self.colors['warning'])
@@ -511,7 +565,7 @@ class UniversalScannerTab:
     # ═══════════════════════════════════════════════════════════════════
 
     def _create_match_panel(self, parent):
-        """Possible matches listbox"""
+        """Match result with price display"""
         frame = tk.LabelFrame(
             parent, text="Match Result",
             font=('Segoe UI', 10, 'bold'),
@@ -564,19 +618,41 @@ class UniversalScannerTab:
                                         fg=self.colors['text'], bg=self.colors['surface'])
         self.match_set_label.pack(side='left', padx=(5, 20))
 
-        tk.Label(info_frame, text="Collector #:", font=('Segoe UI', 9),
+        tk.Label(info_frame, text="#:", font=('Segoe UI', 9),
                  fg=self.colors['text_dim'], bg=self.colors['surface']).pack(side='left')
         self.match_num_label = tk.Label(info_frame, text="--", font=('Segoe UI', 9, 'bold'),
                                         fg=self.colors['text'], bg=self.colors['surface'])
         self.match_num_label.pack(side='left', padx=5)
 
-        # Possible matches dropdown
+        # Price display
+        price_frame = tk.Frame(frame, bg=self.colors['surface'])
+        price_frame.pack(fill='x', padx=10, pady=(0, 5))
+
+        tk.Label(price_frame, text="Price:", font=('Segoe UI', 9),
+                 fg=self.colors['text_dim'], bg=self.colors['surface']).pack(side='left')
+        self.price_label = tk.Label(
+            price_frame, text="--",
+            font=('Segoe UI', 12, 'bold'),
+            fg=self.colors['gold'],
+            bg=self.colors['surface']
+        )
+        self.price_label.pack(side='left', padx=5)
+
+        self.price_foil_label = tk.Label(
+            price_frame, text="",
+            font=('Segoe UI', 9),
+            fg=self.colors['text_dim'],
+            bg=self.colors['surface']
+        )
+        self.price_foil_label.pack(side='left', padx=5)
+
+        # Other matches
         tk.Label(
             frame, text="Other matches:",
             font=('Segoe UI', 8),
             fg=self.colors['text_dim'],
             bg=self.colors['surface']
-        ).pack(anchor='w', padx=10, pady=(10, 2))
+        ).pack(anchor='w', padx=10, pady=(5, 2))
 
         self.match_listbox = tk.Listbox(
             frame,
@@ -590,10 +666,10 @@ class UniversalScannerTab:
         self.match_listbox.pack(fill='x', padx=10, pady=(0, 10))
         self.match_listbox.bind('<<ListboxSelect>>', self._on_match_select)
 
-    def _create_validation_panel(self, parent):
-        """Cross-validation report"""
+    def _create_consensus_panel(self, parent):
+        """Consensus gate signals display — V4 3-signal verification"""
         frame = tk.LabelFrame(
-            parent, text="Cross-Validation Report",
+            parent, text="Consensus Gate",
             font=('Segoe UI', 10, 'bold'),
             fg=self.colors['accent'],
             bg=self.colors['surface'],
@@ -601,20 +677,71 @@ class UniversalScannerTab:
         )
         frame.pack(fill='x', padx=10, pady=5)
 
-        self.validation_text = tk.Text(
-            frame,
-            font=('Consolas', 9),
-            bg=self.colors['bg'],
-            fg=self.colors['text'],
-            height=5,
-            state='disabled',
-            relief='flat'
-        )
-        self.validation_text.pack(fill='x', padx=5, pady=5)
+        self.signal_labels = {}
+        signals = [
+            ('convergence', 'CONVERGENCE', 'OCR + Art match agree'),
+            ('color', 'COLOR', 'HSV matches DB identity'),
+            ('collector', 'COLLECTOR', 'Collector # confirmed'),
+            ('phash', 'PHASH', 'Visual fingerprint match'),
+        ]
 
-        self.validation_text.tag_configure('valid', foreground=self.colors['success'])
-        self.validation_text.tag_configure('invalid', foreground=self.colors['error'])
-        self.validation_text.tag_configure('null', foreground=self.colors['text_dim'])
+        for sig_id, sig_name, sig_desc in signals:
+            row = tk.Frame(frame, bg=self.colors['surface'])
+            row.pack(fill='x', padx=8, pady=1)
+
+            indicator = tk.Label(
+                row, text="\u25cb",
+                font=('Segoe UI', 10),
+                fg=self.colors['text_dim'],
+                bg=self.colors['surface'],
+                width=2
+            )
+            indicator.pack(side='left')
+
+            tk.Label(
+                row, text=sig_name,
+                font=('Consolas', 9, 'bold'),
+                fg=self.colors['text'],
+                bg=self.colors['surface'],
+                width=12, anchor='w'
+            ).pack(side='left')
+
+            desc_lbl = tk.Label(
+                row, text=sig_desc,
+                font=('Segoe UI', 8),
+                fg=self.colors['text_dim'],
+                bg=self.colors['surface']
+            )
+            desc_lbl.pack(side='left')
+
+            self.signal_labels[sig_id] = indicator
+
+        # Gate result
+        gate_row = tk.Frame(frame, bg=self.colors['surface'])
+        gate_row.pack(fill='x', padx=8, pady=(4, 8))
+
+        tk.Label(
+            gate_row, text="GATE:",
+            font=('Consolas', 9, 'bold'),
+            fg=self.colors['text_dim'],
+            bg=self.colors['surface']
+        ).pack(side='left')
+
+        self.gate_result_label = tk.Label(
+            gate_row, text="--",
+            font=('Consolas', 10, 'bold'),
+            fg=self.colors['text_dim'],
+            bg=self.colors['surface']
+        )
+        self.gate_result_label.pack(side='left', padx=5)
+
+        self.gate_score_label = tk.Label(
+            gate_row, text="",
+            font=('Consolas', 9),
+            fg=self.colors['text_dim'],
+            bg=self.colors['surface']
+        )
+        self.gate_score_label.pack(side='left')
 
     def _create_review_form(self, parent):
         """Manual data entry form"""
@@ -731,7 +858,7 @@ class UniversalScannerTab:
         btn_frame.pack(fill='x')
 
         tk.Button(
-            btn_frame, text="✓ ACCEPT",
+            btn_frame, text="ACCEPT",
             font=('Segoe UI', 11, 'bold'),
             bg=self.colors['success'], fg='white',
             relief='flat', cursor='hand2',
@@ -740,7 +867,7 @@ class UniversalScannerTab:
         ).pack(side='left', padx=2, expand=True, fill='x')
 
         tk.Button(
-            btn_frame, text="» SKIP",
+            btn_frame, text="SKIP",
             font=('Segoe UI', 11, 'bold'),
             bg=self.colors['warning'], fg='black',
             relief='flat', cursor='hand2',
@@ -749,7 +876,7 @@ class UniversalScannerTab:
         ).pack(side='left', padx=2, expand=True, fill='x')
 
         tk.Button(
-            btn_frame, text="✗ REJECT",
+            btn_frame, text="REJECT",
             font=('Segoe UI', 11, 'bold'),
             bg=self.colors['error'], fg='white',
             relief='flat', cursor='hand2',
@@ -765,7 +892,6 @@ class UniversalScannerTab:
         """Switch scan mode"""
         self.scan_mode = mode
 
-        # Update button colors
         for m, btn in self.mode_buttons.items():
             if m == mode:
                 if m == 'single':
@@ -777,18 +903,11 @@ class UniversalScannerTab:
             else:
                 btn.config(bg=self.colors['surface2'], fg=self.colors['text'])
 
-        # Enable/disable card type buttons
         for type_id, (btn, color) in self.type_buttons.items():
             if mode == 'single':
                 btn.config(state='normal')
             else:
                 btn.config(state='disabled', bg=self.colors['surface2'])
-
-        # Update step 2 indicator
-        if mode == 'single':
-            self.step_labels['type'].config(text="--", fg=self.colors['text_dim'])
-        else:
-            self.step_labels['type'].config(text="○", fg=self.colors['text_dim'])
 
         self._log(f"Mode: {mode.upper()}", 'info')
 
@@ -796,7 +915,6 @@ class UniversalScannerTab:
         """Select card type for Single TCG mode"""
         self.card_type = type_id
 
-        # Update button colors
         for t, (btn, c) in self.type_buttons.items():
             if t == type_id:
                 btn.config(bg=c)
@@ -806,16 +924,15 @@ class UniversalScannerTab:
         self._log(f"Card type: {type_id.upper()}", 'dim')
 
     def _update_step(self, step_id, status):
-        """Update step indicator: pending, running, success, failed, skipped"""
+        """Update step indicator: pending, running, success, failed"""
         icons = {
-            'pending': ('○', self.colors['text_dim']),
-            'running': ('◉', self.colors['warning']),
-            'success': ('✓', self.colors['success']),
-            'failed': ('✗', self.colors['error']),
-            'skipped': ('--', self.colors['text_dim'])
+            'pending': ('\u25cb', self.colors['text_dim']),
+            'running': ('\u25cf', self.colors['warning']),
+            'success': ('\u25cf', self.colors['success']),
+            'failed': ('\u25cf', self.colors['error']),
         }
 
-        icon, color = icons.get(status, ('○', self.colors['text_dim']))
+        icon, color = icons.get(status, ('\u25cb', self.colors['text_dim']))
 
         def update():
             if step_id in self.step_labels:
@@ -829,10 +946,43 @@ class UniversalScannerTab:
     def _reset_steps(self):
         """Reset all steps to pending"""
         for step_id in self.step_status:
-            if step_id == 'type' and self.scan_mode == 'single':
-                self._update_step(step_id, 'skipped')
+            self._update_step(step_id, 'pending')
+        self._reset_consensus()
+
+    def _update_consensus_signal(self, signal_id, active):
+        """Update a consensus gate signal indicator"""
+        def update():
+            if signal_id in self.signal_labels:
+                if active:
+                    self.signal_labels[signal_id].config(
+                        text='\u25cf', fg=self.colors['success'])
+                else:
+                    self.signal_labels[signal_id].config(
+                        text='\u25cb', fg=self.colors['text_dim'])
+        self._schedule_ui(update)
+
+    def _reset_consensus(self):
+        """Reset all consensus signals"""
+        for sig_id in self.signal_labels:
+            self._update_consensus_signal(sig_id, False)
+
+        def reset_gate():
+            self.gate_result_label.config(text="--", fg=self.colors['text_dim'])
+            self.gate_score_label.config(text="")
+        self._schedule_ui(reset_gate)
+
+    def _update_gate_result(self, passed, score, signals):
+        """Update the consensus gate result display"""
+        def update():
+            if passed:
+                self.gate_result_label.config(text="PASS", fg=self.colors['success'])
             else:
-                self._update_step(step_id, 'pending')
+                self.gate_result_label.config(text="FAIL", fg=self.colors['error'])
+            self.gate_score_label.config(
+                text=f"  {score:.0f}%  [{', '.join(signals)}]",
+                fg=self.colors['text']
+            )
+        self._schedule_ui(update)
 
     def _update_session_stats(self):
         """Update session statistics display"""
@@ -840,7 +990,7 @@ class UniversalScannerTab:
         success_rate = (self.success_count / self.scan_count * 100) if self.scan_count > 0 else 0
 
         stats = f"Session Statistics\n"
-        stats += f"─────────────────\n"
+        stats += f"\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n"
         stats += f"Total Scans:    {self.scan_count}\n"
         stats += f"Success:        {self.success_count} ({success_rate:.0f}%)\n"
         stats += f"Avg Time:       {avg_time:.0f}ms\n"
@@ -882,8 +1032,6 @@ class UniversalScannerTab:
 
     def _check_connections(self):
         """Check DANIELSON connection"""
-        self._log("Checking connection...", 'info')
-
         def check():
             try:
                 r = requests.get(f"{self.danielson_url}/status", timeout=3)
@@ -905,8 +1053,94 @@ class UniversalScannerTab:
 
         threading.Thread(target=check, daemon=True).start()
 
+    # ═══════════════════════════════════════════════════════════════════
+    # CAMERA HEALTH
+    # ═══════════════════════════════════════════════════════════════════
+
+    def _check_camera_health(self):
+        """Check Arducam health via DANIELSON"""
+        self._log("Checking camera health...", 'info')
+
+        def check():
+            try:
+                r = requests.get(f"{self.danielson_url}/api/camera/health", timeout=5)
+                if r.status_code == 200:
+                    data = r.json()
+                    brightness = data.get('brightness', 0)
+                    exposure = data.get('exposure_time_absolute', 0)
+                    gain = data.get('gain', 0)
+                    focus = data.get('focus_absolute', 0)
+                    healthy = brightness >= 20
+
+                    def update():
+                        if healthy:
+                            self.camera_health_label.config(text="HEALTHY", fg=self.colors['success'])
+                        else:
+                            self.camera_health_label.config(text="DESYNC", fg=self.colors['error'])
+                        self.camera_settings_label.config(
+                            text=f"Exp:{exposure} Gain:{gain} Focus:{focus} Bright:{brightness}")
+                    self._schedule_ui(update)
+                    self._log(f"Camera: Exp={exposure} Gain={gain} Focus={focus}", 'dim')
+                else:
+                    # Fallback: try v4l2-ctl via generic status
+                    self._log(f"Camera health endpoint not available (HTTP {r.status_code})", 'warning')
+            except Exception as e:
+                self._log(f"Camera check failed: {e}", 'error')
+
+        threading.Thread(target=check, daemon=True).start()
+
+    def _restore_golden_settings(self):
+        """Restore Arducam golden settings via DANIELSON"""
+        self._log("Restoring golden settings...", 'warning')
+
+        def restore():
+            try:
+                r = requests.post(
+                    f"{self.danielson_url}/api/camera/golden",
+                    json={"device": "/dev/video0"},
+                    timeout=10
+                )
+                if r.status_code == 200:
+                    self._log("Golden settings restored", 'success')
+                    self._schedule_ui(lambda: self.camera_health_label.config(
+                        text="RESTORED", fg=self.colors['success']))
+                else:
+                    self._log(f"Restore failed: HTTP {r.status_code}", 'error')
+            except Exception as e:
+                self._log(f"Restore failed: {e}", 'error')
+
+        threading.Thread(target=restore, daemon=True).start()
+
+    def _usb_reset_camera(self):
+        """USB reset the Arducam via DANIELSON"""
+        if not messagebox.askyesno("USB Reset", "This will kill the camera process and reset USB.\nContinue?"):
+            return
+
+        self._log("USB reset initiated...", 'error')
+
+        def reset():
+            try:
+                r = requests.post(
+                    f"{self.danielson_url}/api/camera/usb_reset",
+                    timeout=15
+                )
+                if r.status_code == 200:
+                    self._log("USB reset complete", 'success')
+                    self._schedule_ui(lambda: self.camera_health_label.config(
+                        text="RESET OK", fg=self.colors['success']))
+                else:
+                    self._log(f"USB reset failed: HTTP {r.status_code}", 'error')
+            except Exception as e:
+                self._log(f"USB reset failed: {e}", 'error')
+
+        threading.Thread(target=reset, daemon=True).start()
+
+    # ═══════════════════════════════════════════════════════════════════
+    # SCANNING (V4 ACR PIPELINE)
+    # ═══════════════════════════════════════════════════════════════════
+
     def _scan_card(self):
-        """Perform card scan"""
+        """Perform card scan via V4 ACR pipeline"""
         if self.scanning:
             return
 
@@ -918,23 +1152,22 @@ class UniversalScannerTab:
         self.scanning = True
         self.scan_btn.config(state='disabled', text="Scanning...", bg=self.colors['warning'])
         self._reset_steps()
-        self._log("Starting scan...", 'info')
+        self._log("Starting ACR scan...", 'info')
 
         start_time = time.time()
 
         def do_scan():
             try:
-                # Step 1: Edge detection
-                self._update_step('edge', 'running')
+                # Step 1: Capture
+                self._update_step('capture', 'running')
 
                 r = requests.post(
-                    f"{self.danielson_url}/api/scan",
+                    f"{self.danielson_url}/api/acr",
                     json={
-                        "camera": "czur",
-                        "process": True,
+                        "camera": "arducam",
                         "card_type": self.card_type,
                         "mode": self.scan_mode,
-                        "skip_back_scan": self.scan_mode == 'single'
+                        "tcg_type": self.card_type,
                     },
                     timeout=60
                 )
@@ -948,141 +1181,129 @@ class UniversalScannerTab:
                     result = r.json()
                     self.current_scan = result
 
-                    # Map DANIELSON stages_run/stages to 5-step display
                     stages_run = result.get('stages_run', [])
                     stages = result.get('stages', {})
-                    # Edge = capture succeeded
-                    self._update_step('edge', 'success' if 'capture' in stages_run and stages.get('capture', {}).get('success') else 'failed')
-                    # Type = skipped in single mode
-                    if self.scan_mode == 'single':
-                        self._update_step('type', 'skipped')
-                    else:
-                        self._update_step('type', 'success' if result.get('card_type') else 'pending')
-                    # Art = FAISS art match
-                    art_stage = stages.get('art_match', {})
-                    self._update_step('art', 'success' if art_stage.get('success') else ('failed' if 'art_match' in stages_run else 'pending'))
-                    # OCR
-                    ocr_stage = stages.get('ocr', {})
-                    self._update_step('ocr', 'success' if ocr_stage.get('success') and ocr_stage.get('overall_confidence', 0) > 50 else ('failed' if 'ocr' in stages_run else 'pending'))
-                    # Match = final result
-                    self._update_step('match', 'success' if result.get('success') else ('failed' if result.get('confidence', 0) > 0 else 'pending'))
 
-                    # Always show preview (even on failed scans)
-                    image_path = result.get('image_path', '')
+                    # Step 1: Capture
+                    capture_ok = 'capture' in stages_run and stages.get('capture', {}).get('success')
+                    self._update_step('capture', 'success' if capture_ok else 'failed')
+
+                    # Step 2: OCR
+                    ocr_stage = stages.get('region_ocr', {})
+                    ocr_ok = ocr_stage.get('success') and ocr_stage.get('confidence', 0) > 50
+                    ocr_ran = 'region_ocr' in stages_run
+                    self._update_step('ocr', 'success' if ocr_ok else ('failed' if ocr_ran else 'pending'))
+
+                    # Step 3: Art Match
+                    art_stage = stages.get('art_match', {})
+                    phash_stage = stages.get('phash', {})
+                    art_ok = art_stage.get('success') or phash_stage.get('success')
+                    art_ran = 'art_match' in stages_run or 'phash' in stages_run
+                    self._update_step('art', 'success' if art_ok else ('failed' if art_ran else 'pending'))
+
+                    # Step 4: Cross-Ref
+                    xref_ok = result.get('success') or result.get('card_name')
+                    self._update_step('xref', 'success' if xref_ok else ('failed' if result.get('confidence', 0) > 0 else 'pending'))
+
+                    # Consensus gate signals
+                    consensus = result.get('consensus', {})
+                    gate_signals = consensus.get('signals', [])
+                    gate_score = consensus.get('score', result.get('confidence', 0))
+                    gate_passed = consensus.get('passed', result.get('success', False))
+
+                    sig_map = {
+                        'CONVERGENCE': 'convergence',
+                        'COLOR': 'color', 'COLOR_VERIFIED': 'color',
+                        'COLLECTOR_LOCK': 'collector',
+                        'PHASH': 'phash', 'PHASH_VERIFIED': 'phash',
+                    }
+                    for sig in gate_signals:
+                        mapped = sig_map.get(sig)
+                        if mapped:
+                            self._update_consensus_signal(mapped, True)
+
+                    self._update_gate_result(gate_passed, gate_score, gate_signals)
+
+                    # Preview image
+                    image_path = (result.get('image_path') or
+                                  stages.get('capture', {}).get('image_path', ''))
                     if image_path:
                         self._update_preview(image_path)
 
-                    if result.get('success'):
-                        self.scan_count += 1
+                    # Extract card info
+                    card = result.get('card') or result.get('best_match') or {}
+                    name = (card.get('name') or result.get('card_name') or
+                            ocr_stage.get('name') or '--')
+                    confidence = result.get('confidence', 0)
+                    set_code = (card.get('set') or card.get('set_code') or
+                                result.get('set_code') or '???')
+                    col_num = (card.get('collector_number') or
+                               result.get('collector_number') or '--')
+                    price = result.get('price') or card.get('price_usd')
+                    price_foil = card.get('price_usd_foil')
 
-                        # Get card data
-                        card = result.get('card') or {}
-                        name = card.get('name', result.get('card_name', 'Unknown'))
-                        set_code = card.get('set', card.get('set_code', result.get('set_code', '???')))
-                        confidence = result.get('confidence', 0)
-                        image_path = result.get('image_path', '')
+                    self.scan_count += 1
 
-                        # Determine status from confidence
-                        if confidence >= 95:
-                            status = 'identified'
-                        elif confidence >= 80:
-                            status = 'likely'
+                    # Update match panel
+                    def update_ui():
+                        self.match_name_label.config(text=name)
+                        self.match_set_label.config(text=set_code)
+                        self.match_num_label.config(text=col_num)
+                        self.confidence_bar['value'] = min(confidence, 100)
+                        self.confidence_label.config(text=f"{confidence:.0f}%")
+
+                        if confidence >= 85:
+                            self.confidence_label.config(fg=self.colors['success'])
+                        elif confidence >= 60:
+                            self.confidence_label.config(fg=self.colors['warning'])
                         else:
-                            status = 'review'
+                            self.confidence_label.config(fg=self.colors['error'])
 
-                        # Update UI
-                        def update_ui():
-                            self.match_name_label.config(text=name)
-                            self.match_set_label.config(text=set_code)
-                            self.match_num_label.config(text=card.get('collector_number', '--'))
-                            self.confidence_bar['value'] = confidence
-                            self.confidence_label.config(text=f"{confidence}%")
-
-                            # Color confidence
-                            if confidence >= 85:
-                                self.confidence_label.config(fg=self.colors['success'])
-                            elif confidence >= 60:
-                                self.confidence_label.config(fg=self.colors['warning'])
-                            else:
-                                self.confidence_label.config(fg=self.colors['error'])
-
-                            # Fill form
-                            self.name_var.set(name)
-                            self.set_var.set(set_code)
-                            self.num_var.set(card.get('collector_number', ''))
-                            self.foil_var.set(card.get('foil', False))
-
-                        self._schedule_ui(update_ui)
-
-                        # Populate matches
-                        matches = result.get('possible_matches', [])
-                        if card.get('name'):
-                            main_match = {'card': card, 'confidence': confidence}
-                            if not matches:
-                                matches = [main_match]
-                        self._populate_matches(matches)
-
-                        # Display validation
-                        validation = result.get('validation', {})
-                        if validation:
-                            self._display_validation(validation)
-
-                        # ============================================================
-                        # ZERO-SORT: Every card gets a call number immediately.
-                        # >=95% = auto-accept (full data into collection)
-                        # <95%  = placeholder (call number assigned, awaits manual ID)
-                        # ============================================================
-                        if status == 'identified':
-                            self.success_count += 1
-                            self._log(f"✓ {name} ({set_code}) - {confidence}%", 'success')
-                            # Auto-accept: send to DANIELSON with full data
-                            self._auto_catalog(card, name, set_code, confidence, image_path, needs_review=False)
-                        elif status == 'likely':
-                            self._log(f"? {name} ({set_code}) - {confidence}%", 'warning')
-                            # Placeholder: call number assigned, needs human review
-                            self._auto_catalog(card, name, set_code, confidence, image_path, needs_review=True)
+                        # Price display
+                        if price:
+                            price_str = f"${price:.2f}" if isinstance(price, (int, float)) else str(price)
+                            self.price_label.config(text=price_str)
                         else:
-                            self._log(f"✗ NEEDS REVIEW: {name} ({confidence}%)", 'error')
-                            # Placeholder: call number assigned, needs human review
-                            self._auto_catalog(card, name, set_code, confidence, image_path, needs_review=True)
+                            self.price_label.config(text="--")
 
+                        if price_foil:
+                            foil_str = f"(Foil: ${price_foil:.2f})" if isinstance(price_foil, (int, float)) else f"(Foil: {price_foil})"
+                            self.price_foil_label.config(text=foil_str)
+                        else:
+                            self.price_foil_label.config(text="")
+
+                        # Fill form
+                        self.name_var.set(name if name != '--' else '')
+                        self.set_var.set(set_code if set_code != '???' else '')
+                        self.num_var.set(col_num if col_num != '--' else '')
+                        self.foil_var.set(card.get('foil', False))
+
+                    self._schedule_ui(update_ui)
+
+                    # Populate matches
+                    matches = result.get('possible_matches', result.get('alternatives', []))
+                    if card.get('name'):
+                        main_match = {'card': card, 'confidence': confidence}
+                        if not matches:
+                            matches = [main_match]
+                    self._populate_matches(matches)
+
+                    # Determine status and log
+                    if confidence >= 95:
+                        self.success_count += 1
+                        self._log(f"MATCH: {name} ({set_code}) - {confidence:.0f}% [{elapsed}ms]", 'success')
+                        self._auto_catalog(card, name, set_code, confidence, image_path, needs_review=False)
+                    elif confidence >= 80:
+                        self._log(f"LIKELY: {name} ({set_code}) - {confidence:.0f}% [{elapsed}ms]", 'warning')
+                        self._auto_catalog(card, name, set_code, confidence, image_path, needs_review=True)
+                    elif name != '--':
+                        self._log(f"REVIEW: {name} - {confidence:.0f}% [{elapsed}ms]", 'error')
+                        self._auto_catalog(card, name, set_code, confidence, image_path, needs_review=True)
                     else:
-                        # Failed scan — still gets a call number (zero-sort)
-                        confidence = result.get('confidence', 0)
-                        card_name = result.get('card_name', '')
-                        card = result.get('card') or {}
-                        error = result.get('error', 'Unknown error')
+                        error = result.get('error', 'No match')
+                        self._log(f"FAILED: {error} [{elapsed}ms]", 'error')
+                        self._auto_catalog({}, 'UNKNOWN', '', confidence, image_path, needs_review=True)
 
-                        # Auto-fill form with best candidate
-                        best_name = card.get('name', card_name) or 'UNKNOWN'
-                        best_set = card.get('set', card.get('set_code', result.get('set_code', '')))
-                        best_num = card.get('collector_number', result.get('collector_number', ''))
-
-                        if best_name != 'UNKNOWN':
-                            def update_failed_ui():
-                                self.match_name_label.config(text=best_name)
-                                self.match_set_label.config(text=best_set or '???')
-                                self.match_num_label.config(text=best_num or '--')
-                                self.confidence_bar['value'] = confidence
-                                self.confidence_label.config(text=f"{confidence:.1f}%")
-                                self.confidence_label.config(fg=self.colors['warning'] if confidence >= 60 else self.colors['error'])
-                                self.name_var.set(best_name)
-                                self.set_var.set(best_set or '')
-                                self.num_var.set(best_num or '')
-                            self._schedule_ui(update_failed_ui)
-
-                        # Populate match candidates list
-                        matches = result.get('possible_matches', [])
-                        if matches:
-                            self._populate_matches(matches)
-                            self._log(f"? PICK A MATCH: {card_name or '?'} ({confidence:.1f}%) - {len(matches)} candidates", 'warning')
-                        elif card_name:
-                            self._log(f"✗ NEEDS REVIEW: {card_name} ({confidence:.1f}%)", 'error')
-                        else:
-                            self._log(f"✗ NEEDS REVIEW: {confidence:.1f}% - {error}", 'error')
-
-                        # Zero-sort: placeholder call number even on failed scans
-                        self._auto_catalog(card, best_name, best_set or '', confidence, result.get('image_path', ''), needs_review=True)
                 else:
                     self._log(f"HTTP error: {r.status_code}", 'error')
 
@@ -1095,7 +1316,7 @@ class UniversalScannerTab:
                 self._update_session_stats()
                 self._schedule_ui(lambda: self.scan_btn.config(
                     state='normal',
-                    text="🔍 SCAN CARD",
+                    text="SCAN CARD",
                     bg=self.colors['success']
                 ))
 
@@ -1120,7 +1341,6 @@ class UniversalScannerTab:
                 else:
                     img = Image.open(image_path)
 
-                # Resize to fit canvas
                 canvas_w = self.preview_canvas.winfo_width() or 450
                 canvas_h = self.preview_canvas.winfo_height() or 400
 
@@ -1185,7 +1405,6 @@ class UniversalScannerTab:
         self.set_var.set(set_code)
         self.num_var.set(col_num)
 
-        # Update the main display too
         def update_display():
             self.match_name_label.config(text=name)
             self.match_set_label.config(text=set_code or '???')
@@ -1197,48 +1416,10 @@ class UniversalScannerTab:
 
         self._log(f"Selected: {name} ({set_code})", 'info')
 
-    def _display_validation(self, validation):
-        """Display cross-validation report"""
-        def update():
-            self.validation_text.config(state='normal')
-            self.validation_text.delete('1.0', 'end')
-
-            sources = [
-                ('ocr', 'OCR', validation.get('ocr', {})),
-                ('zultan', 'ZULTAN', validation.get('zultan', {})),
-                ('scryfall', 'Scryfall', validation.get('scryfall', {})),
-                ('set', 'Set Code', validation.get('set', {}))
-            ]
-
-            valid_count = 0
-            total_count = 0
-
-            for key, label, data in sources:
-                if isinstance(data, dict) and data:
-                    total_count += 1
-                    is_valid = data.get('valid', False)
-                    if is_valid:
-                        valid_count += 1
-
-                    check = '✓' if is_valid else '✗'
-                    tag = 'valid' if is_valid else 'invalid'
-                    text = data.get('text', data.get('match', 'N/A'))
-
-                    self.validation_text.insert('end', f"{check} {label}: ", tag)
-                    self.validation_text.insert('end', f"{text}\n")
-
-            # Summary
-            self.validation_text.insert('end', f"\nScore: {valid_count}/{total_count}")
-
-            self.validation_text.config(state='disabled')
-
-        self._schedule_ui(update)
-
     def _open_zoom_window(self):
         """Open zoomed image in new window"""
         if not self.current_image_path or not PIL_AVAILABLE:
             return
-        # Similar to hardware_scanner.py implementation
         self._log("Opening zoom view...", 'dim')
 
     def _load_review_queue(self):
@@ -1250,14 +1431,14 @@ class UniversalScannerTab:
                 r = requests.get(f"{self.danielson_url}/api/review", timeout=15)
                 if r.status_code == 200:
                     result = r.json()
-                    queue = result.get('items', [])
-                    self.review_queue = queue
+                    q = result.get('items', [])
+                    self.review_queue = q
                     self.review_index = 0
 
                     def update():
-                        total = len(queue)
+                        total = len(q)
                         self.queue_label.config(text=f"{'1' if total > 0 else '0'} / {total}")
-                        if queue:
+                        if q:
                             self._log(f"Loaded {total} items in queue", 'success')
                             self._show_review_item(0)
                         else:
@@ -1303,22 +1484,17 @@ class UniversalScannerTab:
         self._log(f"Showing item {index + 1}: {card.get('name', 'Unknown')}", 'info')
 
     def _prev_review(self):
-        """Previous review item"""
         if self.review_index > 0:
             self.review_index -= 1
             self._show_review_item(self.review_index)
 
     def _next_review(self):
-        """Next review item"""
         if self.review_index < len(self.review_queue) - 1:
             self.review_index += 1
             self._show_review_item(self.review_index)
 
     def _auto_catalog(self, card, name, set_code, confidence, image_path, needs_review=False):
-        """Zero-sort: Every scanned card gets a call number immediately.
-        >=95% confidence: auto-accepted with full data.
-        <95% confidence: placeholder call number, flagged for manual review.
-        """
+        """Zero-sort: Every scanned card gets a call number immediately."""
         payload = {
             'card_name': name,
             'card_type': self.card_type,
@@ -1343,7 +1519,6 @@ class UniversalScannerTab:
                 if r.status_code == 200:
                     resp = r.json()
                     cn = resp.get('call_number', '')
-                    # Store call number on current scan so _accept_card can UPDATE not INSERT
                     if self.current_scan:
                         self.current_scan['call_number'] = cn
                     if needs_review:
@@ -1358,7 +1533,7 @@ class UniversalScannerTab:
         threading.Thread(target=send, daemon=True).start()
 
     def _accept_card(self):
-        """Accept current card (manual override for review queue items)"""
+        """Accept current card"""
         name = self.name_var.get().strip()
         if not name:
             messagebox.showwarning("Missing Data", "Card name required")
@@ -1368,7 +1543,6 @@ class UniversalScannerTab:
         self.success_count += 1
         self._update_session_stats()
 
-        # Send correction to DANIELSON
         scan = self.current_scan or {}
         card = scan.get('card') or {}
         existing_cn = scan.get('call_number', '')
@@ -1389,7 +1563,6 @@ class UniversalScannerTab:
         def send():
             try:
                 if existing_cn:
-                    # Card already has a call number from auto-catalog — UPDATE, don't create duplicate
                     payload['call_number'] = existing_cn
                     r = requests.post(
                         f"{self.danielson_url}/api/library/update",
@@ -1397,7 +1570,6 @@ class UniversalScannerTab:
                         timeout=10
                     )
                 else:
-                    # No call number yet — create new entry
                     r = requests.post(
                         f"{self.danielson_url}/api/review/confirm",
                         json=payload,
@@ -1414,7 +1586,6 @@ class UniversalScannerTab:
                 self._log(f"  -> Failed to save: {e}", 'error')
         threading.Thread(target=send, daemon=True).start()
 
-        # Advance queue
         if self.review_queue:
             self.review_queue.pop(self.review_index)
             if self.review_index >= len(self.review_queue) and self.review_index > 0:
@@ -1425,7 +1596,6 @@ class UniversalScannerTab:
                 text=f"{self.review_index + 1 if self.review_queue else 0} / {len(self.review_queue)}")
 
     def _skip_card(self):
-        """Skip current card"""
         self._log("SKIPPED", 'warning')
 
         if self.review_index < len(self.review_queue) - 1:
@@ -1435,7 +1605,6 @@ class UniversalScannerTab:
             self._log("End of queue", 'dim')
 
     def _reject_card(self):
-        """Reject current card"""
         self._log("REJECTED", 'error')
 
         if self.current_scan:
@@ -1461,12 +1630,11 @@ class UniversalScannerTab:
                 text=f"{self.review_index + 1 if self.review_queue else 0} / {len(self.review_queue)}")
 
     def _refresh_card_count(self):
-        """Fetch updated card count from DANIELSON and update header."""
+        """Fetch updated card count from DANIELSON."""
         try:
             r = requests.get(f"{self.danielson_url}/api/library/stats?type=all", timeout=5)
             if r.status_code == 200:
                 total = r.json().get('total_cards', 0)
-                # Update the app's header card count label (thread-safe)
                 app = self.frame.winfo_toplevel()
                 if hasattr(app, 'card_count_label'):
                     self.frame.after(0, lambda: app.card_count_label.config(text=f"{total:,}"))
